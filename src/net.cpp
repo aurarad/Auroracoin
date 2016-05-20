@@ -1077,14 +1077,19 @@ void ThreadMapPort()
     const char * minissdpdpath = 0;
     struct UPNPDev * devlist = 0;
     char lanaddr[64];
-
-#ifndef UPNPDISCOVER_SUCCESS
-    /* miniupnpc 1.5 */
-    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0);
-#else
-    /* miniupnpc 1.6 */
+#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 14 && MINIUPNPC_API_VERSION <= 16)
+    /* miniupnpc 2.0+ */
+    int error = 0;
+    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, 0, &error);
+#elif defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 8 && MINIUPNPC_API_VERSION <= 13)
+    /* miniupnpc 1.6, 1.7, 1.8, 1.9 */
     int error = 0;
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, &error);
+#elif defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 3 && MINIUPNPC_API_VERSION <= 7)
+    /* miniupnpc 1.3, 1.4, 1.5 */
+    devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0);
+#else
+    #error "Must have miniupnp version >= 1.5"
 #endif
 
     struct UPNPUrls urls;

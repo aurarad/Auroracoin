@@ -18,8 +18,6 @@
 #include "json/json_spirit_utils.h"
 #include "json/json_spirit_value.h"
 
-using namespace std;
-
 #ifdef ENABLE_WALLET
 // Key used by getwork miners.
 // Allocated in InitRPCMining, free'd in ShutdownRPCMining
@@ -93,7 +91,7 @@ json_spirit::Value GetNetworkHashPS(int lookup, int height) {
 json_spirit::Value getnetworkhashps(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 2)
-        throw runtime_error(
+        throw std::runtime_error(
             "getnetworkhashps ( blocks height )\n"
             "\nReturns the estimated network hashes per second based on the last n blocks.\n"
             "Pass in [blocks] to override # of blocks, -1 specifies since last difficulty change.\n"
@@ -115,7 +113,7 @@ json_spirit::Value getnetworkhashps(const json_spirit::Array& params, bool fHelp
 json_spirit::Value getgenerate(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getgenerate\n"
             "\nReturn if the server is set to generate coins or not. The default is false.\n"
             "It is set with the command line argument -gen (or auroracoin.conf setting gen)\n"
@@ -137,7 +135,7 @@ json_spirit::Value getgenerate(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value setgenerate(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
-        throw runtime_error(
+        throw std::runtime_error(
             "setgenerate generate ( genproclimit )\n"
             "\nSet 'generate' true or false to turn generation on or off.\n"
             "Generation is limited to 'genproclimit' processors, -1 is unlimited.\n"
@@ -181,7 +179,7 @@ json_spirit::Value setgenerate(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value gethashespersec(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "gethashespersec\n"
             "\nReturns a recent hashes per second performance measurement while generating.\n"
             "See the getgenerate and setgenerate calls to turn generation on and off.\n"
@@ -202,7 +200,7 @@ json_spirit::Value gethashespersec(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value getmininginfo(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getmininginfo\n"
             "\nReturns a json object containing mining-related information."
             "\nResult:\n"
@@ -250,7 +248,7 @@ json_spirit::Value getmininginfo(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value getwork(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
-        throw runtime_error(
+        throw std::runtime_error(
             "getwork ( \"data\" )\n"
             "\nIf 'data' is not specified, it returns the formatted hash data to work on.\n"
             "If 'data' is specified, tries to solve the block and returns true if it was successful.\n"
@@ -276,9 +274,9 @@ json_spirit::Value getwork(const json_spirit::Array& params, bool fHelp)
     if (IsInitialBlockDownload())
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Auroracoin is downloading blocks...");
 
-    typedef map<uint256, pair<CBlock*, CScript> > mapNewBlock_t;
+    typedef std::map<uint256, std::pair<CBlock*, CScript> > mapNewBlock_t;
     static mapNewBlock_t mapNewBlock;    // FIXME: thread safety
-    static vector<CBlockTemplate*> vNewBlockTemplate;
+    static std::vector<CBlockTemplate*> vNewBlockTemplate;
 
     if (params.size() == 0)
     {
@@ -347,7 +345,7 @@ json_spirit::Value getwork(const json_spirit::Array& params, bool fHelp)
     else
     {
         // Parse parameters
-        vector<unsigned char> vchData = ParseHex(params[0].get_str());
+        std::vector<unsigned char> vchData = ParseHex(params[0].get_str());
         if (vchData.size() != 128)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter");
         CBlock* pdata = (CBlock*)&vchData[0];
@@ -375,7 +373,7 @@ json_spirit::Value getwork(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value getblocktemplate(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
-        throw runtime_error(
+        throw std::runtime_error(
             "getblocktemplate ( \"jsonrequestobject\" )\n"
             "\nIf the request parameters include a 'mode' key, that is used to explicitly select between the default 'template' request or a 'proposal'.\n"
             "It returns data needed to construct a block to work on.\n"
@@ -495,7 +493,7 @@ json_spirit::Value getblocktemplate(const json_spirit::Array& params, bool fHelp
     pblock->nNonce = 0;
 
     json_spirit::Array transactions;
-    map<uint256, int64_t> setTxIndex;
+    std::map<uint256, int64_t> setTxIndex;
     int i = 0;
     BOOST_FOREACH (CTransaction& tx, pblock->vtx)
     {
@@ -570,7 +568,7 @@ json_spirit::Value getblocktemplate(const json_spirit::Array& params, bool fHelp
 json_spirit::Value submitblock(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
-        throw runtime_error(
+        throw std::runtime_error(
             "submitblock \"hexdata\" ( \"jsonparametersobject\" )\n"
             "\nAttempts to submit new block to network.\n"
             "The 'jsonparametersobject' parameter is currently ignored.\n"
@@ -588,7 +586,7 @@ json_spirit::Value submitblock(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("submitblock", "\"mydata\"")
         );
 
-    vector<unsigned char> blockData(ParseHex(params[0].get_str()));
+    std::vector<unsigned char> blockData(ParseHex(params[0].get_str()));
     CDataStream ssBlock(blockData, SER_NETWORK, PROTOCOL_VERSION);
     CBlock pblock;
     try {

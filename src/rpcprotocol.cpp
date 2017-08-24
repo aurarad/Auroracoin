@@ -20,8 +20,6 @@
 #include <boost/shared_ptr.hpp>
 #include "json/json_spirit_writer_template.h"
 
-using namespace std;
-
 //
 // HTTP protocol
 //
@@ -29,9 +27,9 @@ using namespace std;
 // and to be compatible with other JSON-RPC implementations.
 //
 
-string HTTPPost(const string& strMsg, const map<string,string>& mapRequestHeaders)
+std::string HTTPPost(const std::string& strMsg, const std::map<std::string,std::string>& mapRequestHeaders)
 {
-    ostringstream s;
+    std::ostringstream s;
     s << "POST / HTTP/1.1\r\n"
       << "User-Agent: auroracoin-json-rpc/" << FormatFullVersion() << "\r\n"
       << "Host: 127.0.0.1\r\n"
@@ -39,19 +37,19 @@ string HTTPPost(const string& strMsg, const map<string,string>& mapRequestHeader
       << "Content-Length: " << strMsg.size() << "\r\n"
       << "Connection: close\r\n"
       << "Accept: application/json\r\n";
-    BOOST_FOREACH(const PAIRTYPE(string, string)& item, mapRequestHeaders)
+    BOOST_FOREACH(const PAIRTYPE(std::string, std::string)& item, mapRequestHeaders)
         s << item.first << ": " << item.second << "\r\n";
     s << "\r\n" << strMsg;
 
     return s.str();
 }
 
-static string rfc1123Time()
+static std::string rfc1123Time()
 {
     return DateTimeStrFormat("%a, %d %b %Y %H:%M:%S +0000", GetTime());
 }
 
-string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
+std::string HTTPReply(int nStatus, const std::string& strMsg, bool keepalive)
 {
     if (nStatus == HTTP_UNAUTHORIZED)
         return strprintf("HTTP/1.0 401 Authorization Required\r\n"
@@ -96,13 +94,13 @@ string HTTPReply(int nStatus, const string& strMsg, bool keepalive)
 }
 
 bool ReadHTTPRequestLine(std::basic_istream<char>& stream, int &proto,
-                         string& http_method, string& http_uri)
+                         std::string& http_method, std::string& http_uri)
 {
-    string str;
+    std::string str;
     getline(stream, str);
 
     // HTTP request line is space-delimited
-    vector<string> vWords;
+    std::vector<std::string> vWords;
     boost::split(vWords, str, boost::is_any_of(" "));
     if (vWords.size() < 2)
         return false;
@@ -118,7 +116,7 @@ bool ReadHTTPRequestLine(std::basic_istream<char>& stream, int &proto,
         return false;
 
     // parse proto, if present
-    string strProto = "";
+    std::string strProto = "";
     if (vWords.size() > 2)
         strProto = vWords[2];
 
@@ -132,9 +130,9 @@ bool ReadHTTPRequestLine(std::basic_istream<char>& stream, int &proto,
 
 int ReadHTTPStatus(std::basic_istream<char>& stream, int &proto)
 {
-    string str;
+    std::string str;
     getline(stream, str);
-    vector<string> vWords;
+    std::vector<std::string> vWords;
     boost::split(vWords, str, boost::is_any_of(" "));
     if (vWords.size() < 2)
         return HTTP_INTERNAL_SERVER_ERROR;
@@ -145,22 +143,22 @@ int ReadHTTPStatus(std::basic_istream<char>& stream, int &proto)
     return atoi(vWords[1].c_str());
 }
 
-int ReadHTTPHeaders(std::basic_istream<char>& stream, map<string, string>& mapHeadersRet)
+int ReadHTTPHeaders(std::basic_istream<char>& stream, std::map<std::string, std::string>& mapHeadersRet)
 {
     int nLen = 0;
     while (true)
     {
-        string str;
+        std::string str;
         std::getline(stream, str);
         if (str.empty() || str == "\r")
             break;
-        string::size_type nColon = str.find(":");
-        if (nColon != string::npos)
+        std::string::size_type nColon = str.find(":");
+        if (nColon != std::string::npos)
         {
-            string strHeader = str.substr(0, nColon);
+            std::string strHeader = str.substr(0, nColon);
             boost::trim(strHeader);
             boost::to_lower(strHeader);
-            string strValue = str.substr(nColon+1);
+            std::string strValue = str.substr(nColon+1);
             boost::trim(strValue);
             mapHeadersRet[strHeader] = strValue;
             if (strHeader == "content-length")
@@ -171,8 +169,8 @@ int ReadHTTPHeaders(std::basic_istream<char>& stream, map<string, string>& mapHe
 }
 
 
-int ReadHTTPMessage(std::basic_istream<char>& stream, map<string,
-                    string>& mapHeadersRet, string& strMessageRet,
+int ReadHTTPMessage(std::basic_istream<char>& stream, std::map<std::string,
+                    std::string>& mapHeadersRet, std::string& strMessageRet,
                     int nProto)
 {
     mapHeadersRet.clear();
@@ -186,12 +184,12 @@ int ReadHTTPMessage(std::basic_istream<char>& stream, map<string,
     // Read message
     if (nLen > 0)
     {
-        vector<char> vch(nLen);
+        std::vector<char> vch(nLen);
         stream.read(&vch[0], nLen);
-        strMessageRet = string(vch.begin(), vch.end());
+        strMessageRet = std::string(vch.begin(), vch.end());
     }
 
-    string sConHdr = mapHeadersRet["connection"];
+    std::string sConHdr = mapHeadersRet["connection"];
 
     if ((sConHdr != "close") && (sConHdr != "keep-alive"))
     {
@@ -214,7 +212,7 @@ int ReadHTTPMessage(std::basic_istream<char>& stream, map<string,
 // http://www.codeproject.com/KB/recipes/JSON_Spirit.aspx
 //
 
-string JSONRPCRequest(const string& strMethod, const json_spirit::Array& params, const json_spirit::Value& id)
+std::string JSONRPCRequest(const std::string& strMethod, const json_spirit::Array& params, const json_spirit::Value& id)
 {
     json_spirit::Object request;
     request.push_back(json_spirit::Pair("method", strMethod));
@@ -235,13 +233,13 @@ json_spirit::Object JSONRPCReplyObj(const json_spirit::Value& result, const json
     return reply;
 }
 
-string JSONRPCReply(const json_spirit::Value& result, const json_spirit::Value& error, const json_spirit::Value& id)
+std::string JSONRPCReply(const json_spirit::Value& result, const json_spirit::Value& error, const json_spirit::Value& id)
 {
     json_spirit::Object reply = JSONRPCReplyObj(result, error, id);
     return write_string(json_spirit::Value(reply), false) + "\n";
 }
 
-json_spirit::Object JSONRPCError(int code, const string& message)
+json_spirit::Object JSONRPCError(int code, const std::string& message)
 {
     json_spirit::Object error;
     error.push_back(json_spirit::Pair("code", code));

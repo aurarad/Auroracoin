@@ -13,8 +13,6 @@
 
 #include <vector>
 
-//using namespace std;
-
 #define MESSAGE_START_SIZE 4
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 

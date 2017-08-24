@@ -10,13 +10,11 @@
 
 #include <stdint.h>
 
-using namespace std;
-
 void static BatchWriteCoins(CLevelDBBatch &batch, const uint256 &hash, const CCoins &coins) {
     if (coins.IsPruned())
-        batch.Erase(make_pair('c', hash));
+        batch.Erase(std::make_pair('c', hash));
     else
-        batch.Write(make_pair('c', hash), coins);
+        batch.Write(std::make_pair('c', hash), coins);
 }
 
 void static BatchWriteHashBestChain(CLevelDBBatch &batch, const uint256 &hash) {
@@ -27,7 +25,7 @@ CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe) : db(Get
 }
 
 bool CCoinsViewDB::GetCoins(const uint256 &txid, CCoins &coins) {
-    return db.Read(make_pair('c', txid), coins);
+    return db.Read(std::make_pair('c', txid), coins);
 }
 
 bool CCoinsViewDB::SetCoins(const uint256 &txid, const CCoins &coins) {
@@ -37,7 +35,7 @@ bool CCoinsViewDB::SetCoins(const uint256 &txid, const CCoins &coins) {
 }
 
 bool CCoinsViewDB::HaveCoins(const uint256 &txid) {
-    return db.Exists(make_pair('c', txid));
+    return db.Exists(std::make_pair('c', txid));
 }
 
 uint256 CCoinsViewDB::GetBestBlock() {
@@ -70,7 +68,7 @@ CBlockTreeDB::CBlockTreeDB(size_t nCacheSize, bool fMemory, bool fWipe) : CLevel
 
 bool CBlockTreeDB::WriteBlockIndex(const CDiskBlockIndex& blockindex)
 {
-    return Write(make_pair('b', blockindex.GetBlockHash()), blockindex);
+    return Write(std::make_pair('b', blockindex.GetBlockHash()), blockindex);
 }
 
 bool CBlockTreeDB::WriteBestInvalidWork(const CBigNum& bnBestInvalidWork)
@@ -80,11 +78,11 @@ bool CBlockTreeDB::WriteBestInvalidWork(const CBigNum& bnBestInvalidWork)
 }
 
 bool CBlockTreeDB::WriteBlockFileInfo(int nFile, const CBlockFileInfo &info) {
-    return Write(make_pair('f', nFile), info);
+    return Write(std::make_pair('f', nFile), info);
 }
 
 bool CBlockTreeDB::ReadBlockFileInfo(int nFile, CBlockFileInfo &info) {
-    return Read(make_pair('f', nFile), info);
+    return Read(std::make_pair('f', nFile), info);
 }
 
 bool CBlockTreeDB::WriteLastBlockFile(int nFile) {
@@ -159,13 +157,13 @@ bool CCoinsViewDB::GetStats(CCoinsStats &stats) {
 }
 
 bool CBlockTreeDB::ReadTxIndex(const uint256 &txid, CDiskTxPos &pos) {
-    return Read(make_pair('t', txid), pos);
+    return Read(std::make_pair('t', txid), pos);
 }
 
 bool CBlockTreeDB::WriteTxIndex(const std::vector<std::pair<uint256, CDiskTxPos> >&vect) {
     CLevelDBBatch batch;
     for (std::vector<std::pair<uint256,CDiskTxPos> >::const_iterator it=vect.begin(); it!=vect.end(); it++)
-        batch.Write(make_pair('t', it->first), it->second);
+        batch.Write(std::make_pair('t', it->first), it->second);
     return WriteBatch(batch);
 }
 
@@ -186,7 +184,7 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
     leveldb::Iterator *pcursor = NewIterator();
 
     CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << make_pair('b', uint256(0));
+    ssKeySet << std::make_pair('b', uint256(0));
     pcursor->Seek(ssKeySet.str());
 
     // Load mapBlockIndex

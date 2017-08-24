@@ -22,11 +22,8 @@
 #include "json/json_spirit_value.h"
 
 using namespace std;
-using namespace boost;
-using namespace boost::assign;
-using namespace json_spirit;
 
-Value getinfo(const Array& params, bool fHelp)
+json_spirit::Value getinfo(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
         throw runtime_error(
@@ -58,80 +55,80 @@ Value getinfo(const Array& params, bool fHelp)
     proxyType proxy;
     GetProxy(NET_IPV4, proxy);
 
-    Object obj;
-    obj.push_back(Pair("version",         (int)CLIENT_VERSION));
-    obj.push_back(Pair("build_date",      CLIENT_DATE));
-    obj.push_back(Pair("protocolversion", (int)PROTOCOL_VERSION));
+    json_spirit::Object obj;
+    obj.push_back(json_spirit::Pair("version",         (int)CLIENT_VERSION));
+    obj.push_back(json_spirit::Pair("build_date",      CLIENT_DATE));
+    obj.push_back(json_spirit::Pair("protocolversion", (int)PROTOCOL_VERSION));
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
-        obj.push_back(Pair("balance",       ValueFromAmount(pwalletMain->GetBalance())));
+        obj.push_back(json_spirit::Pair("balance",       ValueFromAmount(pwalletMain->GetBalance())));
     }
 #endif
-    obj.push_back(Pair("blocks",             (int)chainActive.Height()));
-    obj.push_back(Pair("timeoffset",         GetTimeOffset()));
-    obj.push_back(Pair("connections",        (int)vNodes.size()));
-    obj.push_back(Pair("proxy",              (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : string())));
-    obj.push_back(Pair("pow_algo_id",        miningAlgo));
-    obj.push_back(Pair("pow_algo",           GetAlgoName(miningAlgo)));
-    obj.push_back(Pair("difficulty",         (double)GetDifficulty(NULL, miningAlgo)));
-    obj.push_back(Pair("difficulty_sha256d", (double)GetDifficulty(NULL, ALGO_SHA256D)));
-    obj.push_back(Pair("difficulty_scrypt",  (double)GetDifficulty(NULL, ALGO_SCRYPT)));
-    obj.push_back(Pair("difficulty_groestl", (double)GetDifficulty(NULL, ALGO_GROESTL)));
-    obj.push_back(Pair("difficulty_skein",   (double)GetDifficulty(NULL, ALGO_SKEIN)));
-    obj.push_back(Pair("difficulty_qubit",   (double)GetDifficulty(NULL, ALGO_QUBIT)));
+    obj.push_back(json_spirit::Pair("blocks",             (int)chainActive.Height()));
+    obj.push_back(json_spirit::Pair("timeoffset",         GetTimeOffset()));
+    obj.push_back(json_spirit::Pair("connections",        (int)vNodes.size()));
+    obj.push_back(json_spirit::Pair("proxy",              (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : string())));
+    obj.push_back(json_spirit::Pair("pow_algo_id",        miningAlgo));
+    obj.push_back(json_spirit::Pair("pow_algo",           GetAlgoName(miningAlgo)));
+    obj.push_back(json_spirit::Pair("difficulty",         (double)GetDifficulty(NULL, miningAlgo)));
+    obj.push_back(json_spirit::Pair("difficulty_sha256d", (double)GetDifficulty(NULL, ALGO_SHA256D)));
+    obj.push_back(json_spirit::Pair("difficulty_scrypt",  (double)GetDifficulty(NULL, ALGO_SCRYPT)));
+    obj.push_back(json_spirit::Pair("difficulty_groestl", (double)GetDifficulty(NULL, ALGO_GROESTL)));
+    obj.push_back(json_spirit::Pair("difficulty_skein",   (double)GetDifficulty(NULL, ALGO_SKEIN)));
+    obj.push_back(json_spirit::Pair("difficulty_qubit",   (double)GetDifficulty(NULL, ALGO_QUBIT)));
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
-        obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
-        obj.push_back(Pair("keypoolsize",   (int)pwalletMain->GetKeyPoolSize()));
+        obj.push_back(json_spirit::Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
+        obj.push_back(json_spirit::Pair("keypoolsize",   (int)pwalletMain->GetKeyPoolSize()));
     }
     if (pwalletMain && pwalletMain->IsCrypted())
-        obj.push_back(Pair("unlocked_until", nWalletUnlockTime));
-    obj.push_back(Pair("paytxfee",      ValueFromAmount(nTransactionFee)));
+        obj.push_back(json_spirit::Pair("unlocked_until", nWalletUnlockTime));
+    obj.push_back(json_spirit::Pair("paytxfee",      ValueFromAmount(nTransactionFee)));
 #endif
-    obj.push_back(Pair("relayfee",      ValueFromAmount(CTransaction::nMinRelayTxFee)));
-    obj.push_back(Pair("errors",        GetWarnings("statusbar")));
+    obj.push_back(json_spirit::Pair("relayfee",      ValueFromAmount(CTransaction::nMinRelayTxFee)));
+    obj.push_back(json_spirit::Pair("errors",        GetWarnings("statusbar")));
     return obj;
 }
 
 #ifdef ENABLE_WALLET
-class DescribeAddressVisitor : public boost::static_visitor<Object>
+class DescribeAddressVisitor : public boost::static_visitor<json_spirit::Object>
 {
 public:
-    Object operator()(const CNoDestination &dest) const { return Object(); }
+    json_spirit::Object operator()(const CNoDestination &dest) const { return json_spirit::Object(); }
 
-    Object operator()(const CKeyID &keyID) const {
-        Object obj;
+    json_spirit::Object operator()(const CKeyID &keyID) const {
+        json_spirit::Object obj;
         CPubKey vchPubKey;
         pwalletMain->GetPubKey(keyID, vchPubKey);
-        obj.push_back(Pair("isscript", false));
-        obj.push_back(Pair("pubkey", HexStr(vchPubKey)));
-        obj.push_back(Pair("iscompressed", vchPubKey.IsCompressed()));
+        obj.push_back(json_spirit::Pair("isscript", false));
+        obj.push_back(json_spirit::Pair("pubkey", HexStr(vchPubKey)));
+        obj.push_back(json_spirit::Pair("iscompressed", vchPubKey.IsCompressed()));
         return obj;
     }
 
-    Object operator()(const CScriptID &scriptID) const {
-        Object obj;
-        obj.push_back(Pair("isscript", true));
+    json_spirit::Object operator()(const CScriptID &scriptID) const {
+        json_spirit::Object obj;
+        obj.push_back(json_spirit::Pair("isscript", true));
         CScript subscript;
         pwalletMain->GetCScript(scriptID, subscript);
         std::vector<CTxDestination> addresses;
         txnouttype whichType;
         int nRequired;
         ExtractDestinations(subscript, whichType, addresses, nRequired);
-        obj.push_back(Pair("script", GetTxnOutputType(whichType)));
-        obj.push_back(Pair("hex", HexStr(subscript.begin(), subscript.end())));
-        Array a;
+        obj.push_back(json_spirit::Pair("script", GetTxnOutputType(whichType)));
+        obj.push_back(json_spirit::Pair("hex", HexStr(subscript.begin(), subscript.end())));
+        json_spirit::Array a;
         BOOST_FOREACH(const CTxDestination& addr, addresses)
             a.push_back(CBitcoinAddress(addr).ToString());
-        obj.push_back(Pair("addresses", a));
+        obj.push_back(json_spirit::Pair("addresses", a));
         if (whichType == TX_MULTISIG)
-            obj.push_back(Pair("sigsrequired", nRequired));
+            obj.push_back(json_spirit::Pair("sigsrequired", nRequired));
         return obj;
     }
 };
 #endif
 
-Value validateaddress(const Array& params, bool fHelp)
+json_spirit::Value validateaddress(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw runtime_error(
@@ -157,22 +154,22 @@ Value validateaddress(const Array& params, bool fHelp)
     CBitcoinAddress address(params[0].get_str());
     bool isValid = address.IsValid();
 
-    Object ret;
-    ret.push_back(Pair("isvalid", isValid));
+    json_spirit::Object ret;
+    ret.push_back(json_spirit::Pair("isvalid", isValid));
     if (isValid)
     {
         CTxDestination dest = address.Get();
         string currentAddress = address.ToString();
-        ret.push_back(Pair("address", currentAddress));
+        ret.push_back(json_spirit::Pair("address", currentAddress));
 #ifdef ENABLE_WALLET
         bool fMine = pwalletMain ? IsMine(*pwalletMain, dest) : false;
-        ret.push_back(Pair("ismine", fMine));
+        ret.push_back(json_spirit::Pair("ismine", fMine));
         if (fMine) {
-            Object detail = boost::apply_visitor(DescribeAddressVisitor(), dest);
+            json_spirit::Object detail = boost::apply_visitor(DescribeAddressVisitor(), dest);
             ret.insert(ret.end(), detail.begin(), detail.end());
         }
         if (pwalletMain && pwalletMain->mapAddressBook.count(dest))
-            ret.push_back(Pair("account", pwalletMain->mapAddressBook[dest].name));
+            ret.push_back(json_spirit::Pair("account", pwalletMain->mapAddressBook[dest].name));
 #endif
     }
     return ret;
@@ -181,10 +178,10 @@ Value validateaddress(const Array& params, bool fHelp)
 //
 // Used by addmultisigaddress / createmultisig:
 //
-CScript _createmultisig(const Array& params)
+CScript _createmultisig(const json_spirit::Array& params)
 {
     int nRequired = params[0].get_int();
-    const Array& keys = params[1].get_array();
+    const json_spirit::Array& keys = params[1].get_array();
 
     // Gather public keys
     if (nRequired < 1)
@@ -236,7 +233,7 @@ CScript _createmultisig(const Array& params)
     return result;
 }
 
-Value createmultisig(const Array& params, bool fHelp)
+json_spirit::Value createmultisig(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 2)
     {
@@ -272,14 +269,14 @@ Value createmultisig(const Array& params, bool fHelp)
     CScriptID innerID = inner.GetID();
     CBitcoinAddress address(innerID);
 
-    Object result;
-    result.push_back(Pair("address", address.ToString()));
-    result.push_back(Pair("redeemScript", HexStr(inner.begin(), inner.end())));
+    json_spirit::Object result;
+    result.push_back(json_spirit::Pair("address", address.ToString()));
+    result.push_back(json_spirit::Pair("redeemScript", HexStr(inner.begin(), inner.end())));
 
     return result;
 }
 
-Value verifymessage(const Array& params, bool fHelp)
+json_spirit::Value verifymessage(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
         throw runtime_error(
@@ -302,9 +299,9 @@ Value verifymessage(const Array& params, bool fHelp)
             + HelpExampleRpc("verifymessage", "\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\", \"signature\", \"my message\"")
         );
 
-    string strAddress  = params[0].get_str();
-    string strSign     = params[1].get_str();
-    string strMessage  = params[2].get_str();
+    std::string strAddress  = params[0].get_str();
+    std::string strSign     = params[1].get_str();
+    std::string strMessage  = params[2].get_str();
 
     CBitcoinAddress addr(strAddress);
     if (!addr.IsValid())
@@ -315,7 +312,7 @@ Value verifymessage(const Array& params, bool fHelp)
         throw JSONRPCError(RPC_TYPE_ERROR, "Address does not refer to key");
 
     bool fInvalid = false;
-    vector<unsigned char> vchSig = DecodeBase64(strSign.c_str(), &fInvalid);
+    std::vector<unsigned char> vchSig = DecodeBase64(strSign.c_str(), &fInvalid);
 
     if (fInvalid)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Malformed base64 encoding");

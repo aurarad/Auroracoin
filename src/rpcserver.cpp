@@ -29,7 +29,7 @@ static std::string strRPCUserColonPass;
 
 // These are created by StartRPCThreads, destroyed in StopRPCThreads
 static boost::asio::io_service* rpc_io_service = NULL;
-static std::map<std::__cxx11::string, boost::shared_ptr<boost::asio::deadline_timer> > deadlineTimers;
+static std::map<std::string, boost::shared_ptr<boost::asio::deadline_timer> > deadlineTimers;
 static boost::asio::ssl::context* rpc_ssl_context = NULL;
 static boost::thread_group* rpc_worker_group = NULL;
 static boost::asio::io_service::work *rpc_dummy_work = NULL;

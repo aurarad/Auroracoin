@@ -58,7 +58,7 @@ void WalletTxToJSON(const CWalletTx& wtx, json_spirit::Object& entry)
         entry.push_back(json_spirit::Pair(item.first, item.second));
 }
 
-std::__cxx11::string AccountFromValue(const json_spirit::Value& value)
+std::string AccountFromValue(const json_spirit::Value& value)
 {
     std::__cxx11::string strAccount = value.get_str();
     if (strAccount == "*")

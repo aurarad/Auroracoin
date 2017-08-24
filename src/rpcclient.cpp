@@ -24,11 +24,8 @@
 #include "json/json_spirit_writer_template.h"
 
 using namespace std;
-using namespace boost;
-using namespace boost::asio;
-using namespace json_spirit;
 
-Object CallRPC(const string& strMethod, const Array& params)
+json_spirit::Object CallRPC(const string& strMethod, const json_spirit::Array& params)
 {
     if (mapArgs["-rpcuser"] == "" && mapArgs["-rpcpassword"] == "")
         throw runtime_error(strprintf(
@@ -38,12 +35,12 @@ Object CallRPC(const string& strMethod, const Array& params)
 
     // Connect to localhost
     bool fUseSSL = GetBoolArg("-rpcssl", false);
-    asio::io_service io_service;
-    ssl::context context(io_service, ssl::context::sslv23);
-    context.set_options(ssl::context::no_sslv2);
-    asio::ssl::stream<asio::ip::tcp::socket> sslStream(io_service, context);
-    SSLIOStreamDevice<asio::ip::tcp> d(sslStream, fUseSSL);
-    iostreams::stream< SSLIOStreamDevice<asio::ip::tcp> > stream(d);
+    boost::asio::io_service io_service;
+    boost::asio::ssl::context context(io_service, boost::asio::ssl::context::sslv23);
+    context.set_options(boost::asio::ssl::context::no_sslv2);
+    boost::asio::ssl::stream<boost::asio::ip::tcp::socket> sslStream(io_service, context);
+    SSLIOStreamDevice<boost::asio::ip::tcp> d(sslStream, fUseSSL);
+    boost::iostreams::stream< SSLIOStreamDevice<boost::asio::ip::tcp> > stream(d);
 
     bool fWait = GetBoolArg("-rpcwait", false); // -rpcwait means try until server has started
     do {
@@ -82,10 +79,10 @@ Object CallRPC(const string& strMethod, const Array& params)
         throw runtime_error("no response from server");
 
     // Parse reply
-    Value valReply;
+    json_spirit::Value valReply;
     if (!read_string(strReply, valReply))
         throw runtime_error("couldn't parse reply from server");
-    const Object& reply = valReply.get_obj();
+    const json_spirit::Object& reply = valReply.get_obj();
     if (reply.empty())
         throw runtime_error("expected reply to have result, error and id properties");
 
@@ -93,14 +90,14 @@ Object CallRPC(const string& strMethod, const Array& params)
 }
 
 template<typename T>
-void ConvertTo(Value& value, bool fAllowNull=false)
+void ConvertTo(json_spirit::Value& value, bool fAllowNull=false)
 {
-    if (fAllowNull && value.type() == null_type)
+    if (fAllowNull && value.type() == json_spirit::null_type)
         return;
-    if (value.type() == str_type)
+    if (value.type() == json_spirit::str_type)
     {
         // reinterpret string as unquoted json value
-        Value value2;
+        json_spirit::Value value2;
         string strJSON = value.get_str();
         if (!read_string(strJSON, value2))
             throw runtime_error(string("Error parsing JSON:")+strJSON);
@@ -114,9 +111,9 @@ void ConvertTo(Value& value, bool fAllowNull=false)
 }
 
 // Convert strings to command-specific RPC representation
-Array RPCConvertValues(const std::string &strMethod, const std::vector<std::string> &strParams)
+json_spirit::Array RPCConvertValues(const std::string &strMethod, const std::vector<std::string> &strParams)
 {
-    Array params;
+    json_spirit::Array params;
     BOOST_FOREACH(const std::string &param, strParams)
         params.push_back(param);
 
@@ -149,28 +146,28 @@ Array RPCConvertValues(const std::string &strMethod, const std::vector<std::stri
     if (strMethod == "listtransactions"       && n > 2) ConvertTo<int64_t>(params[2]);
     if (strMethod == "listaccounts"           && n > 0) ConvertTo<int64_t>(params[0]);
     if (strMethod == "walletpassphrase"       && n > 1) ConvertTo<int64_t>(params[1]);
-    if (strMethod == "getblocktemplate"       && n > 0) ConvertTo<Object>(params[0]);
+    if (strMethod == "getblocktemplate"       && n > 0) ConvertTo<json_spirit::Object>(params[0]);
     if (strMethod == "listsinceblock"         && n > 1) ConvertTo<int64_t>(params[1]);
-    if (strMethod == "sendmany"               && n > 1) ConvertTo<Object>(params[1]);
+    if (strMethod == "sendmany"               && n > 1) ConvertTo<json_spirit::Object>(params[1]);
     if (strMethod == "sendmany"               && n > 2) ConvertTo<int64_t>(params[2]);
     if (strMethod == "addmultisigaddress"     && n > 0) ConvertTo<int64_t>(params[0]);
-    if (strMethod == "addmultisigaddress"     && n > 1) ConvertTo<Array>(params[1]);
+    if (strMethod == "addmultisigaddress"     && n > 1) ConvertTo<json_spirit::Array>(params[1]);
     if (strMethod == "createmultisig"         && n > 0) ConvertTo<int64_t>(params[0]);
-    if (strMethod == "createmultisig"         && n > 1) ConvertTo<Array>(params[1]);
+    if (strMethod == "createmultisig"         && n > 1) ConvertTo<json_spirit::Array>(params[1]);
     if (strMethod == "listunspent"            && n > 0) ConvertTo<int64_t>(params[0]);
     if (strMethod == "listunspent"            && n > 1) ConvertTo<int64_t>(params[1]);
-    if (strMethod == "listunspent"            && n > 2) ConvertTo<Array>(params[2]);
+    if (strMethod == "listunspent"            && n > 2) ConvertTo<json_spirit::Array>(params[2]);
     if (strMethod == "getblock"               && n > 1) ConvertTo<bool>(params[1]);
     if (strMethod == "getrawtransaction"      && n > 1) ConvertTo<int64_t>(params[1]);
-    if (strMethod == "createrawtransaction"   && n > 0) ConvertTo<Array>(params[0]);
-    if (strMethod == "createrawtransaction"   && n > 1) ConvertTo<Object>(params[1]);
-    if (strMethod == "signrawtransaction"     && n > 1) ConvertTo<Array>(params[1], true);
-    if (strMethod == "signrawtransaction"     && n > 2) ConvertTo<Array>(params[2], true);
+    if (strMethod == "createrawtransaction"   && n > 0) ConvertTo<json_spirit::Array>(params[0]);
+    if (strMethod == "createrawtransaction"   && n > 1) ConvertTo<json_spirit::Object>(params[1]);
+    if (strMethod == "signrawtransaction"     && n > 1) ConvertTo<json_spirit::Array>(params[1], true);
+    if (strMethod == "signrawtransaction"     && n > 2) ConvertTo<json_spirit::Array>(params[2], true);
     if (strMethod == "sendrawtransaction"     && n > 1) ConvertTo<bool>(params[1], true);
     if (strMethod == "gettxout"               && n > 1) ConvertTo<int64_t>(params[1]);
     if (strMethod == "gettxout"               && n > 2) ConvertTo<bool>(params[2]);
     if (strMethod == "lockunspent"            && n > 0) ConvertTo<bool>(params[0]);
-    if (strMethod == "lockunspent"            && n > 1) ConvertTo<Array>(params[1]);
+    if (strMethod == "lockunspent"            && n > 1) ConvertTo<json_spirit::Array>(params[1]);
     if (strMethod == "importprivkey"          && n > 2) ConvertTo<bool>(params[2]);
     if (strMethod == "verifychain"            && n > 0) ConvertTo<int64_t>(params[0]);
     if (strMethod == "verifychain"            && n > 1) ConvertTo<int64_t>(params[1]);
@@ -200,16 +197,16 @@ int CommandLineRPC(int argc, char *argv[])
 
         // Parameters default to strings
         std::vector<std::string> strParams(&argv[2], &argv[argc]);
-        Array params = RPCConvertValues(strMethod, strParams);
+        json_spirit::Array params = RPCConvertValues(strMethod, strParams);
 
         // Execute
-        Object reply = CallRPC(strMethod, params);
+        json_spirit::Object reply = CallRPC(strMethod, params);
 
         // Parse reply
-        const Value& result = find_value(reply, "result");
-        const Value& error  = find_value(reply, "error");
+        const json_spirit::Value& result = find_value(reply, "result");
+        const json_spirit::Value& error  = find_value(reply, "error");
 
-        if (error.type() != null_type)
+        if (error.type() != json_spirit::null_type)
         {
             // Error
             strPrint = "error: " + write_string(error, false);
@@ -219,9 +216,9 @@ int CommandLineRPC(int argc, char *argv[])
         else
         {
             // Result
-            if (result.type() == null_type)
+            if (result.type() == json_spirit::null_type)
                 strPrint = "";
-            else if (result.type() == str_type)
+            else if (result.type() == json_spirit::str_type)
                 strPrint = result.get_str();
             else
                 strPrint = write_string(result, true);

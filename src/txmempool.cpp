@@ -6,8 +6,6 @@
 #include "core.h"
 #include "txmempool.h"
 
-using namespace std;
-
 CTxMemPoolEntry::CTxMemPoolEntry()
 {
     nHeight = MEMPOOL_HEIGHT;
@@ -114,7 +112,7 @@ void CTxMemPool::remove(const CTransaction &tx, std::list<CTransaction>& removed
 void CTxMemPool::removeConflicts(const CTransaction &tx, std::list<CTransaction>& removed)
 {
     // Remove transactions which depend on inputs of tx, recursively
-    list<CTransaction> result;
+    std::list<CTransaction> result;
     LOCK(cs);
     BOOST_FOREACH(const CTxIn &txin, tx.vin) {
         std::map<COutPoint, CInPoint>::iterator it = mapNextTx.find(txin.prevout);
@@ -167,7 +165,7 @@ void CTxMemPool::check(CCoinsViewCache *pcoins) const
     }
     for (std::map<COutPoint, CInPoint>::const_iterator it = mapNextTx.begin(); it != mapNextTx.end(); it++) {
         uint256 hash = it->second.ptx->GetHash();
-        map<uint256, CTxMemPoolEntry>::const_iterator it2 = mapTx.find(hash);
+        std::map<uint256, CTxMemPoolEntry>::const_iterator it2 = mapTx.find(hash);
         const CTransaction& tx = it2->second.GetTx();
         assert(it2 != mapTx.end());
         assert(&tx == it->second.ptx);
@@ -176,20 +174,20 @@ void CTxMemPool::check(CCoinsViewCache *pcoins) const
     }
 }
 
-void CTxMemPool::queryHashes(vector<uint256>& vtxid)
+void CTxMemPool::queryHashes(std::vector<uint256>& vtxid)
 {
     vtxid.clear();
 
     LOCK(cs);
     vtxid.reserve(mapTx.size());
-    for (map<uint256, CTxMemPoolEntry>::iterator mi = mapTx.begin(); mi != mapTx.end(); ++mi)
+    for (std::map<uint256, CTxMemPoolEntry>::iterator mi = mapTx.begin(); mi != mapTx.end(); ++mi)
         vtxid.push_back((*mi).first);
 }
 
 bool CTxMemPool::lookup(uint256 hash, CTransaction& result) const
 {
     LOCK(cs);
-    map<uint256, CTxMemPoolEntry>::const_iterator i = mapTx.find(hash);
+    std::map<uint256, CTxMemPoolEntry>::const_iterator i = mapTx.find(hash);
     if (i == mapTx.end()) return false;
     result = i->second.GetTx();
     return true;

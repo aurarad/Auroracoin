@@ -23,12 +23,10 @@
 #include <boost/shared_ptr.hpp>
 #include "json/json_spirit_writer_template.h"
 
-using namespace std;
-
-json_spirit::Object CallRPC(const string& strMethod, const json_spirit::Array& params)
+json_spirit::Object CallRPC(const std::string& strMethod, const json_spirit::Array& params)
 {
     if (mapArgs["-rpcuser"] == "" && mapArgs["-rpcpassword"] == "")
-        throw runtime_error(strprintf(
+        throw std::runtime_error(strprintf(
             _("You must set rpcpassword=<password> in the configuration file:\n%s\n"
               "If the file does not exist, create it with owner-readable-only file permissions."),
                 GetConfigFile().string().c_str()));
@@ -49,17 +47,17 @@ json_spirit::Object CallRPC(const string& strMethod, const json_spirit::Array& p
         if (fWait)
             MilliSleep(1000);
         else
-            throw runtime_error("couldn't connect to server");
+            throw std::runtime_error("couldn't connect to server");
     } while (fWait);
 
     // HTTP basic authentication
-    string strUserPass64 = EncodeBase64(mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"]);
-    map<string, string> mapRequestHeaders;
-    mapRequestHeaders["Authorization"] = string("Basic ") + strUserPass64;
+    std::string strUserPass64 = EncodeBase64(mapArgs["-rpcuser"] + ":" + mapArgs["-rpcpassword"]);
+    std::map<std::string, std::string> mapRequestHeaders;
+    mapRequestHeaders["Authorization"] = std::string("Basic ") + strUserPass64;
 
     // Send request
-    string strRequest = JSONRPCRequest(strMethod, params, 1);
-    string strPost = HTTPPost(strRequest, mapRequestHeaders);
+    std::string strRequest = JSONRPCRequest(strMethod, params, 1);
+    std::string strPost = HTTPPost(strRequest, mapRequestHeaders);
     stream << strPost << std::flush;
 
     // Receive HTTP reply status
@@ -67,24 +65,24 @@ json_spirit::Object CallRPC(const string& strMethod, const json_spirit::Array& p
     int nStatus = ReadHTTPStatus(stream, nProto);
 
     // Receive HTTP reply message headers and body
-    map<string, string> mapHeaders;
-    string strReply;
+    std::map<std::string, std::string> mapHeaders;
+    std::string strReply;
     ReadHTTPMessage(stream, mapHeaders, strReply, nProto);
 
     if (nStatus == HTTP_UNAUTHORIZED)
-        throw runtime_error("incorrect rpcuser or rpcpassword (authorization failed)");
+        throw std::runtime_error("incorrect rpcuser or rpcpassword (authorization failed)");
     else if (nStatus >= 400 && nStatus != HTTP_BAD_REQUEST && nStatus != HTTP_NOT_FOUND && nStatus != HTTP_INTERNAL_SERVER_ERROR)
-        throw runtime_error(strprintf("server returned HTTP error %d", nStatus));
+        throw std::runtime_error(strprintf("server returned HTTP error %d", nStatus));
     else if (strReply.empty())
-        throw runtime_error("no response from server");
+        throw std::runtime_error("no response from server");
 
     // Parse reply
     json_spirit::Value valReply;
     if (!read_string(strReply, valReply))
-        throw runtime_error("couldn't parse reply from server");
+        throw std::runtime_error("couldn't parse reply from server");
     const json_spirit::Object& reply = valReply.get_obj();
     if (reply.empty())
-        throw runtime_error("expected reply to have result, error and id properties");
+        throw std::runtime_error("expected reply to have result, error and id properties");
 
     return reply;
 }
@@ -98,9 +96,9 @@ void ConvertTo(json_spirit::Value& value, bool fAllowNull=false)
     {
         // reinterpret string as unquoted json value
         json_spirit::Value value2;
-        string strJSON = value.get_str();
+        std::string strJSON = value.get_str();
         if (!read_string(strJSON, value2))
-            throw runtime_error(string("Error parsing JSON:")+strJSON);
+            throw std::runtime_error(std::string("Error parsing JSON:")+strJSON);
         ConvertTo<T>(value2, fAllowNull);
         value = value2;
     }
@@ -179,7 +177,7 @@ json_spirit::Array RPCConvertValues(const std::string &strMethod, const std::vec
 
 int CommandLineRPC(int argc, char *argv[])
 {
-    string strPrint;
+    std::string strPrint;
     int nRet = 0;
     try
     {
@@ -192,8 +190,8 @@ int CommandLineRPC(int argc, char *argv[])
 
         // Method
         if (argc < 2)
-            throw runtime_error("too few parameters");
-        string strMethod = argv[1];
+            throw std::runtime_error("too few parameters");
+        std::string strMethod = argv[1];
 
         // Parameters default to strings
         std::vector<std::string> strParams(&argv[2], &argv[argc]);
@@ -228,7 +226,7 @@ int CommandLineRPC(int argc, char *argv[])
         throw;
     }
     catch (std::exception& e) {
-        strPrint = string("error: ") + e.what();
+        strPrint = std::string("error: ") + e.what();
         nRet = abs(RPC_MISC_ERROR);
     }
     catch (...) {
@@ -245,7 +243,7 @@ int CommandLineRPC(int argc, char *argv[])
 
 std::string HelpMessageCli(bool mainProgram)
 {
-    string strUsage;
+    std::string strUsage;
     if(mainProgram)
     {
         strUsage += _("Options:") + "\n";

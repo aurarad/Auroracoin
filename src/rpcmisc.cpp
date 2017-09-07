@@ -21,12 +21,10 @@
 #include "json/json_spirit_utils.h"
 #include "json/json_spirit_value.h"
 
-using namespace std;
-
 json_spirit::Value getinfo(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getinfo\n"
             "Returns an object containing various state info.\n"
             "\nResult:\n"
@@ -67,7 +65,7 @@ json_spirit::Value getinfo(const json_spirit::Array& params, bool fHelp)
     obj.push_back(json_spirit::Pair("blocks",             (int)chainActive.Height()));
     obj.push_back(json_spirit::Pair("timeoffset",         GetTimeOffset()));
     obj.push_back(json_spirit::Pair("connections",        (int)vNodes.size()));
-    obj.push_back(json_spirit::Pair("proxy",              (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : string())));
+    obj.push_back(json_spirit::Pair("proxy",              (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : std::string())));
     obj.push_back(json_spirit::Pair("pow_algo_id",        miningAlgo));
     obj.push_back(json_spirit::Pair("pow_algo",           GetAlgoName(miningAlgo)));
     obj.push_back(json_spirit::Pair("difficulty",         (double)GetDifficulty(NULL, miningAlgo)));
@@ -131,7 +129,7 @@ public:
 json_spirit::Value validateaddress(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
-        throw runtime_error(
+        throw std::runtime_error(
             "validateaddress \"auroracoinaddress\"\n"
             "\nReturn information about the given auroracoin address.\n"
             "\nArguments:\n"
@@ -159,7 +157,7 @@ json_spirit::Value validateaddress(const json_spirit::Array& params, bool fHelp)
     if (isValid)
     {
         CTxDestination dest = address.Get();
-        string currentAddress = address.ToString();
+        std::string currentAddress = address.ToString();
         ret.push_back(json_spirit::Pair("address", currentAddress));
 #ifdef ENABLE_WALLET
         bool fMine = pwalletMain ? IsMine(*pwalletMain, dest) : false;
@@ -185,9 +183,9 @@ CScript _createmultisig(const json_spirit::Array& params)
 
     // Gather public keys
     if (nRequired < 1)
-        throw runtime_error("a multisignature address must require at least one key to redeem");
+        throw std::runtime_error("a multisignature address must require at least one key to redeem");
     if ((int)keys.size() < nRequired)
-        throw runtime_error(
+        throw std::runtime_error(
             strprintf("not enough keys supplied "
                       "(got %u keys, but need at least %d to redeem)", keys.size(), nRequired));
     std::vector<CPubKey> pubkeys;
@@ -202,14 +200,14 @@ CScript _createmultisig(const json_spirit::Array& params)
         {
             CKeyID keyID;
             if (!address.GetKeyID(keyID))
-                throw runtime_error(
+                throw std::runtime_error(
                     strprintf("%s does not refer to a key",ks));
             CPubKey vchPubKey;
             if (!pwalletMain->GetPubKey(keyID, vchPubKey))
-                throw runtime_error(
+                throw std::runtime_error(
                     strprintf("no full public key for address %s",ks));
             if (!vchPubKey.IsFullyValid())
-                throw runtime_error(" Invalid public key: "+ks);
+                throw std::runtime_error(" Invalid public key: "+ks);
             pubkeys[i] = vchPubKey;
         }
 
@@ -220,12 +218,12 @@ CScript _createmultisig(const json_spirit::Array& params)
         {
             CPubKey vchPubKey(ParseHex(ks));
             if (!vchPubKey.IsFullyValid())
-                throw runtime_error(" Invalid public key: "+ks);
+                throw std::runtime_error(" Invalid public key: "+ks);
             pubkeys[i] = vchPubKey;
         }
         else
         {
-            throw runtime_error(" Invalid public key: "+ks);
+            throw std::runtime_error(" Invalid public key: "+ks);
         }
     }
     CScript result;
@@ -237,7 +235,7 @@ json_spirit::Value createmultisig(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 2)
     {
-        string msg = "createmultisig nrequired [\"key\",...]\n"
+        std::string msg = "createmultisig nrequired [\"key\",...]\n"
             "\nCreates a multi-signature address with n signature of m keys required.\n"
             "It returns a json object with the address and redeemScript.\n"
 
@@ -261,7 +259,7 @@ json_spirit::Value createmultisig(const json_spirit::Array& params, bool fHelp)
             "\nAs a json rpc call\n"
             + HelpExampleRpc("createmultisig", "2, \"[\\\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\\\",\\\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\\\"]\"")
         ;
-        throw runtime_error(msg);
+        throw std::runtime_error(msg);
     }
 
     // Construct using pay-to-script-hash:
@@ -279,7 +277,7 @@ json_spirit::Value createmultisig(const json_spirit::Array& params, bool fHelp)
 json_spirit::Value verifymessage(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 3)
-        throw runtime_error(
+        throw std::runtime_error(
             "verifymessage \"auroracoinaddress\" \"signature\" \"message\"\n"
             "\nVerify a signed message\n"
             "\nArguments:\n"

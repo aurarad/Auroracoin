@@ -12,10 +12,7 @@
 
 #include "json/json_spirit_value.h"
 
-using namespace json_spirit;
-using namespace std;
-
-void ScriptPubKeyToJSON(const CScript& scriptPubKey, Object& out, bool fIncludeHex);
+void ScriptPubKeyToJSON(const CScript& scriptPubKey, json_spirit::Object& out, bool fIncludeHex);
 
 double GetDifficulty(const CBlockIndex* blockindex, int algo)
 {
@@ -61,44 +58,44 @@ double GetDifficulty(const CBlockIndex* blockindex, int algo)
 }
 
 
-Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex)
+json_spirit::Object blockToJSON(const CBlock& block, const CBlockIndex* blockindex)
 {
-    Object result;
-    result.push_back(Pair("hash", block.GetHash().GetHex()));
+    json_spirit::Object result;
+    result.push_back(json_spirit::Pair("hash", block.GetHash().GetHex()));
     CMerkleTx txGen(block.vtx[0]);
     txGen.SetMerkleBranch(&block);
-    result.push_back(Pair("confirmations", (int)txGen.GetDepthInMainChain()));
-    result.push_back(Pair("size", (int)::GetSerializeSize(block, SER_NETWORK, PROTOCOL_VERSION)));
-    result.push_back(Pair("height", blockindex->nHeight));
-    result.push_back(Pair("version", block.nVersion));
+    result.push_back(json_spirit::Pair("confirmations", (int)txGen.GetDepthInMainChain()));
+    result.push_back(json_spirit::Pair("size", (int)::GetSerializeSize(block, SER_NETWORK, PROTOCOL_VERSION)));
+    result.push_back(json_spirit::Pair("height", blockindex->nHeight));
+    result.push_back(json_spirit::Pair("version", block.nVersion));
     int algo = block.GetAlgo();
-    result.push_back(Pair("pow_algo_id", algo));
-    result.push_back(Pair("pow_algo", GetAlgoName(algo)));
-    result.push_back(Pair("pow_hash", block.GetPoWHash(algo).GetHex()));
-    result.push_back(Pair("merkleroot", block.hashMerkleRoot.GetHex()));
-    Array txs;
+    result.push_back(json_spirit::Pair("pow_algo_id", algo));
+    result.push_back(json_spirit::Pair("pow_algo", GetAlgoName(algo)));
+    result.push_back(json_spirit::Pair("pow_hash", block.GetPoWHash(algo).GetHex()));
+    result.push_back(json_spirit::Pair("merkleroot", block.hashMerkleRoot.GetHex()));
+    json_spirit::Array txs;
     BOOST_FOREACH(const CTransaction&tx, block.vtx)
         txs.push_back(tx.GetHash().GetHex());
-    result.push_back(Pair("tx", txs));
-    result.push_back(Pair("time", block.GetBlockTime()));
-    result.push_back(Pair("nonce", (uint64_t)block.nNonce));
-    result.push_back(Pair("bits", HexBits(block.nBits)));
-    result.push_back(Pair("difficulty", GetDifficulty(blockindex, miningAlgo)));
-    result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
+    result.push_back(json_spirit::Pair("tx", txs));
+    result.push_back(json_spirit::Pair("time", block.GetBlockTime()));
+    result.push_back(json_spirit::Pair("nonce", (uint64_t)block.nNonce));
+    result.push_back(json_spirit::Pair("bits", HexBits(block.nBits)));
+    result.push_back(json_spirit::Pair("difficulty", GetDifficulty(blockindex, miningAlgo)));
+    result.push_back(json_spirit::Pair("chainwork", blockindex->nChainWork.GetHex()));
 
     if (blockindex->pprev)
-        result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
+        result.push_back(json_spirit::Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
     CBlockIndex *pnext = chainActive.Next(blockindex);
     if (pnext)
-        result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
+        result.push_back(json_spirit::Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
     return result;
 }
 
 
-Value getblockcount(const Array& params, bool fHelp)
+json_spirit::Value getblockcount(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getblockcount\n"
             "\nReturns the number of blocks in the longest block chain.\n"
             "\nResult:\n"
@@ -111,10 +108,10 @@ Value getblockcount(const Array& params, bool fHelp)
     return chainActive.Height();
 }
 
-Value getbestblockhash(const Array& params, bool fHelp)
+json_spirit::Value getbestblockhash(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getbestblockhash\n"
             "\nReturns the hash of the best (tip) block in the longest block chain.\n"
             "\nResult\n"
@@ -127,10 +124,10 @@ Value getbestblockhash(const Array& params, bool fHelp)
     return chainActive.Tip()->GetBlockHash().GetHex();
 }
 
-Value getdifficulty(const Array& params, bool fHelp)
+json_spirit::Value getdifficulty(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getdifficulty\n"
             "\nReturns the proof-of-work difficulty as a multiple of the minimum difficulty.\n"
             "\nResult:\n"
@@ -144,10 +141,10 @@ Value getdifficulty(const Array& params, bool fHelp)
 }
 
 
-Value getrawmempool(const Array& params, bool fHelp)
+json_spirit::Value getrawmempool(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
-        throw runtime_error(
+        throw std::runtime_error(
             "getrawmempool ( verbose )\n"
             "\nReturns all transaction ids in memory pool as a json array of string transaction ids.\n"
             "\nArguments:\n"
@@ -183,37 +180,37 @@ Value getrawmempool(const Array& params, bool fHelp)
     if (fVerbose)
     {
         LOCK(mempool.cs);
-        Object o;
+        json_spirit::Object o;
         BOOST_FOREACH(const PAIRTYPE(uint256, CTxMemPoolEntry)& entry, mempool.mapTx)
         {
             const uint256& hash = entry.first;
             const CTxMemPoolEntry& e = entry.second;
-            Object info;
-            info.push_back(Pair("size", (int)e.GetTxSize()));
-            info.push_back(Pair("fee", ValueFromAmount(e.GetFee())));
-            info.push_back(Pair("time", e.GetTime()));
-            info.push_back(Pair("height", (int)e.GetHeight()));
-            info.push_back(Pair("startingpriority", e.GetPriority(e.GetHeight())));
-            info.push_back(Pair("currentpriority", e.GetPriority(chainActive.Height())));
+            json_spirit::Object info;
+            info.push_back(json_spirit::Pair("size", (int)e.GetTxSize()));
+            info.push_back(json_spirit::Pair("fee", ValueFromAmount(e.GetFee())));
+            info.push_back(json_spirit::Pair("time", e.GetTime()));
+            info.push_back(json_spirit::Pair("height", (int)e.GetHeight()));
+            info.push_back(json_spirit::Pair("startingpriority", e.GetPriority(e.GetHeight())));
+            info.push_back(json_spirit::Pair("currentpriority", e.GetPriority(chainActive.Height())));
             const CTransaction& tx = e.GetTx();
-            set<string> setDepends;
+            std::set<std::string> setDepends;
             BOOST_FOREACH(const CTxIn& txin, tx.vin)
             {
                 if (mempool.exists(txin.prevout.hash))
                     setDepends.insert(txin.prevout.hash.ToString());
             }
-            Array depends(setDepends.begin(), setDepends.end());
-            info.push_back(Pair("depends", depends));
-            o.push_back(Pair(hash.ToString(), info));
+            json_spirit::Array depends(setDepends.begin(), setDepends.end());
+            info.push_back(json_spirit::Pair("depends", depends));
+            o.push_back(json_spirit::Pair(hash.ToString(), info));
         }
         return o;
     }
     else
     {
-        vector<uint256> vtxid;
+        std::vector<uint256> vtxid;
         mempool.queryHashes(vtxid);
 
-        Array a;
+        json_spirit::Array a;
         BOOST_FOREACH(const uint256& hash, vtxid)
             a.push_back(hash.ToString());
 
@@ -221,10 +218,10 @@ Value getrawmempool(const Array& params, bool fHelp)
     }
 }
 
-Value getblockhash(const Array& params, bool fHelp)
+json_spirit::Value getblockhash(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
-        throw runtime_error(
+        throw std::runtime_error(
             "getblockhash index\n"
             "\nReturns hash of block in best-block-chain at index provided.\n"
             "\nArguments:\n"
@@ -238,16 +235,16 @@ Value getblockhash(const Array& params, bool fHelp)
 
     int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > chainActive.Height())
-        throw runtime_error("Block number out of range.");
+        throw std::runtime_error("Block number out of range.");
 
     CBlockIndex* pblockindex = chainActive[nHeight];
     return pblockindex->GetBlockHash().GetHex();
 }
 
-Value getblock(const Array& params, bool fHelp)
+json_spirit::Value getblock(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
-        throw runtime_error(
+        throw std::runtime_error(
             "getblock \"hash\" ( verbose )\n"
             "\nIf verbose is false, returns a string that is serialized, hex-encoded data for block 'hash'.\n"
             "If verbose is true, returns an Object with information about block <hash>.\n"
@@ -305,10 +302,10 @@ Value getblock(const Array& params, bool fHelp)
     return blockToJSON(block, pblockindex);
 }
 
-Value gettxoutsetinfo(const Array& params, bool fHelp)
+json_spirit::Value gettxoutsetinfo(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "gettxoutsetinfo\n"
             "\nReturns statistics about the unspent transaction output set.\n"
             "Note this call may take some time.\n"
@@ -327,25 +324,25 @@ Value gettxoutsetinfo(const Array& params, bool fHelp)
             + HelpExampleRpc("gettxoutsetinfo", "")
         );
 
-    Object ret;
+    json_spirit::Object ret;
 
     CCoinsStats stats;
     if (pcoinsTip->GetStats(stats)) {
-        ret.push_back(Pair("height", (int64_t)stats.nHeight));
-        ret.push_back(Pair("bestblock", stats.hashBlock.GetHex()));
-        ret.push_back(Pair("transactions", (int64_t)stats.nTransactions));
-        ret.push_back(Pair("txouts", (int64_t)stats.nTransactionOutputs));
-        ret.push_back(Pair("bytes_serialized", (int64_t)stats.nSerializedSize));
-        ret.push_back(Pair("hash_serialized", stats.hashSerialized.GetHex()));
-        ret.push_back(Pair("total_amount", ValueFromAmount(stats.nTotalAmount)));
+        ret.push_back(json_spirit::Pair("height", (int64_t)stats.nHeight));
+        ret.push_back(json_spirit::Pair("bestblock", stats.hashBlock.GetHex()));
+        ret.push_back(json_spirit::Pair("transactions", (int64_t)stats.nTransactions));
+        ret.push_back(json_spirit::Pair("txouts", (int64_t)stats.nTransactionOutputs));
+        ret.push_back(json_spirit::Pair("bytes_serialized", (int64_t)stats.nSerializedSize));
+        ret.push_back(json_spirit::Pair("hash_serialized", stats.hashSerialized.GetHex()));
+        ret.push_back(json_spirit::Pair("total_amount", ValueFromAmount(stats.nTotalAmount)));
     }
     return ret;
 }
 
-Value gettxout(const Array& params, bool fHelp)
+json_spirit::Value gettxout(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() < 2 || params.size() > 3)
-        throw runtime_error(
+        throw std::runtime_error(
             "gettxout \"txid\" n ( includemempool )\n"
             "\nReturns details about an unspent transaction output.\n"
             "\nArguments:\n"
@@ -380,7 +377,7 @@ Value gettxout(const Array& params, bool fHelp)
             + HelpExampleRpc("gettxout", "\"txid\", 1")
         );
 
-    Object ret;
+    json_spirit::Object ret;
 
     std::string strHash = params[0].get_str();
     uint256 hash(strHash);
@@ -394,36 +391,36 @@ Value gettxout(const Array& params, bool fHelp)
         LOCK(mempool.cs);
         CCoinsViewMemPool view(*pcoinsTip, mempool);
         if (!view.GetCoins(hash, coins))
-            return Value::null;
+            return json_spirit::Value::null;
         mempool.pruneSpent(hash, coins); // TODO: this should be done by the CCoinsViewMemPool
     } else {
         if (!pcoinsTip->GetCoins(hash, coins))
-            return Value::null;
+            return json_spirit::Value::null;
     }
     if (n<0 || (unsigned int)n>=coins.vout.size() || coins.vout[n].IsNull())
-        return Value::null;
+        return json_spirit::Value::null;
 
     std::map<uint256, CBlockIndex*>::iterator it = mapBlockIndex.find(pcoinsTip->GetBestBlock());
     CBlockIndex *pindex = it->second;
-    ret.push_back(Pair("bestblock", pindex->GetBlockHash().GetHex()));
+    ret.push_back(json_spirit::Pair("bestblock", pindex->GetBlockHash().GetHex()));
     if ((unsigned int)coins.nHeight == MEMPOOL_HEIGHT)
-        ret.push_back(Pair("confirmations", 0));
+        ret.push_back(json_spirit::Pair("confirmations", 0));
     else
-        ret.push_back(Pair("confirmations", pindex->nHeight - coins.nHeight + 1));
-    ret.push_back(Pair("value", ValueFromAmount(coins.vout[n].nValue)));
-    Object o;
+        ret.push_back(json_spirit::Pair("confirmations", pindex->nHeight - coins.nHeight + 1));
+    ret.push_back(json_spirit::Pair("value", ValueFromAmount(coins.vout[n].nValue)));
+    json_spirit::Object o;
     ScriptPubKeyToJSON(coins.vout[n].scriptPubKey, o, true);
-    ret.push_back(Pair("scriptPubKey", o));
-    ret.push_back(Pair("version", coins.nVersion));
-    ret.push_back(Pair("coinbase", coins.fCoinBase));
+    ret.push_back(json_spirit::Pair("scriptPubKey", o));
+    ret.push_back(json_spirit::Pair("version", coins.nVersion));
+    ret.push_back(json_spirit::Pair("coinbase", coins.fCoinBase));
 
     return ret;
 }
 
-Value verifychain(const Array& params, bool fHelp)
+json_spirit::Value verifychain(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() > 2)
-        throw runtime_error(
+        throw std::runtime_error(
             "verifychain ( checklevel numblocks )\n"
             "\nVerifies blockchain database.\n"
             "\nArguments:\n"
@@ -446,10 +443,10 @@ Value verifychain(const Array& params, bool fHelp)
     return VerifyDB(nCheckLevel, nCheckDepth);
 }
 
-Value getblockchaininfo(const Array& params, bool fHelp)
+json_spirit::Value getblockchaininfo(const json_spirit::Array& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
-        throw runtime_error(
+        throw std::runtime_error(
             "getblockchaininfo\n"
             "Returns an object containing various state info regarding block chain processing.\n"
             "\nResult:\n"
@@ -469,15 +466,15 @@ Value getblockchaininfo(const Array& params, bool fHelp)
     proxyType proxy;
     GetProxy(NET_IPV4, proxy);
 
-    Object obj;
+    json_spirit::Object obj;
     std::string chain = Params().DataDir();
     if(chain.empty())
         chain = "main";
-    obj.push_back(Pair("chain",         chain));
-    obj.push_back(Pair("blocks",        (int)chainActive.Height()));
-    obj.push_back(Pair("bestblockhash", chainActive.Tip()->GetBlockHash().GetHex()));
-    obj.push_back(Pair("difficulty",    (double)GetDifficulty(NULL, miningAlgo)));
-    obj.push_back(Pair("verificationprogress", Checkpoints::GuessVerificationProgress(chainActive.Tip())));
-    obj.push_back(Pair("chainwork",     chainActive.Tip()->nChainWork.GetHex()));
+    obj.push_back(json_spirit::Pair("chain",         chain));
+    obj.push_back(json_spirit::Pair("blocks",        (int)chainActive.Height()));
+    obj.push_back(json_spirit::Pair("bestblockhash", chainActive.Tip()->GetBlockHash().GetHex()));
+    obj.push_back(json_spirit::Pair("difficulty",    (double)GetDifficulty(NULL, miningAlgo)));
+    obj.push_back(json_spirit::Pair("verificationprogress", Checkpoints::GuessVerificationProgress(chainActive.Tip())));
+    obj.push_back(json_spirit::Pair("chainwork",     chainActive.Tip()->nChainWork.GetHex()));
     return obj;
 }

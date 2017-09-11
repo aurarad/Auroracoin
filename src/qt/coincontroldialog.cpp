@@ -26,7 +26,6 @@
 #include <QTreeWidget>
 #include <QTreeWidgetItem>
 
-using namespace std;
 QList<qint64> CoinControlDialog::payAmounts;
 CCoinControl* CoinControlDialog::coinControl = new CCoinControl();
 
@@ -422,7 +421,7 @@ QString CoinControlDialog::getPriorityLabel(double dPriority)
 // shows count of locked unspent outputs
 void CoinControlDialog::updateLabelLocked()
 {
-    vector<COutPoint> vOutpts;
+    std::vector<COutPoint> vOutpts;
     model->listLockedCoins(vOutpts);
     if (vOutpts.size() > 0)
     {
@@ -451,7 +450,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             if (amount < CENT)
                 fLowOutput = true;
 
-            CTxOut txout(amount, (CScript)vector<unsigned char>(24, 0));
+            CTxOut txout(amount, (CScript)std::vector<unsigned char>(24, 0));
             txDummy.vout.push_back(txout);
             if (txout.IsDust(CTransaction::nMinRelayTxFee))
                fDust = true;
@@ -470,8 +469,8 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
     unsigned int nQuantity      = 0;
     int nQuantityUncompressed   = 0;
 
-    vector<COutPoint> vCoinControl;
-    vector<COutput>   vOutputs;
+    std::vector<COutPoint> vCoinControl;
+    std::vector<COutput>   vOutputs;
     coinControl->ListSelected(vCoinControl);
     model->getOutputs(vCoinControl, vOutputs);
 
@@ -530,7 +529,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
         // Min Fee
         int64_t nMinFee = GetMinFee(txDummy, nBytes, AllowFree(dPriority), GMF_SEND);
 
-        nPayFee = max(nFee, nMinFee);
+        nPayFee = std::max(nFee, nMinFee);
 
         if (nPayAmount > 0)
         {
@@ -554,7 +553,7 @@ void CoinControlDialog::updateLabels(WalletModel *model, QDialog* dialog)
             // Never create dust outputs; if we would, just add the dust to the fee.
             if (nChange > 0 && nChange < CENT)
             {
-                CTxOut txout(nChange, (CScript)vector<unsigned char>(24, 0));
+                CTxOut txout(nChange, (CScript)std::vector<unsigned char>(24, 0));
                 if (txout.IsDust(CTransaction::nMinRelayTxFee))
                 {
                     nPayFee += nChange;
@@ -654,10 +653,10 @@ void CoinControlDialog::updateView()
 
     int nDisplayUnit = model->getOptionsModel()->getDisplayUnit();
 
-    map<QString, vector<COutput> > mapCoins;
+    std::map<QString, std::vector<COutput> > mapCoins;
     model->listCoins(mapCoins);
 
-    BOOST_FOREACH(PAIRTYPE(QString, vector<COutput>) coins, mapCoins)
+    BOOST_FOREACH(PAIRTYPE(QString, std::vector<COutput>) coins, mapCoins)
     {
         QTreeWidgetItem *itemWalletAddress = new QTreeWidgetItem();
         itemWalletAddress->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);

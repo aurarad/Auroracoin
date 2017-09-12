@@ -72,12 +72,13 @@ public:
         vSeeds.push_back(CDNSSeedData("electrum3", "electrum3.auroracoin.is"));
         vSeeds.push_back(CDNSSeedData("electrum4", "electrum4.auroracoin.is"));
 
-        base58Prefixes[PUBKEY_ADDRESS] = boost::assign::list_of(23);
-        base58Prefixes[SCRIPT_ADDRESS] = boost::assign::list_of(5);
-        base58Prefixes[SECRET_KEY]     = boost::assign::list_of(176);
-        base58Prefixes[SECRET_KEY_OLD] = boost::assign::list_of(151);
-        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xB2)(0x1E);
-        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xAD)(0xE4);
+        base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1,23);
+        base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1,5);
+        base58Prefixes[SECRET_KEY]     = std::vector<unsigned char>(1,176);
+        base58Prefixes[SECRET_KEY_OLD] = std::vector<unsigned char>(1,151);
+        base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
+        base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();
+
         // Convert the pnSeeds array into usable address objects.
         for (unsigned int i = 0; i < ARRAYLEN(pnSeed); i++)
         {

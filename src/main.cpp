@@ -1342,7 +1342,15 @@ unsigned int static GetNextWorkRequired_Original(const CBlockIndex* pindexLast, 
       return bnNew.GetCompact();
   }
 
-unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const CBlockHeader *pblock, uint64_t TargetBlocksSpacingSeconds, uint64_t PastBlocksMin, uint64_t PastBlocksMax, int algo) {
+unsigned int static GetNextWorkRequired_KGW(const CBlockIndex* pindexLast, const CBlockHeader *pblock, int algo) {
+
+          static const int64_t BlocksTargetSpacing = 5 * 60; // 1 Minute
+          unsigned int TimeDaySeconds = 60 * 60 * 24;
+          int64_t PastSecondsMin = TimeDaySeconds * 0.5;
+          int64_t PastSecondsMax = TimeDaySeconds * 14;
+          uint64_t PastBlocksMin = PastSecondsMin / BlocksTargetSpacing;
+          uint64_t PastBlocksMax = PastSecondsMax / BlocksTargetSpacing;
+
           /* current difficulty formula, megacoin - kimoto gravity well */
           const CBlockIndex *BlockLastSolved = pindexLast;
           const CBlockIndex *BlockReading = pindexLast;
@@ -1371,7 +1379,7 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const CBloc
                   PastDifficultyAveragePrev = PastDifficultyAverage;
 
                   PastRateActualSeconds = BlockLastSolved->GetBlockTime() - BlockReading->GetBlockTime();
-                  PastRateTargetSeconds = TargetBlocksSpacingSeconds * PastBlocksMass;
+                  PastRateTargetSeconds = BlocksTargetSpacing * PastBlocksMass;
                   PastRateAdjustmentRatio = double(1);
                   if (PastRateActualSeconds < 0) { PastRateActualSeconds = 0; }
                   if (PastRateActualSeconds != 0 && PastRateTargetSeconds != 0) {
@@ -1406,18 +1414,6 @@ unsigned int static KimotoGravityWell(const CBlockIndex* pindexLast, const CBloc
       LogPrintf("KGW %g  %08x  %08x  %s\n" , PastRateAdjustmentRatio, BlockLastSolved->nBits, bnNew.GetCompact(), bnNew.getuint256().ToString().c_str());
 
           return bnNew.GetCompact();
-  }
-
-  unsigned int static GetNextWorkRequired_KGW(const CBlockIndex* pindexLast, const CBlockHeader *pblock, int algo)
-  {
-          static const int64_t BlocksTargetSpacing = 5 * 60; // 1 Minute
-          unsigned int TimeDaySeconds = 60 * 60 * 24;
-          int64_t PastSecondsMin = TimeDaySeconds * 0.5;
-          int64_t PastSecondsMax = TimeDaySeconds * 14;
-          uint64_t PastBlocksMin = PastSecondsMin / BlocksTargetSpacing;
-          uint64_t PastBlocksMax = PastSecondsMax / BlocksTargetSpacing;
-
-          return KimotoGravityWell(pindexLast, pblock, BlocksTargetSpacing, PastBlocksMin, PastBlocksMax, algo);
   }
 
 static unsigned int GetNextWorkRequiredMULTI(const CBlockIndex* pindexLast, const CBlockHeader *pblock, int algo)
@@ -1494,24 +1490,15 @@ static unsigned int GetNextWorkRequiredMULTI(const CBlockIndex* pindexLast, cons
 
 
 unsigned int GetNextWorkRequired(const CBlockIndex * pindexLast, const CBlockHeader * pblock, int algo){
-    int DiffMode = 1;
 
-    if (pindexLast->nHeight+1 <= 5400) { DiffMode = 1;
-      } else if (pindexLast->nHeight + 1 <= multiAlgoDiffChangeTarget) {
-        DiffMode = 2;
-      } else {
-        DiffMode = 3;
-      }
-
-    if (DiffMode == 1) {
+    if (pindexLast->nHeight+1 <= 5400) {
         return GetNextWorkRequired_Original(pindexLast, pblock, algo);
-    } else if (DiffMode == 2) {
+    } else if (pindexLast->nHeight + 1 <= multiAlgoDiffChangeTarget) {
         return GetNextWorkRequired_KGW(pindexLast, pblock, algo);
-    } else if (DiffMode == 3) {
+    } else {
         return GetNextWorkRequiredMULTI(pindexLast, pblock, algo);
     }
 
-    return GetNextWorkRequiredMULTI(pindexLast, pblock, algo);
 }
 
 bool CheckProofOfWork(uint256 hash, unsigned int nBits, int algo)

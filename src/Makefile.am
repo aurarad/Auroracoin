@@ -83,7 +83,7 @@ BITCOIN_CORE_H = \
   sph_simd.h \
   sph_cubehash.h \
   sph_shavite.h \
-  hashgroestl.h \
+  groestl.h \
   hashskein.h \
   hashqubit.h
 
@@ -155,7 +155,7 @@ libbitcoin_common_a_SOURCES = \
   scrypt-sse2.cpp \
   blake.c \
   bmw.c \
-  groestl.c \
+  groestl.cpp \
   jh.c \
   keccak.c \
   skein.c \

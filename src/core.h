@@ -10,7 +10,7 @@
 #include "serialize.h"
 #include "uint256.h"
 #include "scrypt.h"
-#include "hashgroestl.h"
+#include "groestl.h"
 #include "hashskein.h"
 #include "hashqubit.h"
 
@@ -437,7 +437,12 @@ public:
                 return thash;
             }
             case ALGO_GROESTL:
-                return HashGroestl(BEGIN(nVersion), END(nNonce));
+            {
+                /*return HashGroestl(BEGIN(nVersion), END(nNonce));*/
+                uint256 thash;
+                groestl(BEGIN(nVersion), BEGIN(thash));
+                return thash;
+            }
             case ALGO_SKEIN:
                 return HashSkein(BEGIN(nVersion), END(nNonce));
             case ALGO_QUBIT:

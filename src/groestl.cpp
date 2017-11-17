@@ -34,10 +34,8 @@
 #include <string.h>
 
 #include "sph_groestl.h"
-
-#ifdef __cplusplus
-extern "C"{
-#endif
+#include "uint256.h"
+#include <openssl/sha.h>
 
 #if SPH_SMALL_FOOTPRINT && !defined SPH_SMALL_FOOTPRINT_GROESTL
 #define SPH_SMALL_FOOTPRINT_GROESTL   1
@@ -3010,114 +3008,123 @@ groestl_big_close(sph_groestl_big_context *sc,
 void
 sph_groestl224_init(void *cc)
 {
-	groestl_small_init(cc, 224);
+	groestl_small_init((sph_groestl_small_context*)cc, 224);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl224(void *cc, const void *data, size_t len)
 {
-	groestl_small_core(cc, data, len);
+	groestl_small_core((sph_groestl_small_context*)cc, data, len);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl224_close(void *cc, void *dst)
 {
-	groestl_small_close(cc, 0, 0, dst, 28);
+	groestl_small_close((sph_groestl_small_context*)cc, 0, 0, dst, 28);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl224_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	groestl_small_close(cc, ub, n, dst, 28);
+	groestl_small_close((sph_groestl_small_context*)cc, ub, n, dst, 28);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl256_init(void *cc)
 {
-	groestl_small_init(cc, 256);
+	groestl_small_init((sph_groestl_small_context*)cc, 256);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl256(void *cc, const void *data, size_t len)
 {
-	groestl_small_core(cc, data, len);
+	groestl_small_core((sph_groestl_small_context*)cc, data, len);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl256_close(void *cc, void *dst)
 {
-	groestl_small_close(cc, 0, 0, dst, 32);
+	groestl_small_close((sph_groestl_small_context*)cc, 0, 0, dst, 32);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl256_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	groestl_small_close(cc, ub, n, dst, 32);
+	groestl_small_close((sph_groestl_small_context*)cc, ub, n, dst, 32);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl384_init(void *cc)
 {
-	groestl_big_init(cc, 384);
+	groestl_big_init((sph_groestl_big_context*)cc, 384);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl384(void *cc, const void *data, size_t len)
 {
-	groestl_big_core(cc, data, len);
+	groestl_big_core((sph_groestl_big_context*)cc, data, len);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl384_close(void *cc, void *dst)
 {
-	groestl_big_close(cc, 0, 0, dst, 48);
+	groestl_big_close((sph_groestl_big_context*)cc, 0, 0, dst, 48);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl384_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	groestl_big_close(cc, ub, n, dst, 48);
+	groestl_big_close((sph_groestl_big_context*)cc, ub, n, dst, 48);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl512_init(void *cc)
 {
-	groestl_big_init(cc, 512);
+	groestl_big_init((sph_groestl_big_context*)cc, 512);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl512(void *cc, const void *data, size_t len)
 {
-	groestl_big_core(cc, data, len);
+	groestl_big_core((sph_groestl_big_context*)cc, data, len);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl512_close(void *cc, void *dst)
 {
-	groestl_big_close(cc, 0, 0, dst, 64);
+	groestl_big_close((sph_groestl_big_context*)cc, 0, 0, dst, 64);
 }
 
 /* see sph_groestl.h */
 void
 sph_groestl512_addbits_and_close(void *cc, unsigned ub, unsigned n, void *dst)
 {
-	groestl_big_close(cc, ub, n, dst, 64);
+	groestl_big_close((sph_groestl_big_context*)cc, ub, n, dst, 64);
 }
 
-#ifdef __cplusplus
+void groestl(const char *input, char *output)
+{
+    sph_groestl512_context ctx_groestl;
+
+    uint512 hash1;
+
+    sph_groestl512_init(&ctx_groestl);
+    sph_groestl512(&ctx_groestl, input, sizeof(input));
+    sph_groestl512_close(&ctx_groestl, static_cast<void*>(&hash1));
+
+    SHA256((unsigned char*)&hash1, 64, (unsigned char*)output);
 }
-#endif

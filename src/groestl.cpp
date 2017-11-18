@@ -3123,7 +3123,8 @@ void groestl(const char *input, char *output)
     uint512 hash1;
 
     sph_groestl512_init(&ctx_groestl);
-    sph_groestl512(&ctx_groestl, input, sizeof(input));
+    /*sph_groestl512(&ctx_groestl, input, sizeof(input));*/
+    sph_groestl512(&ctx_groestl, input, 80);
     sph_groestl512_close(&ctx_groestl, static_cast<void*>(&hash1));
 
     SHA256((unsigned char*)&hash1, 64, (unsigned char*)output);

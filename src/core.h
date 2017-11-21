@@ -11,7 +11,7 @@
 #include "uint256.h"
 #include "scrypt.h"
 #include "groestl.h"
-#include "hashskein.h"
+#include "skein.h"
 #include "hashqubit.h"
 
 #include <stdint.h>
@@ -444,7 +444,12 @@ public:
                 return thash;
             }
             case ALGO_SKEIN:
-                return HashSkein(BEGIN(nVersion), END(nNonce));
+            {
+                /*return HashSkein(BEGIN(nVersion), END(nNonce));*/
+                uint256 thash;
+                skein(BEGIN(nVersion), BEGIN(thash));
+                return thash;
+            }
             case ALGO_QUBIT:
                 return HashQubit(BEGIN(nVersion), END(nNonce));
         }

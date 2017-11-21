@@ -84,7 +84,7 @@ BITCOIN_CORE_H = \
   sph_cubehash.h \
   sph_shavite.h \
   groestl.h \
-  hashskein.h \
+  skein.h \
   hashqubit.h
 
 JSON_H = \
@@ -158,7 +158,7 @@ libbitcoin_common_a_SOURCES = \
   groestl.cpp \
   jh.c \
   keccak.c \
-  skein.c \
+  skein.cpp \
   aes_helper.c \
   echo.c \
   luffa.c \

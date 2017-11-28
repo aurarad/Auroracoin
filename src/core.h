@@ -12,7 +12,7 @@
 #include "scrypt.h"
 #include "groestl.h"
 #include "skein.h"
-#include "hashqubit.h"
+#include "qubit.h"
 
 #include <stdint.h>
 
@@ -451,7 +451,10 @@ public:
                 return thash;
             }
             case ALGO_QUBIT:
-                return HashQubit(BEGIN(nVersion), END(nNonce));
+                uint256 thash;
+                qubit(BEGIN(nVersion), BEGIN(thash));
+                return thash;
+                /*return HashQubit(BEGIN(nVersion), END(nNonce));*/
         }
         return GetHash();
     }

@@ -85,7 +85,7 @@ BITCOIN_CORE_H = \
   sph_shavite.h \
   groestl.h \
   skein.h \
-  hashqubit.h
+  qubit.h
 
 JSON_H = \
   json/json_spirit.h \
@@ -165,6 +165,7 @@ libbitcoin_common_a_SOURCES = \
   simd.c \
   cubehash.c \
   shavite.c \
+  qubit.cpp \
   $(BITCOIN_CORE_H)
 
 if GLIBC_BACK_COMPAT

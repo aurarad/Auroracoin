@@ -13,6 +13,7 @@
 #include "groestl.h"
 #include "skein.h"
 #include "qubit.h"
+#include "sha256d.h"
 
 #include <stdint.h>
 
@@ -428,7 +429,12 @@ public:
         switch (algo)
         {
             case ALGO_SHA256D:
-                return GetHash();
+            {
+                uint256 thash;
+                sha256d(BEGIN(nVersion), BEGIN(thash));
+                /*return GetHash();*/
+                return thash;
+            }
             case ALGO_SCRYPT:
             {
                 uint256 thash;

@@ -42,6 +42,7 @@ BITCOIN_CORE_H = \
   crypter.h \
   db.h \
   hash.h \
+  sha256d.h \
   init.h \
   key.h \
   keystore.h \
@@ -143,6 +144,7 @@ libbitcoin_common_a_SOURCES = \
   chainparams.cpp \
   core.cpp \
   hash.cpp \
+  sha256d.cpp \
   key.cpp \
   netbase.cpp \
   protocol.cpp \

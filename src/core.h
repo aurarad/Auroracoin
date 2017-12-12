@@ -426,43 +426,27 @@ public:
     // from foreign chain (parent block in merged mining) which does not encode algo in its nVersion field.
     uint256 GetPoWHash(int algo) const
     {
+        uint256 thash;
         switch (algo)
         {
             case ALGO_SHA256D:
-            {
-                uint256 thash;
                 sha256d(BEGIN(nVersion), BEGIN(thash));
-                /*return GetHash();*/
-                return thash;
-            }
+                break;
             case ALGO_SCRYPT:
-            {
-                uint256 thash;
                 // Caution: scrypt_1024_1_1_256 assumes fixed length of 80 bytes
                 scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
-                return thash;
-            }
+                break;
             case ALGO_GROESTL:
-            {
-                /*return HashGroestl(BEGIN(nVersion), END(nNonce));*/
-                uint256 thash;
                 groestl(BEGIN(nVersion), BEGIN(thash));
-                return thash;
-            }
+                break;
             case ALGO_SKEIN:
-            {
-                /*return HashSkein(BEGIN(nVersion), END(nNonce));*/
-                uint256 thash;
                 skein(BEGIN(nVersion), BEGIN(thash));
-                return thash;
-            }
+                break;
             case ALGO_QUBIT:
-                uint256 thash;
                 qubit(BEGIN(nVersion), BEGIN(thash));
-                return thash;
-                /*return HashQubit(BEGIN(nVersion), END(nNonce));*/
+                break;
         }
-        return GetHash();
+        return thash;
     }
 
     int64_t GetBlockTime() const

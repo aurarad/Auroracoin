@@ -443,7 +443,13 @@ public:
                 skein(BEGIN(nVersion), BEGIN(thash));
                 break;
             case ALGO_QUBIT:
-                qubit(BEGIN(nVersion), BEGIN(thash));
+                thash = qubit(BEGIN(nVersion));
+                break;
+            default:
+                // If we didn't fill thash with a value (should never happen), do it here.
+                // This way it should never return the highest possible PoW.
+                scrypt_1024_1_1_256(BEGIN(nVersion), BEGIN(thash));
+                LogPrintf("GetPoWHash: default switch executed. Normally this should not happen!\n");
                 break;
         }
         /*LogPrintf("GetPoWHash: %s (algo: %i)\n", thash.ToString(), algo);*/

@@ -16,7 +16,7 @@
 #include <vector>
 
 
-void qubit(const char *input, char *output)
+uint256 qubit(const char *input)
 {
     sph_luffa512_context     ctx_luffa;
     sph_cubehash512_context  ctx_cubehash;
@@ -24,7 +24,7 @@ void qubit(const char *input, char *output)
     sph_simd512_context      ctx_simd;
     sph_echo512_context      ctx_echo;
 
-    uint512 hash[4];
+    uint512 hash[5];
 
     sph_luffa512_init(&ctx_luffa);
     sph_luffa512(&ctx_luffa, input, 80);
@@ -44,6 +44,8 @@ void qubit(const char *input, char *output)
 
     sph_echo512_init(&ctx_echo);
     sph_echo512 (&ctx_echo, static_cast<const void*>(&hash[3]), 64);
-    sph_echo512_close(&ctx_echo, (unsigned char*)output);
+    sph_echo512_close(&ctx_echo, static_cast<void*>(&hash[4]));
+
+    return hash[4].trim256();
 
 }

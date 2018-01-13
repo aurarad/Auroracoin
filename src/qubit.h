@@ -3,6 +3,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-void qubit(const char *input, char *output);
+uint256 qubit(const char *input);
 
 #endif

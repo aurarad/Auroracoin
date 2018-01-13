@@ -24,8 +24,6 @@ void qubit(const char *input, char *output)
     sph_simd512_context      ctx_simd;
     sph_echo512_context      ctx_echo;
 
-    /*static unsigned char pblank[1];*/
-
     uint512 hash[4];
 
     sph_luffa512_init(&ctx_luffa);
@@ -46,10 +44,6 @@ void qubit(const char *input, char *output)
 
     sph_echo512_init(&ctx_echo);
     sph_echo512 (&ctx_echo, static_cast<const void*>(&hash[3]), 64);
-    /*sph_echo512_close(&ctx_echo, static_cast<void*>(&hash[4]));*/
-    sph_echo512_close(&ctx_echo, (unsigned char*)&output);
+    sph_echo512_close(&ctx_echo, (unsigned char*)output);
 
-    /*hash[4].trim256();
-
-    output = (unsigned char*)&hash[4];*/
 }

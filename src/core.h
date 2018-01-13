@@ -446,6 +446,7 @@ public:
                 qubit(BEGIN(nVersion), BEGIN(thash));
                 break;
         }
+        /*LogPrintf("GetPoWHash: %s (algo: %i)\n", thash.ToString(), algo);*/
         return thash;
     }
 

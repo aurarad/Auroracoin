@@ -1419,6 +1419,27 @@ unsigned int static GetNextWorkRequired_KGW(const CBlockIndex* pindexLast, const
 static unsigned int GetNextWorkRequiredMULTI(const CBlockIndex* pindexLast, const CBlockHeader *pblock, int algo)
 {
 	unsigned int nProofOfWorkLimit = Params().ProofOfWorkLimit(algo).GetCompact();
+	
+	/* These checks and PoW limits are needed for the short transition to multi-algo, where we raised the limits, and later restored to the current values. */
+	if ((pindexLast->nHeight+1 == 225001) || (pindexLast->nHeight+1 == 225012) || (pindexLast->nHeight+1 == 225018) || (pindexLast->nHeight+1 == 225024) ||
+	    (pindexLast->nHeight+1 == 225030) || (pindexLast->nHeight+1 == 225036) || (pindexLast->nHeight+1 == 225042))
+	    {
+	    /* skein and groestl */
+	    nProofOfWorkLimit = CBigNum(~uint256(0) >> 23).GetCompact();
+	    return nProofOfWorkLimit;
+	    }
+	if ((pindexLast->nHeight+1 == 225095))
+	    {
+	    /* qubit */
+	    nProofOfWorkLimit = CBigNum(~uint256(0) >> 22).GetCompact();
+	    return nProofOfWorkLimit;
+	    }
+	if ((pindexLast->nHeight+1 == 225237))
+	    {
+	    /* sha256d */
+	    nProofOfWorkLimit = CBigNum(~uint256(0) >> 32).GetCompact();
+	    return nProofOfWorkLimit;
+	    }
 
 	//LogPrintf("GetNextWorkRequired RETARGET\n");
 	//LogPrintf("Algo: %s\n", GetAlgoName(algo));
@@ -2515,8 +2536,9 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
 		// Is this really needed?
 		if (block.nBits != nCheckBits) {
 			LogPrintf("CheckBlock() : proof of work in block not the same as calculated at height %i. Ignoring...\n", nHeight);
-			//return state.DoS(100, error("CheckBlock() : incorrect proof of work in header"), 
-			//		REJECT_INVALID, "bad-diffbits");
+			LogPrintf("ChecBlock() : nBits (%08x) below calculated bits (%08x)\n", block.nBits, nCheckBits);
+			return state.DoS(100, error("CheckBlock() : incorrect proof of work in header"), 
+					REJECT_INVALID, "bad-diffbits");
 			}
 
 		// Check proof of work matches claimed amount

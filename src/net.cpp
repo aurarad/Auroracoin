@@ -1670,7 +1670,7 @@ void static Discover(boost::thread_group& threadGroup)
     char pszHostName[1000] = "";
     if (gethostname(pszHostName, sizeof(pszHostName)) != SOCKET_ERROR)
     {
-        vector<CNetAddr> vaddr;
+        std::vector<CNetAddr> vaddr;
         if (LookupHost(pszHostName, vaddr))
         {
             BOOST_FOREACH (const CNetAddr &addr, vaddr)

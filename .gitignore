@@ -52,6 +52,10 @@ src/qt/test/moc*.cpp
 *.json.h
 *.raw.h
 
+# Python files
+*.pyc
+*__pycache__/*.pyc
+
 # Compilation and Qt preprocessor part
 *.qm
 Makefile

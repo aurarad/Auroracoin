@@ -141,7 +141,7 @@ json_spirit::Value getpeerinfo(const json_spirit::Array& params, bool fHelp)
 
 json_spirit::Value addnode(const json_spirit::Array& params, bool fHelp)
 {
-    std::__cxx11::string strCommand;
+    std::string strCommand;
     if (params.size() == 2)
         strCommand = params[1].get_str();
     if (fHelp || params.size() != 2 ||
@@ -158,7 +158,7 @@ json_spirit::Value addnode(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("addnode", "\"192.168.0.6:12340\", \"onetry\"")
         );
 
-    std::__cxx11::string strNode = params[0].get_str();
+    std::string strNode = params[0].get_str();
 
     if (strCommand == "onetry")
     {
@@ -168,7 +168,7 @@ json_spirit::Value addnode(const json_spirit::Array& params, bool fHelp)
     }
 
     LOCK(cs_vAddedNodes);
-    std::vector<std::__cxx11::string>::iterator it = vAddedNodes.begin();
+    std::vector<std::string>::iterator it = vAddedNodes.begin();
     for(; it != vAddedNodes.end(); it++)
         if (strNode == *it)
             break;
@@ -224,18 +224,18 @@ json_spirit::Value getaddednodeinfo(const json_spirit::Array& params, bool fHelp
 
     bool fDns = params[0].get_bool();
 
-    std::__cxx11::list<std::__cxx11::string> laddedNodes(0);
+    std::list<std::string> laddedNodes(0);
     if (params.size() == 1)
     {
         LOCK(cs_vAddedNodes);
-        BOOST_FOREACH(std::__cxx11::string& strAddNode, vAddedNodes)
+        BOOST_FOREACH(std::string& strAddNode, vAddedNodes)
             laddedNodes.push_back(strAddNode);
     }
     else
     {
-        std::__cxx11::string strNode = params[1].get_str();
+        std::string strNode = params[1].get_str();
         LOCK(cs_vAddedNodes);
-        BOOST_FOREACH(std::__cxx11::string& strAddNode, vAddedNodes)
+        BOOST_FOREACH(std::string& strAddNode, vAddedNodes)
             if (strAddNode == strNode)
             {
                 laddedNodes.push_back(strAddNode);
@@ -248,7 +248,7 @@ json_spirit::Value getaddednodeinfo(const json_spirit::Array& params, bool fHelp
     json_spirit::Array ret;
     if (!fDns)
     {
-        BOOST_FOREACH(std::__cxx11::string& strAddNode, laddedNodes)
+        BOOST_FOREACH(std::string& strAddNode, laddedNodes)
         {
             json_spirit::Object obj;
             obj.push_back(json_spirit::Pair("addednode", strAddNode));
@@ -257,8 +257,8 @@ json_spirit::Value getaddednodeinfo(const json_spirit::Array& params, bool fHelp
         return ret;
     }
 
-    std::__cxx11::list<std::pair<std::__cxx11::string, std::vector<CService> > > laddedAddreses(0);
-    BOOST_FOREACH(std::__cxx11::string& strAddNode, laddedNodes)
+    std::list<std::pair<std::string, std::vector<CService> > > laddedAddreses(0);
+    BOOST_FOREACH(std::string& strAddNode, laddedNodes)
     {
         std::vector<CService> vservNode(0);
         if(Lookup(strAddNode.c_str(), vservNode, Params().GetDefaultPort(), fNameLookup, 0))
@@ -274,7 +274,7 @@ json_spirit::Value getaddednodeinfo(const json_spirit::Array& params, bool fHelp
     }
 
     LOCK(cs_vNodes);
-    for (std::__cxx11::list<std::pair<std::__cxx11::string, std::vector<CService> > >::iterator it = laddedAddreses.begin(); it != laddedAddreses.end(); it++)
+    for (std::list<std::pair<std::string, std::vector<CService> > >::iterator it = laddedAddreses.begin(); it != laddedAddreses.end(); it++)
     {
         json_spirit::Object obj;
         obj.push_back(json_spirit::Pair("addednode", it->first));
@@ -364,7 +364,7 @@ json_spirit::Value getnetworkinfo(const json_spirit::Array& params, bool fHelp)
     obj.push_back(json_spirit::Pair("protocolversion",(int)PROTOCOL_VERSION));
     obj.push_back(json_spirit::Pair("timeoffset",    GetTimeOffset()));
     obj.push_back(json_spirit::Pair("connections",   (int)vNodes.size()));
-    obj.push_back(json_spirit::Pair("proxy",         (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : std::__cxx11::string())));
+    obj.push_back(json_spirit::Pair("proxy",         (proxy.first.IsValid() ? proxy.first.ToStringIPPort() : std::string())));
     obj.push_back(json_spirit::Pair("relayfee",      ValueFromAmount(CTransaction::nMinRelayTxFee)));
     json_spirit::Array localAddresses;
     {

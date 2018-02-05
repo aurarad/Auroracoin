@@ -48,7 +48,7 @@ void RPCTypeCheck(const json_spirit::Array& params,
         const json_spirit::Value& v = params[i];
         if (!((v.type() == t) || (fAllowNull && (v.type() == json_spirit::null_type))))
         {
-            std::__cxx11::string err = strprintf("Expected type %s, got %s",
+            std::string err = strprintf("Expected type %s, got %s",
                                    json_spirit::Value_type_name[t], json_spirit::Value_type_name[v.type()]);
             throw JSONRPCError(RPC_TYPE_ERROR, err);
         }
@@ -57,10 +57,10 @@ void RPCTypeCheck(const json_spirit::Array& params,
 }
 
 void RPCTypeCheck(const json_spirit::Object& o,
-                  const std::map<std::__cxx11::string, json_spirit::Value_type>& typesExpected,
+                  const std::map<std::string, json_spirit::Value_type>& typesExpected,
                   bool fAllowNull)
 {
-    BOOST_FOREACH(const PAIRTYPE(std::__cxx11::string, json_spirit::Value_type)& t, typesExpected)
+    BOOST_FOREACH(const PAIRTYPE(std::string, json_spirit::Value_type)& t, typesExpected)
     {
         const json_spirit::Value& v = find_value(o, t.first);
         if (!fAllowNull && v.type() == json_spirit::null_type)
@@ -68,7 +68,7 @@ void RPCTypeCheck(const json_spirit::Object& o,
 
         if (!((v.type() == t.second) || (fAllowNull && (v.type() == json_spirit::null_type))))
         {
-            std::__cxx11::string err = strprintf("Expected type %s for %s, got %s",
+            std::string err = strprintf("Expected type %s for %s, got %s",
                                    json_spirit::Value_type_name[t.second], t.first, json_spirit::Value_type_name[v.type()]);
             throw JSONRPCError(RPC_TYPE_ERROR, err);
         }
@@ -101,9 +101,9 @@ std::string HexBits(unsigned int nBits)
     return HexStr(BEGIN(uBits.cBits), END(uBits.cBits));
 }
 
-uint256 ParseHashV(const json_spirit::Value& v, std::__cxx11::string strName)
+uint256 ParseHashV(const json_spirit::Value& v, std::string strName)
 {
-    std::__cxx11::string strHex;
+    std::string strHex;
     if (v.type() == json_spirit::str_type)
         strHex = v.get_str();
     if (!IsHex(strHex)) // Note: IsHex("") is false
@@ -112,20 +112,20 @@ uint256 ParseHashV(const json_spirit::Value& v, std::__cxx11::string strName)
     result.SetHex(strHex);
     return result;
 }
-uint256 ParseHashO(const json_spirit::Object& o, std::__cxx11::string strKey)
+uint256 ParseHashO(const json_spirit::Object& o, std::string strKey)
 {
     return ParseHashV(json_spirit::find_value(o, strKey), strKey);
 }
-std::vector<unsigned char> ParseHexV(const json_spirit::Value& v, std::__cxx11::string strName)
+std::vector<unsigned char> ParseHexV(const json_spirit::Value& v, std::string strName)
 {
-    std::__cxx11::string strHex;
+    std::string strHex;
     if (v.type() == json_spirit::str_type)
         strHex = v.get_str();
     if (!IsHex(strHex))
         throw JSONRPCError(RPC_INVALID_PARAMETER, strName+" must be hexadecimal string (not '"+strHex+"')");
     return ParseHex(strHex);
 }
-std::vector<unsigned char> ParseHexO(const json_spirit::Object& o, std::__cxx11::string strKey)
+std::vector<unsigned char> ParseHexO(const json_spirit::Object& o, std::string strKey)
 {
     return ParseHexV(json_spirit::find_value(o, strKey), strKey);
 }
@@ -135,16 +135,16 @@ std::vector<unsigned char> ParseHexO(const json_spirit::Object& o, std::__cxx11:
 /// Note: This interface may still be subject to change.
 ///
 
-std::__cxx11::string CRPCTable::help(std::__cxx11::string strCommand) const
+std::string CRPCTable::help(std::string strCommand) const
 {
-    std::__cxx11::string strRet;
+    std::string strRet;
     std::set<rpcfn_type> setDone;
-    for (std::map<std::__cxx11::string, const CRPCCommand*>::const_iterator mi = mapCommands.begin(); mi != mapCommands.end(); ++mi)
+    for (std::map<std::string, const CRPCCommand*>::const_iterator mi = mapCommands.begin(); mi != mapCommands.end(); ++mi)
     {
         const CRPCCommand *pcmd = mi->second;
-        std::__cxx11::string strMethod = mi->first;
+        std::string strMethod = mi->first;
         // We already filter duplicates, but these deprecated screw up the sort order
-        if (strMethod.find("label") != std::__cxx11::string::npos)
+        if (strMethod.find("label") != std::string::npos)
             continue;
         if (strCommand != "" && strMethod != strCommand)
             continue;
@@ -163,9 +163,9 @@ std::__cxx11::string CRPCTable::help(std::__cxx11::string strCommand) const
         catch (std::exception& e)
         {
             // Help text is returned in an exception
-            std::__cxx11::string strHelp = std::__cxx11::string(e.what());
+            std::string strHelp = std::string(e.what());
             if (strCommand == "")
-                if (strHelp.find('\n') != std::__cxx11::string::npos)
+                if (strHelp.find('\n') != std::string::npos)
                     strHelp = strHelp.substr(0, strHelp.find('\n'));
             strRet += strHelp + "\n";
         }
@@ -188,7 +188,7 @@ json_spirit::Value help(const json_spirit::Array& params, bool fHelp)
             "\"text\"     (string) The help text\n"
         );
 
-    std::__cxx11::string strCommand;
+    std::string strCommand;
     if (params.size() > 0)
         strCommand = params[0].get_str();
 
@@ -324,22 +324,22 @@ CRPCTable::CRPCTable()
     }
 }
 
-const CRPCCommand *CRPCTable::operator[](std::__cxx11::string name) const
+const CRPCCommand *CRPCTable::operator[](std::string name) const
 {
-    std::map<std::__cxx11::string, const CRPCCommand*>::const_iterator it = mapCommands.find(name);
+    std::map<std::string, const CRPCCommand*>::const_iterator it = mapCommands.find(name);
     if (it == mapCommands.end())
         return NULL;
     return (*it).second;
 }
 
 
-bool HTTPAuthorized(std::map<std::__cxx11::string, std::__cxx11::string>& mapHeaders)
+bool HTTPAuthorized(std::map<std::string, std::string>& mapHeaders)
 {
-    std::__cxx11::string strAuth = mapHeaders["authorization"];
+    std::string strAuth = mapHeaders["authorization"];
     if (strAuth.substr(0,6) != "Basic ")
         return false;
-    std::__cxx11::string strUserPass64 = strAuth.substr(6); boost::trim(strUserPass64);
-    std::__cxx11::string strUserPass = DecodeBase64(strUserPass64);
+    std::string strUserPass64 = strAuth.substr(6); boost::trim(strUserPass64);
+    std::string strUserPass = DecodeBase64(strUserPass64);
     return TimingResistantEqual(strUserPass, strRPCUserColonPass);
 }
 
@@ -350,7 +350,7 @@ void ErrorReply(std::ostream& stream, const json_spirit::Object& objError, const
     int code = json_spirit::find_value(objError, "code").get_int();
     if (code == RPC_INVALID_REQUEST) nStatus = HTTP_BAD_REQUEST;
     else if (code == RPC_METHOD_NOT_FOUND) nStatus = HTTP_NOT_FOUND;
-    std::__cxx11::string strReply = JSONRPCReply(json_spirit::Value::null, objError, id);
+    std::string strReply = JSONRPCReply(json_spirit::Value::null, objError, id);
     stream << HTTPReply(nStatus, strReply, false) << std::flush;
 }
 
@@ -369,9 +369,9 @@ bool ClientAllowed(const boost::asio::ip::address& address)
       && (address.to_v4().to_ulong() & 0xff000000) == 0x7f000000))
         return true;
 
-    const std::__cxx11::string strAddress = address.to_string();
-    const std::vector<std::__cxx11::string>& vAllow = mapMultiArgs["-rpcallowip"];
-    BOOST_FOREACH(std::__cxx11::string strAllow, vAllow)
+    const std::string strAddress = address.to_string();
+    const std::vector<std::string>& vAllow = mapMultiArgs["-rpcallowip"];
+    BOOST_FOREACH(std::string strAllow, vAllow)
         if (WildcardMatch(strAddress, strAllow))
             return true;
     return false;
@@ -502,7 +502,7 @@ void StartRPCThreads()
     {
         unsigned char rand_pwd[32];
         RAND_bytes(rand_pwd, 32);
-        std::__cxx11::string strWhatAmI = "To use auroracoind";
+        std::string strWhatAmI = "To use auroracoind";
         if (mapArgs.count("-server"))
             strWhatAmI = strprintf(_("To use the %s option"), "\"-server\"");
         else if (mapArgs.count("-daemon"))
@@ -546,7 +546,7 @@ void StartRPCThreads()
         if (boost::filesystem::exists(pathPKFile)) rpc_ssl_context->use_private_key_file(pathPKFile.string(), boost::asio::ssl::context::pem);
         else LogPrintf("ThreadRPCServer ERROR: missing server private key file %s\n", pathPKFile.string());
 
-        std::__cxx11::string strCiphers = GetArg("-rpcsslciphers", "TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH");
+        std::string strCiphers = GetArg("-rpcsslciphers", "TLSv1.2+HIGH:TLSv1+HIGH:!SSLv2:!aNULL:!eNULL:!3DES:@STRENGTH");
         SSL_CTX_set_cipher_list(rpc_ssl_context->impl(), strCiphers.c_str());
     }
 
@@ -682,7 +682,7 @@ class JSONRequest
 {
 public:
     json_spirit::Value id;
-    std::__cxx11::string strMethod;
+    std::string strMethod;
     json_spirit::Array params;
 
     JSONRequest() { id = json_spirit::Value::null; }
@@ -744,7 +744,7 @@ static json_spirit::Object JSONRPCExecOne(const json_spirit::Value& req)
     return rpc_result;
 }
 
-static std::__cxx11::string JSONRPCExecBatch(const json_spirit::Array& vReq)
+static std::string JSONRPCExecBatch(const json_spirit::Array& vReq)
 {
     json_spirit::Array ret;
     for (unsigned int reqIdx = 0; reqIdx < vReq.size(); reqIdx++)
@@ -759,8 +759,8 @@ void ServiceConnection(AcceptedConnection *conn)
     while (fRun && !ShutdownRequested())
     {
         int nProto = 0;
-        std::map<std::__cxx11::string, std::__cxx11::string> mapHeaders;
-        std::__cxx11::string strRequest, strMethod, strURI;
+        std::map<std::string, std::string> mapHeaders;
+        std::string strRequest, strMethod, strURI;
 
         // Read HTTP request line
         if (!ReadHTTPRequestLine(conn->stream(), nProto, strMethod, strURI))
@@ -803,7 +803,7 @@ void ServiceConnection(AcceptedConnection *conn)
             if (!json_spirit::read_string(strRequest, valRequest))
                 throw JSONRPCError(RPC_PARSE_ERROR, "Parse error");
 
-            std::__cxx11::string strReply;
+            std::string strReply;
 
             // singleton request
             if (valRequest.type() == json_spirit::obj_type) {
@@ -847,10 +847,10 @@ json_spirit::Value CRPCTable::execute(const std::string &strMethod, const json_s
 #endif
 
     // Observe safe mode
-    std::__cxx11::string strWarning = GetWarnings("rpc");
+    std::string strWarning = GetWarnings("rpc");
     if (strWarning != "" && !GetBoolArg("-disablesafemode", false) &&
         !pcmd->okSafeMode)
-        throw JSONRPCError(RPC_FORBIDDEN_BY_SAFE_MODE, std::__cxx11::string("Safe mode: ") + strWarning);
+        throw JSONRPCError(RPC_FORBIDDEN_BY_SAFE_MODE, std::string("Safe mode: ") + strWarning);
 
     try
     {
@@ -882,11 +882,11 @@ json_spirit::Value CRPCTable::execute(const std::string &strMethod, const json_s
     }
 }
 
-std::string HelpExampleCli(std::__cxx11::string methodname, std::__cxx11::string args){
+std::string HelpExampleCli(std::string methodname, std::string args){
     return "> auroracoin-cli " + methodname + " " + args + "\n";
 }
 
-std::string HelpExampleRpc(std::__cxx11::string methodname, std::__cxx11::string args){
+std::string HelpExampleRpc(std::string methodname, std::string args){
     return "> curl --user myusername --data-binary '{\"jsonrpc\": \"1.0\", \"id\":\"curltest\", "
         "\"method\": \"" + methodname + "\", \"params\": [" + args + "] }' -H 'content-type: text/plain;' http://127.0.0.1:8332/\n";
 }

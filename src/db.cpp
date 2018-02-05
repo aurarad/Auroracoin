@@ -190,7 +190,7 @@ bool CDBEnv::Salvage(std::string strFile, bool fAggressive,
     // ... repeated
     // DATA=END
 
-    std::__cxx11::string strLine;
+    std::string strLine;
     while (!strDump.eof() && strLine != "HEADER=END")
         getline(strDump, strLine); // Skip past header
 
@@ -268,7 +268,7 @@ CDB::CDB(const char *pszFile, const char* pszMode) :
                 throw std::runtime_error(strprintf("CDB : Error %d, can't open database %s", ret, pszFile));
             }
 
-            if (fCreate && !Exists(std::__cxx11::string("version")))
+            if (fCreate && !Exists(std::string("version")))
             {
                 bool fTmp = fReadOnly;
                 fReadOnly = false;
@@ -350,7 +350,7 @@ bool CDB::Rewrite(const std::string& strFile, const char* pszSkip)
 
                 bool fSuccess = true;
                 LogPrintf("CDB::Rewrite : Rewriting %s...\n", strFile);
-                std::__cxx11::string strFileRes = strFile + ".rewrite";
+                std::string strFileRes = strFile + ".rewrite";
                 { // surround usage of db with extra {}
                     CDB db(strFile.c_str(), "r");
                     Db* pdbCopy = new Db(&bitdb.dbenv, 0);
@@ -438,10 +438,10 @@ void CDBEnv::Flush(bool fShutdown)
         return;
     {
         LOCK(cs_db);
-        std::map<std::__cxx11::string, int>::iterator mi = mapFileUseCount.begin();
+        std::map<std::string, int>::iterator mi = mapFileUseCount.begin();
         while (mi != mapFileUseCount.end())
         {
-            std::__cxx11::string strFile = (*mi).first;
+            std::string strFile = (*mi).first;
             int nRefCount = (*mi).second;
             LogPrint("db", "CDBEnv::Flush : Flushing %s (refcount = %d)...\n", strFile, nRefCount);
             if (nRefCount == 0)

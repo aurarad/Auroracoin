@@ -517,7 +517,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     fDebug = !mapMultiArgs["-debug"].empty();
     // Special-case: if -debug=0/-nodebug is set, turn off debugging messages
     const std::vector<std::string>& categories = mapMultiArgs["-debug"];
-    if (GetBoolArg("-nodebug", false) || std::find(categories.begin(), categories.end(), std::__cxx11::string("0")) != categories.end())
+    if (GetBoolArg("-nodebug", false) || std::find(categories.begin(), categories.end(), std::string("0")) != categories.end())
         fDebug = false;
 
     // Check for -debugnet (deprecated)
@@ -655,7 +655,7 @@ bool AppInit2(boost::thread_group& threadGroup)
             // try again
             if (!bitdb.Open(pathDataDir)) {
                 // if it still fails, it probably means we can't even create the database env
-                std::__cxx11::string msg = strprintf(_("Error initializing wallet database environment %s!"), strDataDir);
+                std::string msg = strprintf(_("Error initializing wallet database environment %s!"), strDataDir);
                 return InitError(msg);
             }
         }
@@ -672,7 +672,7 @@ bool AppInit2(boost::thread_group& threadGroup)
             CDBEnv::VerifyResult r = bitdb.Verify(strWalletFile, CWalletDB::Recover);
             if (r == CDBEnv::RECOVER_OK)
             {
-                std::__cxx11::string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
+                std::string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
                                          " Original wallet.dat saved as wallet.{timestamp}.bak in %s; if"
                                          " your balance or transactions are incorrect you should"
                                          " restore from a backup."), strDataDir);
@@ -747,7 +747,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     }
 
     if (mapArgs.count("-externalip")) {
-        BOOST_FOREACH(std::__cxx11::string strAddr, mapMultiArgs["-externalip"]) {
+        BOOST_FOREACH(std::string strAddr, mapMultiArgs["-externalip"]) {
             CService addrLocal(strAddr, GetListenPort(), fNameLookup);
             if (!addrLocal.IsValid())
                 return InitError(strprintf(_("Cannot resolve -externalip address: '%s'"), strAddr));
@@ -755,7 +755,7 @@ bool AppInit2(boost::thread_group& threadGroup)
         }
     }
 
-    BOOST_FOREACH(std::__cxx11::string strDest, mapMultiArgs["-seednode"])
+    BOOST_FOREACH(std::string strDest, mapMultiArgs["-seednode"])
         AddOneShot(strDest);
 
     // ********************************************************* Step 7: load block chain
@@ -899,7 +899,7 @@ bool AppInit2(boost::thread_group& threadGroup)
 
     if (mapArgs.count("-printblock"))
     {
-        std::__cxx11::string strMatch = mapArgs["-printblock"];
+        std::string strMatch = mapArgs["-printblock"];
         int nFound = 0;
         for (std::map<uint256, CBlockIndex*>::iterator mi = mapBlockIndex.begin(); mi != mapBlockIndex.end(); ++mi)
         {
@@ -952,7 +952,7 @@ bool AppInit2(boost::thread_group& threadGroup)
                 strErrors << _("Error loading wallet.dat: Wallet corrupted") << "\n";
             else if (nLoadWalletRet == DB_NONCRITICAL_ERROR)
             {
-                std::__cxx11::string msg(_("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
+                std::string msg(_("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
                              " or address book entries might be missing or incorrect."));
                 InitWarning(msg);
             }
@@ -1040,7 +1040,7 @@ bool AppInit2(boost::thread_group& threadGroup)
     std::vector<boost::filesystem::path> vImportFiles;
     if (mapArgs.count("-loadblock"))
     {
-        BOOST_FOREACH(std::__cxx11::string strFile, mapMultiArgs["-loadblock"])
+        BOOST_FOREACH(std::string strFile, mapMultiArgs["-loadblock"])
             vImportFiles.push_back(strFile);
     }
     threadGroup.create_thread(boost::bind(&ThreadImport, vImportFiles));

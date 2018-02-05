@@ -186,7 +186,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, int algo)
     CCoinsViewCache view(*pcoinsTip, true);
 
     // Priority order to process transactions
-    std::__cxx11::list<COrphan> vOrphan; // list memory doesn't move
+    std::list<COrphan> vOrphan; // list memory doesn't move
     std::map<uint256, std::vector<COrphan*> > mapDependers;
     bool fPrintPriority = GetBoolArg("-printpriority", false);
 

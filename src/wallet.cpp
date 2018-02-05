@@ -729,8 +729,8 @@ int CWalletTx::GetRequestCount() const
     return nRequests;
 }
 
-void CWalletTx::GetAmounts(std::__cxx11::list<std::pair<CTxDestination, int64_t> >& listReceived,
-                           std::__cxx11::list<std::pair<CTxDestination, int64_t> >& listSent, int64_t& nFee, std::__cxx11::string& strSentAccount) const
+void CWalletTx::GetAmounts(std::list<std::pair<CTxDestination, int64_t> >& listReceived,
+                           std::list<std::pair<CTxDestination, int64_t> >& listSent, int64_t& nFee, std::string& strSentAccount) const
 {
     nFee = 0;
     listReceived.clear();
@@ -782,15 +782,15 @@ void CWalletTx::GetAmounts(std::__cxx11::list<std::pair<CTxDestination, int64_t>
 
 }
 
-void CWalletTx::GetAccountAmounts(const std::__cxx11::string& strAccount, int64_t& nReceived,
+void CWalletTx::GetAccountAmounts(const std::string& strAccount, int64_t& nReceived,
                                   int64_t& nSent, int64_t& nFee) const
 {
     nReceived = nSent = nFee = 0;
 
     int64_t allFee;
-    std::__cxx11::string strSentAccount;
-    std::__cxx11::list<std::pair<CTxDestination, int64_t> > listReceived;
-    std::__cxx11::list<std::pair<CTxDestination, int64_t> > listSent;
+    std::string strSentAccount;
+    std::list<std::pair<CTxDestination, int64_t> > listReceived;
+    std::list<std::pair<CTxDestination, int64_t> > listSent;
     GetAmounts(listReceived, listSent, allFee, strSentAccount);
 
     if (strAccount == strSentAccount)
@@ -1429,7 +1429,7 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey)
 
 
 
-std::__cxx11::string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew)
+std::string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew)
 {
     CReserveKey reservekey(this);
     int64_t nFeeRequired;
@@ -1438,11 +1438,11 @@ std::__cxx11::string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CW
 
     if (IsLocked())
     {
-        std::__cxx11::string strError = _("Error: Wallet locked, unable to create transaction!");
+        std::string strError = _("Error: Wallet locked, unable to create transaction!");
         LogPrintf("SendMoney() : %s", strError);
         return strError;
     }
-    std::__cxx11::string strError;
+    std::string strError;
     if (!CreateTransaction(scriptPubKey, nValue, wtxNew, reservekey, nFeeRequired, strError))
     {
         if (nValue + nFeeRequired > GetBalance())
@@ -1459,7 +1459,7 @@ std::__cxx11::string CWallet::SendMoney(CScript scriptPubKey, int64_t nValue, CW
 
 
 
-std::__cxx11::string CWallet::SendMoneyToDestination(const CTxDestination& address, int64_t nValue, CWalletTx& wtxNew)
+std::string CWallet::SendMoneyToDestination(const CTxDestination& address, int64_t nValue, CWalletTx& wtxNew)
 {
     // Check amount
     if (nValue <= 0)
@@ -1529,7 +1529,7 @@ DBErrors CWallet::ZapWalletTx()
 }
 
 
-bool CWallet::SetAddressBook(const CTxDestination& address, const std::__cxx11::string& strName, const std::__cxx11::string& strPurpose)
+bool CWallet::SetAddressBook(const CTxDestination& address, const std::string& strName, const std::string& strPurpose)
 {
     bool fUpdated = false;
     {
@@ -1557,8 +1557,8 @@ bool CWallet::DelAddressBook(const CTxDestination& address)
         if(fFileBacked)
         {
             // Delete destdata tuples associated with address
-            std::__cxx11::string strAddress = CBitcoinAddress(address).ToString();
-            BOOST_FOREACH(const PAIRTYPE(std::__cxx11::string, std::__cxx11::string) &item, mapAddressBook[address].destdata)
+            std::string strAddress = CBitcoinAddress(address).ToString();
+            BOOST_FOREACH(const PAIRTYPE(std::string, std::string) &item, mapAddressBook[address].destdata)
             {
                 CWalletDB(strWalletFile).EraseDestData(strAddress, item.first);
             }
@@ -1870,14 +1870,14 @@ std::set< std::set<CTxDestination> > CWallet::GetAddressGroupings()
     return ret;
 }
 
-std::set<CTxDestination> CWallet::GetAccountAddresses(std::__cxx11::string strAccount) const
+std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) const
 {
     AssertLockHeld(cs_wallet); // mapWallet
     std::set<CTxDestination> result;
     BOOST_FOREACH(const PAIRTYPE(CTxDestination, CAddressBookData)& item, mapAddressBook)
     {
         const CTxDestination& address = item.first;
-        const std::__cxx11::string& strName = item.second.name;
+        const std::string& strName = item.second.name;
         if (strName == strAccount)
             result.insert(address);
     }

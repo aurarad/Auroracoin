@@ -54,13 +54,13 @@ void WalletTxToJSON(const CWalletTx& wtx, json_spirit::Object& entry)
     entry.push_back(json_spirit::Pair("walletconflicts", conflicts));
     entry.push_back(json_spirit::Pair("time", wtx.GetTxTime()));
     entry.push_back(json_spirit::Pair("timereceived", (int64_t)wtx.nTimeReceived));
-    BOOST_FOREACH(const PAIRTYPE(std::__cxx11::string,std::__cxx11::string)& item, wtx.mapValue)
+    BOOST_FOREACH(const PAIRTYPE(std::string,std::string)& item, wtx.mapValue)
         entry.push_back(json_spirit::Pair(item.first, item.second));
 }
 
 std::string AccountFromValue(const json_spirit::Value& value)
 {
-    std::__cxx11::string strAccount = value.get_str();
+    std::string strAccount = value.get_str();
     if (strAccount == "*")
         throw JSONRPCError(RPC_WALLET_INVALID_ACCOUNT_NAME, "Invalid account name");
     return strAccount;
@@ -86,7 +86,7 @@ json_spirit::Value getnewaddress(const json_spirit::Array& params, bool fHelp)
         );
 
     // Parse the account first so we don't generate a key if there's an error
-    std::__cxx11::string strAccount;
+    std::string strAccount;
     if (params.size() > 0)
         strAccount = AccountFromValue(params[0]);
 
@@ -105,7 +105,7 @@ json_spirit::Value getnewaddress(const json_spirit::Array& params, bool fHelp)
 }
 
 
-CBitcoinAddress GetAccountAddress(std::__cxx11::string strAccount, bool bForceNew=false)
+CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew=false)
 {
     CWalletDB walletdb(pwalletMain->strWalletFile);
 
@@ -161,7 +161,7 @@ json_spirit::Value getaccountaddress(const json_spirit::Array& params, bool fHel
         );
 
     // Parse the account first so we don't generate a key if there's an error
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
 
     json_spirit::Value ret;
 
@@ -220,14 +220,14 @@ json_spirit::Value setaccount(const json_spirit::Array& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Auroracoin address");
 
 
-    std::__cxx11::string strAccount;
+    std::string strAccount;
     if (params.size() > 1)
         strAccount = AccountFromValue(params[1]);
 
     // Detect when changing the account of an address that is the 'unused current key' of another account:
     if (pwalletMain->mapAddressBook.count(address.Get()))
     {
-        std::__cxx11::string strOldAccount = pwalletMain->mapAddressBook[address.Get()].name;
+        std::string strOldAccount = pwalletMain->mapAddressBook[address.Get()].name;
         if (address == GetAccountAddress(strOldAccount))
             GetAccountAddress(strOldAccount, true);
     }
@@ -257,7 +257,7 @@ json_spirit::Value getaccount(const json_spirit::Array& params, bool fHelp)
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Auroracoin address");
 
-    std::__cxx11::string strAccount;
+    std::string strAccount;
     std::map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
     if (mi != pwalletMain->mapAddressBook.end() && !(*mi).second.name.empty())
         strAccount = (*mi).second.name;
@@ -283,14 +283,14 @@ json_spirit::Value getaddressesbyaccount(const json_spirit::Array& params, bool 
             + HelpExampleRpc("getaddressesbyaccount", "\"tabby\"")
         );
 
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
 
     // Find all addresses that have the given account
     json_spirit::Array ret;
     BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
     {
         const CBitcoinAddress& address = item.first;
-        const std::__cxx11::string& strName = item.second.name;
+        const std::string& strName = item.second.name;
         if (strName == strAccount)
             ret.push_back(address.ToString());
     }
@@ -336,7 +336,7 @@ json_spirit::Value sendtoaddress(const json_spirit::Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    std::__cxx11::string strError = pwalletMain->SendMoneyToDestination(address.Get(), nAmount, wtx);
+    std::string strError = pwalletMain->SendMoneyToDestination(address.Get(), nAmount, wtx);
     if (strError != "")
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
 
@@ -415,8 +415,8 @@ json_spirit::Value signmessage(const json_spirit::Array& params, bool fHelp)
 
     EnsureWalletIsUnlocked();
 
-    std::__cxx11::string strAddress = params[0].get_str();
-    std::__cxx11::string strMessage = params[1].get_str();
+    std::string strAddress = params[0].get_str();
+    std::string strMessage = params[1].get_str();
 
     CBitcoinAddress addr(strAddress);
     if (!addr.IsValid())
@@ -523,7 +523,7 @@ json_spirit::Value getreceivedbyaccount(const json_spirit::Array& params, bool f
         nMinDepth = params[1].get_int();
 
     // Get the set of pub keys assigned to account
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
     std::set<CTxDestination> setAddress = pwalletMain->GetAccountAddresses(strAccount);
 
     // Tally
@@ -547,7 +547,7 @@ json_spirit::Value getreceivedbyaccount(const json_spirit::Array& params, bool f
 }
 
 
-int64_t GetAccountBalance(CWalletDB& walletdb, const std::__cxx11::string& strAccount, int nMinDepth)
+int64_t GetAccountBalance(CWalletDB& walletdb, const std::string& strAccount, int nMinDepth)
 {
     int64_t nBalance = 0;
 
@@ -572,7 +572,7 @@ int64_t GetAccountBalance(CWalletDB& walletdb, const std::__cxx11::string& strAc
     return nBalance;
 }
 
-int64_t GetAccountBalance(const std::__cxx11::string& strAccount, int nMinDepth)
+int64_t GetAccountBalance(const std::string& strAccount, int nMinDepth)
 {
     CWalletDB walletdb(pwalletMain->strWalletFile);
     return GetAccountBalance(walletdb, strAccount, nMinDepth);
@@ -625,9 +625,9 @@ json_spirit::Value getbalance(const json_spirit::Array& params, bool fHelp)
                 continue;
 
             int64_t allFee;
-            std::__cxx11::string strSentAccount;
-            std::__cxx11::list<std::pair<CTxDestination, int64_t> > listReceived;
-            std::__cxx11::list<std::pair<CTxDestination, int64_t> > listSent;
+            std::string strSentAccount;
+            std::list<std::pair<CTxDestination, int64_t> > listReceived;
+            std::list<std::pair<CTxDestination, int64_t> > listSent;
             wtx.GetAmounts(listReceived, listSent, allFee, strSentAccount);
             if (wtx.GetDepthInMainChain() >= nMinDepth)
             {
@@ -641,7 +641,7 @@ json_spirit::Value getbalance(const json_spirit::Array& params, bool fHelp)
         return  ValueFromAmount(nBalance);
     }
 
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
 
     int64_t nBalance = GetAccountBalance(strAccount, nMinDepth);
 
@@ -680,13 +680,13 @@ json_spirit::Value movecmd(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("move", "\"timotei\", \"akiko\", 0.01, 6, \"happy birthday!\"")
         );
 
-    std::__cxx11::string strFrom = AccountFromValue(params[0]);
-    std::__cxx11::string strTo = AccountFromValue(params[1]);
+    std::string strFrom = AccountFromValue(params[0]);
+    std::string strTo = AccountFromValue(params[1]);
     int64_t nAmount = AmountFromValue(params[2]);
     if (params.size() > 3)
         // unused parameter, used to be nMinDepth, keep type-checking it though
         (void)params[3].get_int();
-    std::__cxx11::string strComment;
+    std::string strComment;
     if (params.size() > 4)
         strComment = params[4].get_str();
 
@@ -752,7 +752,7 @@ json_spirit::Value sendfrom(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("sendfrom", "\"tabby\", \"1M72Sfpbz1BPpXFHz9m3CdqATR44Jvaydd\", 0.01, 6, \"donation\", \"seans outpost\"")
         );
 
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
     CBitcoinAddress address(params[1].get_str());
     if (!address.IsValid())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid Auroracoin address");
@@ -776,7 +776,7 @@ json_spirit::Value sendfrom(const json_spirit::Array& params, bool fHelp)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
 
     // Send
-    std::__cxx11::string strError = pwalletMain->SendMoneyToDestination(address.Get(), nAmount, wtx);
+    std::string strError = pwalletMain->SendMoneyToDestination(address.Get(), nAmount, wtx);
     if (strError != "")
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
 
@@ -812,7 +812,7 @@ json_spirit::Value sendmany(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("sendmany", "\"tabby\", \"{\\\"1D1ZrZNe3JUo7ZycKEYQQiQAWd9y54F4XZ\\\":0.01,\\\"1353tsE8YMTA4EuV7dgUXGjNFf9KpVvKHz\\\":0.02}\", 6, \"testing\"")
         );
 
-    std::__cxx11::string strAccount = AccountFromValue(params[0]);
+    std::string strAccount = AccountFromValue(params[0]);
     json_spirit::Object sendTo = params[1].get_obj();
     int nMinDepth = 1;
     if (params.size() > 2)
@@ -831,10 +831,10 @@ json_spirit::Value sendmany(const json_spirit::Array& params, bool fHelp)
     {
         CBitcoinAddress address(s.name_);
         if (!address.IsValid())
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::__cxx11::string("Invalid Auroracoin address: ")+s.name_);
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid Auroracoin address: ")+s.name_);
 
         if (setAddress.count(address))
-            throw JSONRPCError(RPC_INVALID_PARAMETER, std::__cxx11::string("Invalid parameter, duplicated address: ")+s.name_);
+            throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ")+s.name_);
         setAddress.insert(address);
 
         CScript scriptPubKey;
@@ -855,7 +855,7 @@ json_spirit::Value sendmany(const json_spirit::Array& params, bool fHelp)
     // Send
     CReserveKey keyChange(pwalletMain);
     int64_t nFeeRequired = 0;
-    std::__cxx11::string strFailReason;
+    std::string strFailReason;
     bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, strFailReason);
     if (!fCreated)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strFailReason);
@@ -872,7 +872,7 @@ json_spirit::Value addmultisigaddress(const json_spirit::Array& params, bool fHe
 {
     if (fHelp || params.size() < 2 || params.size() > 3)
     {
-        std::__cxx11::string msg = "addmultisigaddress nrequired [\"key\",...] ( \"account\" )\n"
+        std::string msg = "addmultisigaddress nrequired [\"key\",...] ( \"account\" )\n"
             "\nAdd a nrequired-to-sign multisignature address to the wallet.\n"
             "Each key is a Auroracoin address or hex-encoded public key.\n"
             "If 'account' is specified, assign address to that account.\n"
@@ -898,7 +898,7 @@ json_spirit::Value addmultisigaddress(const json_spirit::Array& params, bool fHe
         throw std::runtime_error(msg);
     }
 
-    std::__cxx11::string strAccount;
+    std::string strAccount;
     if (params.size() > 2)
         strAccount = AccountFromValue(params[2]);
 
@@ -964,11 +964,11 @@ json_spirit::Value ListReceived(const json_spirit::Array& params, bool fByAccoun
 
     // Reply
     json_spirit::Array ret;
-    std::map<std::__cxx11::string, tallyitem> mapAccountTally;
+    std::map<std::string, tallyitem> mapAccountTally;
     BOOST_FOREACH(const PAIRTYPE(CBitcoinAddress, CAddressBookData)& item, pwalletMain->mapAddressBook)
     {
         const CBitcoinAddress& address = item.first;
-        const std::__cxx11::string& strAccount = item.second.name;
+        const std::string& strAccount = item.second.name;
         std::map<CBitcoinAddress, tallyitem>::iterator it = mapTally.find(address);
         if (it == mapTally.end() && !fIncludeEmpty)
             continue;
@@ -1009,7 +1009,7 @@ json_spirit::Value ListReceived(const json_spirit::Array& params, bool fByAccoun
 
     if (fByAccounts)
     {
-        for (std::map<std::__cxx11::string, tallyitem>::iterator it = mapAccountTally.begin(); it != mapAccountTally.end(); ++it)
+        for (std::map<std::string, tallyitem>::iterator it = mapAccountTally.begin(); it != mapAccountTally.end(); ++it)
         {
             int64_t nAmount = (*it).second.nAmount;
             int nConf = (*it).second.nConf;
@@ -1090,16 +1090,16 @@ static void MaybePushAddress(json_spirit::Object & entry, const CTxDestination &
         entry.push_back(json_spirit::Pair("address", addr.ToString()));
 }
 
-void ListTransactions(const CWalletTx& wtx, const std::__cxx11::string& strAccount, int nMinDepth, bool fLong, json_spirit::Array& ret)
+void ListTransactions(const CWalletTx& wtx, const std::string& strAccount, int nMinDepth, bool fLong, json_spirit::Array& ret)
 {
     int64_t nFee;
-    std::__cxx11::string strSentAccount;
-    std::__cxx11::list<std::pair<CTxDestination, int64_t> > listReceived;
-    std::__cxx11::list<std::pair<CTxDestination, int64_t> > listSent;
+    std::string strSentAccount;
+    std::list<std::pair<CTxDestination, int64_t> > listReceived;
+    std::list<std::pair<CTxDestination, int64_t> > listSent;
 
     wtx.GetAmounts(listReceived, listSent, nFee, strSentAccount);
 
-    bool fAllAccounts = (strAccount == std::__cxx11::string("*"));
+    bool fAllAccounts = (strAccount == std::string("*"));
 
     // Sent
     if ((!listSent.empty() || nFee != 0) && (fAllAccounts || strAccount == strSentAccount))
@@ -1123,7 +1123,7 @@ void ListTransactions(const CWalletTx& wtx, const std::__cxx11::string& strAccou
     {
         BOOST_FOREACH(const PAIRTYPE(CTxDestination, int64_t)& r, listReceived)
         {
-            std::__cxx11::string account;
+            std::string account;
             if (pwalletMain->mapAddressBook.count(r.first))
                 account = pwalletMain->mapAddressBook[r.first].name;
             if (fAllAccounts || (account == strAccount))
@@ -1153,9 +1153,9 @@ void ListTransactions(const CWalletTx& wtx, const std::__cxx11::string& strAccou
     }
 }
 
-void AcentryToJSON(const CAccountingEntry& acentry, const std::__cxx11::string& strAccount, json_spirit::Array& ret)
+void AcentryToJSON(const CAccountingEntry& acentry, const std::string& strAccount, json_spirit::Array& ret)
 {
-    bool fAllAccounts = (strAccount == std::__cxx11::string("*"));
+    bool fAllAccounts = (strAccount == std::string("*"));
 
     if (fAllAccounts || acentry.strAccount == strAccount)
     {
@@ -1226,7 +1226,7 @@ json_spirit::Value listtransactions(const json_spirit::Array& params, bool fHelp
             + HelpExampleRpc("listtransactions", "\"tabby\", 20, 100")
         );
 
-    std::__cxx11::string strAccount = "*";
+    std::string strAccount = "*";
     if (params.size() > 0)
         strAccount = params[0].get_str();
     int nCount = 10;
@@ -1305,7 +1305,7 @@ json_spirit::Value listaccounts(const json_spirit::Array& params, bool fHelp)
     if (params.size() > 0)
         nMinDepth = params[0].get_int();
 
-    std::map<std::__cxx11::string, int64_t> mapAccountBalances;
+    std::map<std::string, int64_t> mapAccountBalances;
     BOOST_FOREACH(const PAIRTYPE(CTxDestination, CAddressBookData)& entry, pwalletMain->mapAddressBook) {
         if (IsMine(*pwalletMain, entry.first)) // This address belongs to me
             mapAccountBalances[entry.second.name] = 0;
@@ -1315,9 +1315,9 @@ json_spirit::Value listaccounts(const json_spirit::Array& params, bool fHelp)
     {
         const CWalletTx& wtx = (*it).second;
         int64_t nFee;
-        std::__cxx11::string strSentAccount;
-        std::__cxx11::list<std::pair<CTxDestination, int64_t> > listReceived;
-        std::__cxx11::list<std::pair<CTxDestination, int64_t> > listSent;
+        std::string strSentAccount;
+        std::list<std::pair<CTxDestination, int64_t> > listReceived;
+        std::list<std::pair<CTxDestination, int64_t> > listSent;
         int nDepth = wtx.GetDepthInMainChain();
         if (wtx.GetBlocksToMaturity(chainActive.Height()  - nDepth) > 0 || nDepth < 0)
             continue;
@@ -1335,13 +1335,13 @@ json_spirit::Value listaccounts(const json_spirit::Array& params, bool fHelp)
         }
     }
 
-    std::__cxx11::list<CAccountingEntry> acentries;
+    std::list<CAccountingEntry> acentries;
     CWalletDB(pwalletMain->strWalletFile).ListAccountCreditDebit("*", acentries);
     BOOST_FOREACH(const CAccountingEntry& entry, acentries)
         mapAccountBalances[entry.strAccount] += entry.nCreditDebit;
 
     json_spirit::Object ret;
-    BOOST_FOREACH(const PAIRTYPE(std::__cxx11::string, int64_t)& accountBalance, mapAccountBalances) {
+    BOOST_FOREACH(const PAIRTYPE(std::string, int64_t)& accountBalance, mapAccountBalances) {
         ret.push_back(json_spirit::Pair(accountBalance.first, ValueFromAmount(accountBalance.second)));
     }
     return ret;
@@ -1486,7 +1486,7 @@ json_spirit::Value gettransaction(const json_spirit::Array& params, bool fHelp)
 
     CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);
     ssTx << static_cast<CTransaction>(wtx);
-    std::__cxx11::string strHex = HexStr(ssTx.begin(), ssTx.end());
+    std::string strHex = HexStr(ssTx.begin(), ssTx.end());
     entry.push_back(json_spirit::Pair("hex", strHex));
 
     return entry;
@@ -1506,7 +1506,7 @@ json_spirit::Value backupwallet(const json_spirit::Array& params, bool fHelp)
             + HelpExampleRpc("backupwallet", "\"backup.dat\"")
         );
 
-    std::__cxx11::string strDest = params[0].get_str();
+    std::string strDest = params[0].get_str();
     if (!BackupWallet(*pwalletMain, strDest))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: Wallet backup failed!");
 
@@ -1795,7 +1795,7 @@ json_spirit::Value lockunspent(const json_spirit::Array& params, bool fHelp)
 
         RPCTypeCheck(o, boost::assign::map_list_of("txid", json_spirit::str_type)("vout", json_spirit::int_type));
 
-        std::__cxx11::string txid = find_value(o, "txid").get_str();
+        std::string txid = find_value(o, "txid").get_str();
         if (!IsHex(txid))
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex txid");
 

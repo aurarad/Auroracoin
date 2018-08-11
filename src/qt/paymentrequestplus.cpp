@@ -1,4 +1,5 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
+// Copyright (c) 2016-2018 The Auroracoin developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,6 +12,7 @@
 
 #include <stdexcept>
 
+#include <openssl/opensslv.h>     // For using openssl 1.0 and 1.1 branches.
 #include <openssl/x509.h>
 #include <openssl/x509_vfy.h>
 #include <QDateTime>
@@ -158,12 +160,22 @@ bool PaymentRequestPlus::getMerchant(X509_STORE* certStore, QString& merchant) c
         std::string data_to_verify;                     // Everything but the signature
         rcopy.SerializeToString(&data_to_verify);
 
+#if OPENSSL_VERSION_NUMBER < 0x10100000L
         EVP_MD_CTX ctx;
         EVP_PKEY *pubkey = X509_get_pubkey(signing_cert);
         EVP_MD_CTX_init(&ctx);
         if (!EVP_VerifyInit_ex(&ctx, digestAlgorithm, NULL) ||
             !EVP_VerifyUpdate(&ctx, data_to_verify.data(), data_to_verify.size()) ||
             !EVP_VerifyFinal(&ctx, (const unsigned char*)paymentRequest.signature().data(), paymentRequest.signature().size(), pubkey)) {
+#else
+        EVP_MD_CTX *ctx = EVP_MD_CTX_new();
+        EVP_PKEY *pubkey = X509_get_pubkey(signing_cert);
+        EVP_MD_CTX_init(ctx);
+        if (!EVP_VerifyInit_ex(ctx, digestAlgorithm, NULL) ||
+            !EVP_VerifyUpdate(ctx, data_to_verify.data(), data_to_verify.size()) ||
+            !EVP_VerifyFinal(ctx, (const unsigned char*)paymentRequest.signature().data(), paymentRequest.signature().size(), pubkey)) {
+            EVP_MD_CTX_free(ctx);
+#endif
 
             throw SSLVerifyError("Bad signature, invalid PaymentRequest.");
         }

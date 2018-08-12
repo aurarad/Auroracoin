@@ -1075,7 +1075,7 @@ void ThreadMapPort()
     struct UPNPDev * devlist = 0;
     char lanaddr[64];
 
-#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 14 && MINIUPNPC_API_VERSION <= 16)
+#if defined(MINIUPNPC_API_VERSION) && (MINIUPNPC_API_VERSION >= 14 && MINIUPNPC_API_VERSION <= 17)
     /* miniupnpc 2.0+ */
     int error = 0;
     devlist = upnpDiscover(2000, multicastif, minissdpdpath, 0, 0, 0, &error);

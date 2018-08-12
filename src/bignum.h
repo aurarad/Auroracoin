@@ -66,7 +66,7 @@ class CBigNum
 protected:
     BIGNUM *bn;
 
-    CBigNum_init()
+    void CBigNum_init()
     {
         bn = BN_secure_new();
     }

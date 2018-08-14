@@ -117,6 +117,7 @@ dnl Checks for programs.
 AC_PROG_CXX
 AC_PROG_CC
 AC_PROG_CPP
+AX_CXX_COMPILE_STDCXX([14], [noext], [mandatory])
 AC_PROG_CXXCPP
 AC_PROG_INSTALL
 AC_PROG_OBJC

@@ -536,7 +536,7 @@ public:
 #if OPENSSL_VERSION_NUMBER < 0x10100000L
         if (BN_is_negative(this))
 #else
-        if (BN_is_negative(bn))
+        if (BN_is_negative(bn1))
 #endif
             str += "-";
         reverse(str.begin(), str.end());

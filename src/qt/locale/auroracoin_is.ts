@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="en_US">
+<TS version="2.1" language="is">
 <context>
     <name>AboutDialog</name>
     <message>
@@ -18,20 +18,26 @@
         <source>
 A special thanks to the Myriadcoin developers for their help with the multi-algo update.
 
+
 This is experimental software.
 
+
 Distributed under the MIT/X11 software license, see the accompanying file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 
 This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit (http://www.openssl.org/) and cryptographic software written by Eric Young (eay@cryptsoft.com) and UPnP software written by Thomas Bernard.</source>
         <translation>
 Sérstakar þakkir til Myradcoin þróunarteymisins fyrir þeirra hjálp við innleiðingu á multi-algo.
 
+
 Þessi hugbúnaður er í tilraunafasa.
+
 
 Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi eða á http://www.opensource.org/licenses/mit-license.php.
 
-Þessi vara inniheldur hugbúnað þróaðan af OpenSSL Project sem er notað í OpenSSL verkfrærakistunni (http://www.openssl.org/) og dulkóðunarhugbúnað skrifaður af Eric Young (eay@cryptsoft.com) og UPnP hugbúnað skrifaðan af Thomas Bernard. 
-		</translation>
+
+Þessi vara inniheldur hugbúnað þróaðan af OpenSSL Project sem er notað í OpenSSL verkfrærakistunni (http://www.openssl.org/) og dulkóðunarhugbúnað skrifaður af Eric Young (eay@cryptsoft.com) og UPnP hugbúnað skrifaðan af Thomas Bernard.
+                 </translation>
     </message>
     <message>
         <location filename="../utilitydialog.cpp" line="+29"/>
@@ -65,27 +71,27 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+10"/>
         <source>Right-click to edit address or label</source>
-        <translation type="unfinished"></translation>
+        <translation>Smelltu á hægri músatakka til að breyta færslugildi eða merkingu</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Double-click to edit address or label</source>
-        <translation>Tví-klikkið til að uppfæra reikningsnúmer eða lýsingu</translation>
+        <translation>Tví-klikkið til að uppfæra færslugildi eða lýsingu</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Create a new address</source>
-        <translation type="unfinished"></translation>
+        <translation>Búa til nýtt færslugildi</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Nýtt</translation>
     </message>
     <message>
         <location line="+17"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Afrita</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -95,17 +101,17 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+64"/>
         <source>C&amp;lose</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Loka</translation>
     </message>
     <message>
         <location line="-70"/>
         <source>Copy the currently selected address to the system clipboard</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita valið færslugildi í klemmuspjald</translation>
     </message>
     <message>
         <location filename="../addressbookpage.cpp" line="+120"/>
         <source>&amp;Copy Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita færslugildi</translation>
     </message>
     <message>
         <location filename="../forms/addressbookpage.ui" line="+45"/>
@@ -115,7 +121,7 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+19"/>
         <source>Verify a message to ensure it was signed with a specified Auroracoin address</source>
-        <translation>Staðfesta skilaboð til að tryggja að þau séu staðfest af völdu Auroracoin reikningsnúmeri </translation>
+        <translation>Staðfesta skilaboð til að tryggja að þau séu staðfest af völdu Auroracoin færslugildi </translation>
     </message>
     <message>
         <location line="+3"/>
@@ -125,42 +131,42 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="-50"/>
         <source>Delete the currently selected address from the list</source>
-        <translation type="unfinished"></translation>
+        <translation>Eyða völdu færslugildi úr listanum</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Eyða</translation>
     </message>
     <message>
         <location line="+27"/>
         <source>Export the data in the current tab to a file</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Flytja út</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Export</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Flytja út</translation>
     </message>
     <message>
         <location filename="../addressbookpage.cpp" line="-32"/>
         <source>Choose the address to send coins to</source>
-        <translation type="unfinished"></translation>
+        <translation>Veldu færslugildi sem greiða skal til</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Choose the address to receive coins with</source>
-        <translation type="unfinished"></translation>
+        <translation>Veldu færslugildi sem á að taka við mynt</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>Sending addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildi sem senda frá sér</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Receiving addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildi sem þiggja til sín</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -175,42 +181,42 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+8"/>
         <source>Copy &amp;Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita og &amp;Merkja</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Breyta</translation>
     </message>
     <message>
         <location line="+192"/>
         <source>There was an error trying to save the address list to %1. Please try again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ekki tókst að vista færslugildalistann á %1. Reyndu aftur.</translation>
     </message>
     <message>
         <location line="-220"/>
         <source>C&amp;hoose</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Veldu</translation>
     </message>
     <message>
         <location line="+205"/>
         <source>Export Address List</source>
-        <translation type="unfinished"></translation>
+        <translation>Flytja út færslulista</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Comma separated file (*.csv)</source>
-        <translation type="unfinished"></translation>
+        <translation>Gildi aðskilin með kommu (*.csv)</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Exporting Failed</source>
-        <translation type="unfinished"></translation>
+        <translation>Útflutningur tókst ekki</translation>
     </message>
     <message>
         <location line="-28"/>
         <source>There was an error trying to save the address list to %1.</source>
-        <translation>Það kom upp villa við að vista reikningsnúmeralistann á %1.</translation>
+        <translation>Ekki tókst að vista færslugildalistann á %1. Reyndu aftur.</translation>
     </message>
 </context>
 <context>
@@ -218,17 +224,17 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location filename="../addresstablemodel.cpp" line="+165"/>
         <source>Label</source>
-        <translation type="unfinished"></translation>
+        <translation>Merking</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildi</translation>
     </message>
     <message>
         <location line="+36"/>
         <source>(no label)</source>
-        <translation type="unfinished"></translation>
+        <translation>(engin merking)</translation>
     </message>
 </context>
 <context>
@@ -236,27 +242,27 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location filename="../forms/askpassphrasedialog.ui" line="+26"/>
         <source>Passphrase Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation>Lykilsetning</translation>
     </message>
     <message>
         <location line="+30"/>
         <source>Enter passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Skráðu lykilsetning</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>New passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Ný lykilsetning</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Repeat new passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurtaktu nýja lykilsetningu</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Show password</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna lykilorð</translation>
     </message>
     <message>
         <location filename="../askpassphrasedialog.cpp" line="+40"/>
@@ -266,32 +272,32 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+10"/>
         <source>Encrypt wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulkóða veski</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>This operation needs your wallet passphrase to unlock the wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Þessi aðgerð þarf að fá lykilsetninguna þína til að opna veskið.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Unlock wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna veskið</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>This operation needs your wallet passphrase to decrypt the wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Þessi aðgerð þarf lykilsetninguna þína til að dulráða veskið.</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Decrypt wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulráða veskið</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Change passphrase</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta lykilsetningu</translation>
     </message>
     <message>
         <location line="-8"/>
@@ -301,23 +307,23 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+54"/>
         <source>Confirm wallet encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Staðfesta dulkóðan veskis</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR AURORACOINS&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
+        <translation>Viðvörun: Ef þú dulkóðar veskið og týnir lykilsetningunn þá munt þú &lt;b&gt;TAPA ALLRI ÞINNI AURORACOIN MYNT&lt;/b&gt;!</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ertu viss um að þú viljir dulkóða veskið þitt?</translation>
     </message>
     <message>
         <location line="+9"/>
         <location line="+58"/>
         <source>Wallet encrypted</source>
-        <translation type="unfinished"></translation>
+        <translation>Veski dulkóðað</translation>
     </message>
     <message>
         <location line="-64"/>
@@ -464,12 +470,12 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+6"/>
         <source>&amp;Addresses</source>
-        <translation>&amp;Reikningsnúmer</translation>
+        <translation>&amp;Færslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Edit the list of stored addresses and labels</source>
-        <translation>Breyta lista af vistuðum reikningsnúmerum og tilvísunum</translation>
+        <translation>Breyta lista af vistuðum færslugildum og tilvísunum</translation>
     </message>
     <message>
         <location line="+21"/>
@@ -537,7 +543,7 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+2"/>
         <source>&amp;Backup Wallet...</source>
-        <translation>&amp;Afrita/bakcup af veski...</translation>
+        <translation>&amp;Afrita/backup af veski...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -562,7 +568,7 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+1"/>
         <source>Sign messages with your Auroracoin addresses to prove you own them</source>
-        <translation>Skráðu skilaboð með Auroracoin reikningsnúmeri til að sanna að þú eigir það</translation>
+        <translation>Skráðu skilaboð með Auroracoin færslugildi til að sanna að þú eigir það</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -572,7 +578,7 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+1"/>
         <source>Verify messages to ensure they were signed with specified Auroracoin addresses</source>
-        <translation>Staðfesta skilaboð til að ganga úr skugga um að þau staðfest með Auroracoin reikningsnúmeri</translation>
+        <translation>Staðfesta skilaboð til að ganga úr skugga um að þau staðfest með Auroracoin færslugildi</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -587,22 +593,22 @@ Dreift undir MIT/X11 hugbúnaðarleyfi, sjáið nánar í skjali í viðhengi e�
     <message>
         <location line="+2"/>
         <source>&amp;Sending addresses...</source>
-        <translation>&amp;Millifærslu reikningsnúmer..</translation>
+        <translation>&amp;Millifærslu færslugildi..</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of used sending addresses and labels</source>
-        <translation>Sýna lista yfir millifærslu reikningsnúmer og tilvísanir </translation>
+        <translation>Sýna lista yfir millifærslu færslugildi og tilvísanir </translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Receiving addresses...</source>
-        <translation>&amp;Móttöku reikningsnúmer</translation>
+        <translation>&amp;Móttöku færslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of used receiving addresses and labels</source>
-        <translation>Sýna lista af reikningsnúmerum og tilvísunum, sem hafa verið notuð</translation>
+        <translation>Sýna lista af færslugildum og tilvísunum, sem hafa verið notuð</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -818,27 +824,27 @@ Address: %4
     <message>
         <location filename="../forms/coincontroldialog.ui" line="+14"/>
         <source>Coin Control Address Selection</source>
-        <translation>Myntstýring, yfirlit reikningsnúmera</translation>
+        <translation>Myntstýring, yfirlit færslugildi</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Coin Selection</source>
-        <translation type="unfinished"></translation>
+        <translation>Myntval</translation>
     </message>
     <message>
         <location line="+34"/>
         <source>Quantity:</source>
-        <translation type="unfinished"></translation>
+        <translation>Magn:</translation>
     </message>
     <message>
         <location line="+29"/>
         <source>Bytes:</source>
-        <translation type="unfinished"></translation>
+        <translation>Bæti:</translation>
     </message>
     <message>
         <location line="+45"/>
         <source>Amount:</source>
-        <translation type="unfinished"></translation>
+        <translation>Upphæð:</translation>
     </message>
     <message>
         <location line="+29"/>
@@ -848,12 +854,12 @@ Address: %4
     <message>
         <location line="+3"/>
         <source>Dust:</source>
-        <translation type="unfinished"></translation>
+        <translation>Ryk:</translation>
     </message>
     <message>
         <location line="+48"/>
         <source>Fee:</source>
-        <translation type="unfinished"></translation>
+        <translation>Gjald:</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -863,52 +869,52 @@ Address: %4
     <message>
         <location line="+19"/>
         <source>After Fee:</source>
-        <translation type="unfinished"></translation>
+        <translation>Eftirgjald:</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Change:</source>
-        <translation type="unfinished"></translation>
+        <translation>Skiptimynt:</translation>
     </message>
     <message>
         <location line="+56"/>
         <source>(un)select all</source>
-        <translation type="unfinished"></translation>
+        <translation>(af)velja allt</translation>
     </message>
     <message>
         <location line="+16"/>
         <source>Tree mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Hrísluhamur</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>List mode</source>
-        <translation type="unfinished"></translation>
+        <translation>Listahamur</translation>
     </message>
     <message>
         <location line="+56"/>
         <source>Amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Upphæð</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Received with label</source>
-        <translation type="unfinished"></translation>
+        <translation>Móttekið með merkingu></translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Received with address</source>
-        <translation type="unfinished"></translation>
+        <translation>Móttekið með færslugildi</translation>
     </message>
     <message>
         <location line="+26"/>
         <source>Address</source>
-        <translation>Reikningsnúmer</translation>
+        <translation>Færslugildi</translation>
     </message>
     <message>
         <location line="-21"/>
         <source>Date</source>
-        <translation type="unfinished"></translation>
+        <translation>Dagsetning</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -918,7 +924,7 @@ Address: %4
     <message>
         <location line="+3"/>
         <source>Confirmed</source>
-        <translation type="unfinished"></translation>
+        <translation>Staðfest</translation>
     </message>
     <message>
         <location line="+31"/>
@@ -928,18 +934,18 @@ Address: %4
     <message>
         <location filename="../coincontroldialog.cpp" line="+62"/>
         <source>Copy address</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita færslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy label</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita merki</translation>
     </message>
     <message>
         <location line="+1"/>
         <location line="+26"/>
         <source>Copy amount</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita upphæð</translation>
     </message>
     <message>
         <location line="-25"/>
@@ -959,22 +965,22 @@ Address: %4
     <message>
         <location line="+22"/>
         <source>Copy quantity</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita magn</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Copy fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita gjald</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy after fee</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita eftirgjald</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Copy bytes</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita bæti</translation>
     </message>
     <message>
         <location line="-20"/>
@@ -989,12 +995,12 @@ Address: %4
     <message>
         <location line="+21"/>
         <source>Copy change</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita skiptimynt</translation>
     </message>
     <message>
         <location line="-1"/>
         <source>Copy dust</source>
-        <translation type="unfinished"></translation>
+        <translation>Afrita ryk</translation>
     </message>
     <message>
         <location line="+313"/>
@@ -1044,7 +1050,7 @@ Address: %4
     <message>
         <location line="-9"/>
         <source>(%1 locked)</source>
-        <translation type="unfinished"></translation>
+        <translation>(%1 læst)</translation>
     </message>
     <message>
         <location line="+52"/>
@@ -1054,7 +1060,7 @@ Address: %4
     <message>
         <location line="+117"/>
         <source>This label turns red if any recipient receives an amount smaller than the current dust threshold.</source>
-        <translation type="unfinished"></translation>
+        <translation>Þetta merki verður rautt ef einhver viðtakandi tekur við upphæð sem er lægri en núgildandi þröskuldur.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1069,12 +1075,12 @@ Address: %4
     <message>
         <location line="-38"/>
         <source>yes</source>
-        <translation type="unfinished"></translation>
+        <translation>já</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>no</source>
-        <translation type="unfinished"></translation>
+        <translation>nei</translation>
     </message>
     <message>
         <location line="+48"/>
@@ -1127,7 +1133,7 @@ Address: %4
         <location line="+5"/>
         <location line="+54"/>
         <source>(no label)</source>
-        <translation type="unfinished"></translation>
+        <translation>(ekkert merki)</translation>
     </message>
     <message>
         <location line="-7"/>
@@ -1145,62 +1151,62 @@ Address: %4
     <message>
         <location filename="../forms/editaddressdialog.ui" line="+14"/>
         <source>Edit Address</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta færslugildi</translation>
     </message>
     <message>
         <location line="+11"/>
         <source>&amp;Label</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Merki</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>The label associated with this address list entry</source>
-        <translation type="unfinished"></translation>
+        <translation>Merking tengd þessi færslugildi</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>&amp;Address</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Færslugildi</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>The address associated with this address list entry. This can only be modified for sending addresses.</source>
-        <translation type="unfinished"></translation>
+        <translation>>Færslugildið sem tengt er þessari færslu. Þessu má einungis breyta þegar sent er.</translation>
     </message>
     <message>
         <location filename="../editaddressdialog.cpp" line="+28"/>
         <source>New receiving address</source>
-        <translation>Nýtt móttöku reikningsnúmer</translation>
+        <translation>Nýtt móttöku færslugildi</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>New sending address</source>
-        <translation type="unfinished"></translation>
+        <translation>Nýtt sendingarfærslugildi</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Edit receiving address</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta móttökufærslugildi</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Edit sending address</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta sendingarfærslugildi</translation>
     </message>
     <message>
         <location line="+75"/>
         <source>The entered address &quot;%1&quot; is not a valid Auroracoin address.</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildið sem slegið var inn &quot;%1&quot; er ekki leyfilegt Auroracoin færslugildi.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>The entered address &quot;%1&quot; is already in the address book.</source>
-        <translation>Reikningsnúmerið &quot;%1&quot; er nú þegar í tengiliðum.</translation>
+        <translation>Færslugildið &quot;%1&quot; er nú þegar í tengiliðum.</translation>
     </message>
     <message>
         <location line="+7"/>
         <source>Could not unlock wallet.</source>
-        <translation type="unfinished"></translation>
+        <translation>Gat ekki opnað veskið.</translation>
     </message>
     <message>
         <location line="+5"/>
@@ -1215,7 +1221,7 @@ Address: %4
     <message>
         <location line="+5"/>
         <source>The entered address &quot;%1&quot; is already in the address book with label &quot;%2&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildið &quot;%1&quot; er nú þegar í tengiliðum með merkingu &quot;%2&quot;.</translation>
     </message>
 </context>
 <context>
@@ -1228,7 +1234,7 @@ Address: %4
     <message>
         <location line="+22"/>
         <source>name</source>
-        <translation type="unfinished"></translation>
+        <translation>nafn</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -1243,7 +1249,7 @@ Address: %4
     <message>
         <location line="+7"/>
         <source>Cannot create data directory here.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
@@ -1272,7 +1278,7 @@ Address: %4
     <message>
         <location line="+5"/>
         <source>About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Um %1</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -1307,7 +1313,7 @@ Address: %4
     <message>
         <location line="+0"/>
         <source>Command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation>Innsláttar valmöguleikar</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -1325,7 +1331,7 @@ Address: %4
     <message>
         <location filename="../forms/intro.ui" line="+14"/>
         <source>Welcome</source>
-        <translation type="unfinished"></translation>
+        <translation>Velkomin</translation>
     </message>
     <message>
         <location line="+9"/>
@@ -1335,7 +1341,7 @@ Address: %4
     <message>
         <location line="+0"/>
         <source>Welcome to %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>Velkomin til %1.</translation>
     </message>
     <message>
         <location line="+26"/>
@@ -1345,7 +1351,7 @@ Address: %4
     <message>
         <location line="+0"/>
         <source>As this is the first time the program is launched, you can choose where %1 will store its data.</source>
-        <translation type="unfinished"></translation>
+        <translation>Þar sem þetta er í fyrsta skipti sem veskið er ræst, þú getur valið hvar Auroracoin %1 verða geymd.</translation>
     </message>
     <message>
         <location line="+10"/>
@@ -1380,7 +1386,7 @@ Address: %4
     <message>
         <location filename="../intro.cpp" line="+22"/>
         <source>Auroracoin</source>
-        <translation type="unfinished"></translation>
+        <translation>Auroracoin</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -1410,7 +1416,7 @@ Address: %4
     <message>
         <location line="+72"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa</translation>
     </message>
     <message>
         <location line="-39"/>
@@ -1449,7 +1455,7 @@ Address: %4
     <message>
         <location filename="../forms/openuridialog.ui" line="+14"/>
         <source>Open URI</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna URI</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -1758,12 +1764,12 @@ Address: %4
     <message>
         <location line="+2"/>
         <source>Whether to show Auroracoin addresses in the transaction list or not.</source>
-        <translation>Hvort það eigi að sýna Auroracoin reikningsnúmer í millifærslulistanum eða ekki.</translation>
+        <translation>Hvort það eigi að sýna Auroracoin færslugildi í millifærslulistanum eða ekki.</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Display addresses in transaction list</source>
-        <translation>&amp;Sýna reikningsnúmer í millifærslulista</translation>
+        <translation>&amp;Sýna færslugildi í millifærslulista</translation>
     </message>
     <message>
         <location line="+227"/>
@@ -2119,7 +2125,7 @@ Address: %4
     <message>
         <location line="+57"/>
         <source>URI can not be parsed! This can be caused by an invalid Auroracoin address or malformed URI parameters.</source>
-        <translation>URI virkar ekki! Þetta getur verið út af ógildu Auroracoin reikningsnúmeri eða vitlausum URI föstum.</translation>
+        <translation>URI virkar ekki! Þetta getur verið út af ógildu Auroracoin færslugildi eða vitlausum URI föstum.</translation>
     </message>
     <message>
         <location line="-58"/>
@@ -2246,7 +2252,7 @@ Address: %4
     <message>
         <location filename="../guiutil.cpp" line="+93"/>
         <source>Enter a Auroracoin address (e.g. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</source>
-        <translation>Sláðu inn Auroracoin reikningsnúmer (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
+        <translation>Sláðu inn Auroracoin færslugildi (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -2924,7 +2930,7 @@ Address: %4
     <message>
         <location filename="../forms/receivecoinsdialog.ui" line="+34"/>
         <source>Reuse one of the previously used receiving addresses. Reusing addresses has security and privacy issues. Do not use this unless re-generating a payment request made before.</source>
-        <translation>Endurnýta eldra reikningsnúmer til mótttöku. Endurnotkun á reikningsnúmerum getur haft áhrif á öryggi og persónuvernd. Ekki nota nota þetta nema til að endurframkalla eldri greiðslu.</translation>
+        <translation>Endurnýta eldra færslugildi til mótttöku. Endurnotkun á færslugildum getur haft áhrif á öryggi og persónuvernd. Ekki nota nota þetta nema til að endurframkalla eldri greiðslu.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3313,6 +3319,7 @@ Address: %4
         <location line="+48"/>
         <source>Specify a custom fee per kB (1,000 bytes) of the transaction&apos;s virtual size.
 
+
 Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satoshis per kB&quot; for a transaction size of 500 bytes (half of 1 kB) would ultimately yield a fee of only 50 satoshis.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3482,12 +3489,12 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+8"/>
         <source>Invalid payment address %1</source>
-        <translation>Ógilt greiðslu reikningsnúmer %1</translation>
+        <translation>Ógilt greiðslu færslugildi %1</translation>
     </message>
     <message>
         <location line="+38"/>
         <source>The recipient address is not valid, please recheck.</source>
-        <translation>Reikningsnúmer viðtakanda er ekki gilt, vinsamlegast skoðið.</translation>
+        <translation>Færslugildi viðtakanda er ekki gilt, vinsamlegast skoðið.</translation>
     </message>
     <message>
         <location line="+132"/>
@@ -3517,7 +3524,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="-372"/>
         <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>Sama reikningsnúmer er til staðar, getur einungis sent á eitt reikningsnúmer í hverri millifærslu.</translation>
+        <translation>Sama færslugildi er til staðar, getur einungis sent á eitt færslugildi í hverri millifærslu.</translation>
     </message>
     <message>
         <location line="+132"/>
@@ -3593,7 +3600,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+12"/>
         <source>The address to send the payment to (e.g. DNS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Reikningsnúmer til að greiða inn á (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
+        <translation>Færslugildi til að greiða inn á (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
     </message>
     <message>
         <location line="+6"/>
@@ -3740,7 +3747,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+3"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Þú getur skráð skilaboð með reikningsnúmeri til að sanna að þú eigir það. Ath að skrifa ekki eitthvað óljóst, þar sem aðrir gætu reynt að fá þig til að láta þeim í té persónulegar upplýsingar. Einungis senda skilaboð sem þú ert samþykk/ur.</translation>
+        <translation>Þú getur skráð skilaboð með færslugildi til að sanna að þú eigir það. Ath að skrifa ekki eitthvað óljóst, þar sem aðrir gætu reynt að fá þig til að láta þeim í té persónulegar upplýsingar. Einungis senda skilaboð sem þú ert samþykk/ur.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3750,7 +3757,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+15"/>
         <source>The address to sign the message with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Reikningsnúmerið til að skrifa undir skilaboð með (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
+        <translation>Færslugildið til að skrifa undir skilaboð með (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3823,7 +3830,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+3"/>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
-        <translation>Settu inn skráða reikningsnúmerið, skilaboð (passaðu að afrita línu bil, bil, tabs og annað nákvæmlega) og undirskrift fyrir neðan til að staðfesta skilaboðin. Passaðu að treysta ekki meira á undirskriftina en er í raun í skilaboðunum sjálfum, til að koma í veg fyrir &quot;man-in-the-middle&quot; árás.</translation>
+        <translation>Settu inn skráða færslugildiðð, skilaboð (passaðu að afrita línu bil, bil, tabs og annað nákvæmlega) og undirskrift fyrir neðan til að staðfesta skilaboðin. Passaðu að treysta ekki meira á undirskriftina en er í raun í skilaboðunum sjálfum, til að koma í veg fyrir &quot;man-in-the-middle&quot; árás.</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3833,7 +3840,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+18"/>
         <source>The address the message was signed with (e.g. 1NS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Reikningsnúmerið sem skilaboðin voru staðfest með (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
+        <translation>færslugildið sem skilaboðin voru staðfest með (t.d. AafeSfiXVkHpcPmb9nQJTDAE5sKybkJAzz)</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -3863,7 +3870,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="-10"/>
         <source>Enter a Auroracoin address (e.g. DNS17iag9jJgTHD1VXjvLCEnZuQ3rJDE9L)</source>
-        <translation>Sláðu inn Auroracoin reikningsnúmer (t.d. AT3XK3BX6iDRwoFpgukDybXLeYSREn8N8r)</translation>
+        <translation>Sláðu inn Auroracoin færslugildi (t.d. AT3XK3BX6iDRwoFpgukDybXLeYSREn8N8r)</translation>
     </message>
     <message>
         <location line="+93"/>
@@ -4247,7 +4254,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+9"/>
         <source>Address</source>
-        <translation>Reikningsnúmer</translation>
+        <translation>Færslugildi</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -4375,7 +4382,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="-58"/>
         <source>Destination address of transaction.</source>
-        <translation>Reikningsnúmer viðtakanda færslunnar.</translation>
+        <translation>Færslugildi viðtakanda færslunnar.</translation>
     </message>
     <message>
         <location line="+60"/>
@@ -4444,7 +4451,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="+1"/>
         <source>Mined</source>
-        <translation type="unfinished"></translation>
+        <translation>Námuunnið</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -4454,7 +4461,7 @@ Note:  Since the fee is calculated on a per-byte basis, a fee of &quot;100 satos
     <message>
         <location line="-8"/>
         <source>Enter address or label to search</source>
-        <translation>Settu inn reikningsnúmer eða tilvísun til að leita</translation>
+        <translation>Settu inn færslugildi eða tilvísun til að leita</translation>
     </message>
     <message>
         <location line="+17"/>
@@ -4758,7 +4765,7 @@ til dæmis; alertnotify=echo %%s | mail -s &quot;Auroracoin Alert&quot; admin@fo
     <message>
         <location line="+3"/>
         <source>Bind to given address and always listen on it. Use [host]:port notation for IPv6</source>
-        <translation>Binda á gefið reikningsnúmer og hlusta á það. Nota [host]:port viðvaranir fyrir IPv6</translation>
+        <translation>Binda á gefið færslugildi og hlusta á það. Nota [host]:port viðvaranir fyrir IPv6</translation>
     </message>
     <message>
         <location line="+3"/>
@@ -4992,7 +4999,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+1"/>
         <source>Cannot write default address</source>
-        <translation>Get ekki skrifað sjálfgefið reikningsnúmer</translation>
+        <translation>Get ekki skrifað sjálfgefið færslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5017,7 +5024,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+1"/>
         <source>Connect to a node to retrieve peer addresses, and disconnect</source>
-        <translation>Tengstu við nóðu til að fá reikningsnúmer jafningja, og aftengstu</translation>
+        <translation>Tengstu við nóðu til að fá færslugildi jafningja, og aftengstu</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5042,7 +5049,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+1"/>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
-        <translation>Finndu eigin IP reikningsnúmer (sjálfgefið: 1 við hlustun og engin -externalip)</translation>
+        <translation>Finndu eigin IP tala (sjálfgefið: 1 við hlustun og engin -externalip)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5282,7 +5289,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+1"/>
         <source>Loading addresses...</source>
-        <translation>Keyri upp reikningsnúmer...</translation>
+        <translation>Keyri upp færslugildi...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5522,7 +5529,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+1"/>
         <source>Specify your own public address</source>
-        <translation>Tilgreindu þitt eigið opinbera reikningsnúmer</translation>
+        <translation>Tilgreindu þitt eigið opinbera færslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5710,142 +5717,142 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location filename="../auroracoingui.cpp" line="+245"/>
         <source>&amp;Overview</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yfirlit</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show general overview of wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna almennt yfirlit af veski</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&amp;Send</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Senda</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Send coins to an Auroracoin address</source>
-        <translation type="unfinished"></translation>
+        <translation>Senda mynt í Auroracoin færslugildi</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>&amp;Receive</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Taka við</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Request payments (generates QR codes and auroracoin: URIs)</source>
-        <translation type="unfinished"></translation>
+        <translation>Óska eftir greiðslum (býr til QR kóða og auroracoin: URI)</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>&amp;Transactions</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslur</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Browse transaction history</source>
-        <translation type="unfinished"></translation>
+        <translation>Skoða færslusögu</translation>
     </message>
     <message>
         <location line="+23"/>
         <source>E&amp;xit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hætta</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Quit application</source>
-        <translation type="unfinished"></translation>
+        <translation>Hætta í forriti</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;About %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Um %1</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show information about %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna upplýsingar um %1</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>About &amp;Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Um &amp;Qt</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show information about Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna upplýsingar um Qt</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Options...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Valkostir</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Modify configuration options for %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta samstillingum fyrir %1</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>&amp;Show / Hide</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sýna / Fela</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show or hide the main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna eða fela megin glugga</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Encrypt Wallet...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Dulkóða veski...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Encrypt the private keys that belong to your wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Dulkóða einkalyklana sem tilheyra veskinu þínu</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>&amp;Backup Wallet...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Öryggisafrit á veski...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Backup wallet to another location</source>
-        <translation type="unfinished"></translation>
+        <translation>Öryggisafrita veski á annan stað</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Change Passphrase...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Breyta lykilsetningu</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Change the passphrase used for wallet encryption</source>
-        <translation type="unfinished"></translation>
+        <translation>Breyta lykilsetningunni sem gildir um dulkóðun veskis</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sign &amp;message...</source>
-        <translation type="unfinished"></translation>
+        <translation>Undirrita &amp;skilaboð</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sign messages with your Auroracoin addresses to prove you own them</source>
-        <translation type="unfinished"></translation>
+        <translation>Kvitta undir skilaboð með Auroracoin færslugildunum þínum til að sanna að þú eigir þau</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Verify message...</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Yfirfara skilaboð...</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Verify messages to ensure they were signed with specified Auroracoin addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>Yfirfara skilaboð til að tryggja að kvittað hafi verið fyrir þau með tilteknum Auroracoin færslugildum</translation>
     </message>
     <message>
         <location line="+2"/>
@@ -5860,27 +5867,27 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+5"/>
         <source>&amp;Sending addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Sendingarfærslugildi</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of used sending addresses and labels</source>
-        <translation type="unfinished"></translation>
+        <translation>>Sýna lista yfir færslugildi sem notuð hafa verið til sendingar og merkingar þeirra</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>&amp;Receiving addresses</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Færslugildi sem þiggja til sín</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Show the list of used receiving addresses and labels</source>
-        <translation type="unfinished"></translation>
+        <translation>Sýna færslugildi sem notuð hafa verið til að taka við mynt og merkingar þeirra</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Open &amp;URI...</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna &amp;URI...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -5890,17 +5897,17 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+2"/>
         <source>Open Wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna Veski</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Open a wallet</source>
-        <translation type="unfinished"></translation>
+        <translation>Opna veski</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>&amp;Command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Valkostir skipanalínu</translation>
     </message>
     <message>
         <location line="-3"/>
@@ -5915,7 +5922,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+4"/>
         <source>Show the %1 help message to get a list with possible auroracoin command-line options</source>
-        <translation type="unfinished"></translation>
+        <translation>>Sýna %1 hjálparskilaboðin til að fá lista yfir valkosti auroracoin aðgerðir í skipanalínu</translation>
     </message>
     <message>
         <location line="+30"/>
@@ -5940,27 +5947,27 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+25"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Skrá</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Stillingar</translation>
     </message>
     <message>
         <location line="+9"/>
         <source>&amp;Window</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Glugga></translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Minimize</source>
-        <translation type="unfinished"></translation>
+        <translation>Kreppa</translation>
     </message>
     <message>
         <location line="+10"/>
         <source>Zoom</source>
-        <translation type="unfinished"></translation>
+        <translation>Þysja</translation>
     </message>
     <message>
         <location line="+14"/>
@@ -5970,12 +5977,12 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+12"/>
         <source>Main Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Aðalglugga</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Hjálp</translation>
     </message>
     <message>
         <location line="+11"/>
@@ -5984,13 +5991,13 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     </message>
     <message>
         <location line="+21"/>
-        <source>Wallet:</source>
-        <translation type="unfinished"></translation>
+        <source>Wallet</source>
+        <translation>Veski</translation>
     </message>
     <message>
         <location line="+181"/>
         <source>%1 client</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 biðlari</translation>
     </message>
     <message numerus="yes">
         <location line="+155"/>
@@ -6003,47 +6010,47 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+0"/>
         <source>Click to disable network activity.</source>
-        <translation type="unfinished"></translation>
+        <translation>Smelltu til að loka fyrir netumferð.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Network activity disabled.</source>
-        <translation type="unfinished"></translation>
+        <translation>Slökkt á netumferð.</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Click to enable network activity again.</source>
-        <translation type="unfinished"></translation>
+        <translation>Smelltu til að hefja aftur netumferð.</translation>
     </message>
     <message>
         <location line="+35"/>
-        <source>Syncing Headers (%1%)...</source>
-        <translation type="unfinished"></translation>
+        <source>Syncing Headers (%1)...</source>
+        <translation>Samstilli hausa (%1)...</translation>
     </message>
     <message>
         <location line="+42"/>
         <source>Synchronizing with network...</source>
-        <translation type="unfinished"></translation>
+        <translation>Samstilli við netið...</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Indexing blocks on disk...</source>
-        <translation type="unfinished"></translation>
+        <translation>Raða blokkum á drifi</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Processing blocks on disk...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vinn úr blokkum á drifi...</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>Reindexing blocks on disk...</source>
-        <translation type="unfinished"></translation>
+        <translation>Endurraða blokkum á drifi...</translation>
     </message>
     <message>
         <location line="+6"/>
         <source>Connecting to peers...</source>
-        <translation type="unfinished"></translation>
+        <translation>Tengist jafningjum...</translation>
     </message>
     <message numerus="yes">
         <location line="+9"/>
@@ -6056,88 +6063,94 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+5"/>
         <source>Up to date</source>
-        <translation type="unfinished"></translation>
+        <translation>Uppfært</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>%1 behind</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 á eftir</translation>
     </message>
     <message>
         <location line="+5"/>
         <source>Catching up...</source>
-        <translation type="unfinished"></translation>
+        <translation>Færist nær...</translation>
     </message>
     <message>
         <location line="+19"/>
         <source>Last received block was generated %1 ago.</source>
-        <translation type="unfinished"></translation>
+        <translation>Síðasta viðtekna blokk var búin til fyrir %1 síðan.</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Transactions after this will not yet be visible.</source>
-        <translation type="unfinished"></translation>
+        <translation>Færslur á eftir þessari munu ekki sjást.</translation>
     </message>
     <message>
         <location line="+13"/>
         <source>Auroracoin</source>
-        <translation type="unfinished"></translation>
+        <translation>Auroracoin</translation>
     </message>
     <message>
         <location line="+14"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Villa</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Warning</source>
-        <translation type="unfinished"></translation>
+        <translation>Viðvörun</translation>
     </message>
     <message>
         <location line="+3"/>
         <source>Information</source>
-        <translation type="unfinished"></translation>
+        <translation>Upplýsingar</translation>
     </message>
     <message>
         <location line="+97"/>
         <source>Date: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Dagsetning: %1
+</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Amount: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Upphæð: %1
+</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Wallet: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Veski: %1
+</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Type: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Tegund: %1
+</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Label: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Merki: %1
+</translation>
     </message>
     <message>
         <location line="+2"/>
         <source>Address: %1
 </source>
-        <translation type="unfinished"></translation>
+        <translation>Færslugildi: %1
+</translation>
     </message>
     <message>
         <location line="+1"/>
         <source>Sent transaction</source>
-        <translation type="unfinished"></translation>
+        <translation>Send Færsla</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -6147,32 +6160,32 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+52"/>
         <source>Private key &lt;b&gt;disabled&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Móttökufærsla</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>HD key generation is &lt;b&gt;enabled&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>HD lyklagerð er &lt;b&gt;virkjuð&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>HD key generation is &lt;b&gt;disabled&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>HD lyklagerð er &lt;b&gt;óvirk&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+20"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Veskið er &lt;b&gt;dulkóðað&lt;/b&gt; og núna &lt;b&gt;ólæst&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+8"/>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>Veskið er &lt;b&gt;dulkóðað&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</translation>
     </message>
     <message>
         <location line="+32"/>
         <source>Proxy is &lt;b&gt;enabled&lt;/b&gt;: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vefsel er &lt;b&gt;virkjuð&lt;/b&gt;: %1</translation>
     </message>
 </context>
 <context>
@@ -6180,12 +6193,12 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location filename="../bantablemodel.cpp" line="+89"/>
         <source>IP/Netmask</source>
-        <translation type="unfinished"></translation>
+        <translation>IP/Netgríma</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Banned Until</source>
-        <translation type="unfinished"></translation>
+        <translation>Bannað til type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -6208,7 +6221,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+63"/>
         <source>Number of blocks left</source>
-        <translation type="unfinished"></translation>
+        <translation>Fjöldi blokka sem eftir eru</translation>
     </message>
     <message>
         <location line="+7"/>
@@ -6259,12 +6272,12 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location filename="../peertablemodel.cpp" line="+110"/>
         <source>NodeId</source>
-        <translation type="unfinished"></translation>
+        <translation>HnuturId</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Node/Service</source>
-        <translation type="unfinished"></translation>
+        <translation>Hnutur/Þjónjusta</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -6274,12 +6287,12 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
     <message>
         <location line="+0"/>
         <source>Sent</source>
-        <translation type="unfinished"></translation>
+        <translation>Send</translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Received</source>
-        <translation type="unfinished"></translation>
+        <translation>Móttekið</translation>
     </message>
     <message>
         <location line="+0"/>
@@ -6316,7 +6329,7 @@ Ef skráin er ekki til, skaltu búa hana til með owner-readable-only file permi
         <location filename="../sendcoinsdialog.cpp" line="+213"/>
         <location line="+5"/>
         <source>Yes</source>
-        <translation type="unfinished"></translation>
+        <translation>Já</translation>
     </message>
 </context>
 <context>

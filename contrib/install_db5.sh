@@ -86,8 +86,14 @@ patch -p1 < clang.patch
 
 cd build_unix/
 
+if [[ "$OSTYPE" == "darwin"* ]]; then
+   SYS_OPT="--with-mutex=Darwin/_spin_lock_try"
+else
+   SYS_OPT=""
+fi
+
 "${BDB_PREFIX}/${BDB_VERSION}/dist/configure" \
-  --enable-cxx --disable-shared --disable-replication --with-pic --with-mutex=Darwin/_spin_lock_try --prefix="${BDB_PREFIX}" \
+  --enable-cxx --disable-shared --disable-replication --with-pic ${SYS_OPT} --prefix="${BDB_PREFIX}" \
   "${@}"
 
 make install

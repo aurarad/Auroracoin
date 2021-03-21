@@ -45,7 +45,6 @@ enum class FeeReason {
     PAYTXFEE,
     FALLBACK,
     REQUIRED,
-    MAXTXFEE,
 };
 
 /* Used to determine type of fee estimation requested */

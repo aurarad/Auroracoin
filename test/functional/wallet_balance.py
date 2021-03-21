@@ -11,7 +11,7 @@ from test_framework.test_framework import DigiByteTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
-    connect_nodes_bi,
+    connect_nodes,
     sync_blocks,
 )
 
@@ -202,13 +202,15 @@ class WalletTest(DigiByteTestFramework):
         self.log.info('Put txs back into mempool of node 1 (not node 0)')
         self.nodes[0].invalidateblock(block_reorg)
         self.nodes[1].invalidateblock(block_reorg)
+        self.sync_blocks()
+        self.nodes[0].syncwithvalidationinterfacequeue()
         assert_equal(self.nodes[0].getbalance(minconf=0), 0)  # wallet txs not in the mempool are untrusted
         self.nodes[0].generatetoaddress(1, ADDRESS_WATCHONLY)
         assert_equal(self.nodes[0].getbalance(minconf=0), 0)  # wallet txs not in the mempool are untrusted
 
         # Now confirm tx_orig
         self.restart_node(1, ['-persistmempool=0'])
-        connect_nodes_bi(self.nodes, 0, 1)
+        connect_nodes(self.nodes[0], 1)
         sync_blocks(self.nodes)
         self.nodes[1].sendrawtransaction(tx_orig)
         self.nodes[1].generatetoaddress(1, ADDRESS_WATCHONLY)

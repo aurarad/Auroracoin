@@ -4,6 +4,8 @@
 
 #include <qt/auroracoin.h>
 
+#include <util/translation.h>
+
 #include <QCoreApplication>
 
 #include <functional>

@@ -3,10 +3,9 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef BITCOIN_TEST_SCRIPTNUM10_H
-#define BITCOIN_TEST_SCRIPTNUM10_H
+#ifndef AURORACOIN_TEST_SCRIPTNUM10_H
+#define AURORACOIN_TEST_SCRIPTNUM10_H
 
-#include <algorithm>
 #include <limits>
 #include <stdexcept>
 #include <stdint.h>
@@ -180,4 +179,4 @@ private:
 };
 
 
-#endif // BITCOIN_TEST_BIGNUM_H
+#endif // AURORACOIN_TEST_BIGNUM_H

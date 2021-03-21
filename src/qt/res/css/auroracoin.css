@@ -71,7 +71,8 @@ WalletFrame {
     /*******************************************************/
     
     QLabel { /* Base Text Size & Color */
-    font-size:11pt;
+    /*jan5*/
+	font-size:12pt;
     color:#575859;
     }
     
@@ -86,7 +87,8 @@ WalletFrame {
     
     .QValidatedLineEdit, .QLineEdit { /* Text Entry Fields */
     border: 1px solid #00886f;
-    font-size:8pt;
+    /*jan5*/
+	font-size:12pt;
     min-height:25px;
     outline:0;
     padding:3px;
@@ -94,7 +96,8 @@ WalletFrame {
     }
     
     .QLineEdit:!focus {
-    font-size:9pt;
+    /*jan5*/
+	font-size:12pt;
     }
     
     .QValidatedLineEdit:disabled, .QLineEdit:disabled {
@@ -107,8 +110,10 @@ WalletFrame {
     background-color:#35b297;
     border:0;
     border-radius:3px;
-    color:#000000;
-    font-size:9pt;
+    /* color:#000000; */
+	color:#fff;
+    /*jan5*/
+	font-size:11pt;
     font-weight:normal;
     height: 26px;
     padding-left:25px;
@@ -529,10 +534,12 @@ WalletFrame {
     padding-right:10px;
     }
     
-    QWidget#AddressBookPage QPushButton#newAddress:hover {
+    /*
+	QWidget#AddressBookPage QPushButton#newAddress:hover {
     background-color:#0066cc;
     color:#333;
     }
+	*/
     
     QWidget#AddressBookPage QPushButton#newAddress:pressed {
     border:1px solid #9e9e9e;
@@ -596,7 +603,7 @@ WalletFrame {
     /* Options Dialog */
     QDialog#OptionsDialog {
     background: color #003366;
-    }
+	}
     
     QDialog#OptionsDialog QValueComboBox, QDialog#OptionsDialog QSpinBox {
     margin-top:5px;
@@ -764,7 +771,7 @@ WalletFrame {
     color:#000000;
     margin-right:5px;
     padding-right:5px;
-    font-size:10pt;
+    font-size:12pt;
     font-weight: bold;
     min-height:35px;
     }
@@ -774,7 +781,7 @@ WalletFrame {
     font-size:12pt;
     color:#000000;
     margin-left:0px;
-        font-weight: bold;
+    font-weight: bold;
     }
     
     QWidget .QFrame#frame .QLabel#labelWatchAvailable { /* Watch-only Balance */
@@ -1182,16 +1189,17 @@ WalletFrame {
     QDialog#SendCoinsDialog .QPushButton#clearButton { /* Clear Button */
     background-color:#0066cc;
     border:1px solid #d2d2d2;
-    color:#616161;
+    /* color:#616161; */
     padding-left:10px;
     padding-right:10px;
     }
     
-    QDialog#SendCoinsDialog .QPushButton#clearButton:hover {
+  /*  QDialog#SendCoinsDialog .QPushButton#clearButton:hover {
     background-color:#0066cc;
     color:#333;
     }
-    
+    */
+	
     QDialog#SendCoinsDialog .QPushButton#clearButton:pressed {
     border:1px solid #9e9e9e;
     }
@@ -1199,16 +1207,16 @@ WalletFrame {
     QDialog#SendCoinsDialog .QPushButton#addButton { /* Add Button */
     background-color:#0066cc;
     border:1px solid #d2d2d2;
-    color:#616161;
+    /* color:#616161; */
     padding-left:10px;
     padding-right:10px;
     }
     
-    QDialog#SendCoinsDialog .QPushButton#addButton:hover {
+/*    QDialog#SendCoinsDialog .QPushButton#addButton:hover {
     background-color:#0066cc;
     color:#333;
     }
-    
+*/    
     QDialog#SendCoinsDialog .QPushButton#addButton:pressed {
     border:1px solid #9e9e9e;
     }
@@ -1252,8 +1260,10 @@ WalletFrame {
     QDialog#SendCoinsDialog QLabel#labelBalance {
     margin-left:0px;
     padding-left:0px;
-    color:#fff;
-    /* font-weight:bold;
+    color:#000;
+	font-weight:bold;
+	font-size:12pt;
+	/*
     border-radius:5px;
     padding-top:20px;
     padding-bottom:20px; */
@@ -1268,7 +1278,7 @@ WalletFrame {
     /* SEND COINS ENTRY */
     
     QStackedWidget#SendCoinsEntry .QFrame#SendCoins > .QLabel { /* Send Coin Entry Labels */
-    background-color:#F8F6F6;
+    /*background-color:#F8F6F6;*/
     min-width:102px;
     font-weight:normal;
     /*font-size:8pt;*/
@@ -1279,12 +1289,15 @@ WalletFrame {
     }
     
     QStackedWidget#SendCoinsEntry .QFrame#SendCoins .QLabel#amountLabel {
-    color: #fff;
+    /*color: #fff;
     background-color:#999;
-    }
+    */
+	}
     
     QStackedWidget#SendCoinsEntry .QValidatedLineEdit#payTo { /* Pay To Input Field */
-    }
+    /*jan5
+	font-size:12pt;*/
+	}
     
     QStackedWidget#SendCoinsEntry .QToolButton { /* General Settings for Pay To Icons */
     background-color:transparent;
@@ -1308,7 +1321,8 @@ WalletFrame {
     }
     
     QStackedWidget#SendCoinsEntry .QLineEdit#addAsLabel { /* Pay To Input Field */
-    }
+    font-size:12pt;
+	}
     
     /* COIN CONTROL POPUP */
     
@@ -1454,8 +1468,8 @@ WalletFrame {
     /* RECEIVE COINS */
     
     QWidget#ReceiveCoinsDialog .QFrame#frame2 .QLabel#label_2 { /* Label Label */
-    background-color:#F8F6F6;
-    border: 1px solid #fff;
+    /* background-color:#F8F6F6; 
+    border: 1px solid #fff;*/
     min-width:102px;
     color:#333;
     /*font-weight:bold;
@@ -1464,18 +1478,18 @@ WalletFrame {
     }
     
     QWidget#ReceiveCoinsDialog .QFrame#frame2 .QLabel#label { /* Amount Label */
-    background-color:#999;
-    border: 1px solid #fff;
+    /* background-color:#999; 
+    border: 1px solid #fff;*/
     min-width:102px;
-    color:#ffffff;
+    color:#333;
     /*font-weight:bold;
     font-size:8pt;*/
     padding-right:5px;
     }
     
     QWidget#ReceiveCoinsDialog .QFrame#frame2 .QLabel#label_3 { /* Message Label */
-    background-color:#F8F6F6;
-    border: 1px solid #fff;
+    /* background-color:#F8F6F6; 
+    border: 1px solid #fff;*/
     min-width:102px;
     color:#333;
     /*font-weight:bold;
@@ -1491,10 +1505,12 @@ WalletFrame {
     padding-right:10px;
     }
     
-    QWidget#ReceiveCoinsDialog .QFrame#frame2 QPushButton#clearButton:hover {
+    /*
+	QWidget#ReceiveCoinsDialog .QFrame#frame2 QPushButton#clearButton:hover {
     background-color:#0066cc;
     color:#333;
     }
+	*/
     
     QWidget#ReceiveCoinsDialog .QFrame#frame2 QPushButton#clearButton:pressed {
     border:1px solid #9e9e9e;
@@ -1535,7 +1551,7 @@ WalletFrame {
     }
     
     QWidget#ReceiveCoinsDialog .QFrame#frame .QLabel#label_6 { /* Requested Payments History Label */
-    color:#999;
+    color:#333;
     font-weight:normal;
     font-size:10pt;
     }

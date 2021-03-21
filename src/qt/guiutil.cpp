@@ -1,4 +1,4 @@
-// Copyright (c) 2009-2019 The Bitcoin Core developers
+// Copyright (c) 2011-2019 The Bitcoin Core developers
 // Copyright (c) 2014-2019 The DigiByte Core developers
 // Copyright (c) 2014-2019 The Auroracoin Developers
 // Distributed under the MIT software license, see the accompanying
@@ -13,10 +13,10 @@
 
 #include <base58.h>
 #include <chainparams.h>
-#include <primitives/transaction.h>
-#include <key_io.h>
 #include <interfaces/node.h>
+#include <key_io.h>
 #include <policy/policy.h>
+#include <primitives/transaction.h>
 #include <protocol.h>
 #include <script/script.h>
 #include <script/standard.h>
@@ -41,7 +41,6 @@
 #include <QClipboard>
 #include <QDateTime>
 #include <QDesktopServices>
-#include <QDesktopWidget>
 #include <QDoubleValidator>
 #include <QFileDialog>
 #include <QFont>
@@ -51,6 +50,7 @@
 #include <QLineEdit>
 #include <QMouseEvent>
 #include <QProgressDialog>
+#include <QScreen>
 #include <QSettings>
 #include <QTextDocument> // for Qt::mightBeRichText
 #include <QThread>
@@ -592,7 +592,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
             // Start client minimized
             QString strArgs = "-min";
             // Set -testnet /-regtest options
-            strArgs += QString::fromStdString(strprintf(" -testnet=%d -regtest=%d", gArgs.GetBoolArg("-testnet", false), gArgs.GetBoolArg("-regtest", false)));
+            strArgs += QString::fromStdString(strprintf(" -chain=%s", gArgs.GetChainName()));
 
             // Set the path to the shortcut target
             psl->SetPath(pszExePath);
@@ -640,7 +640,7 @@ fs::path static GetAutostartFilePath()
     std::string chain = gArgs.GetChainName();
     if (chain == CBaseChainParams::MAIN)
         return GetAutostartDir() / "auroracoin.desktop";
-    return GetAutostartDir() / strprintf("auroracoin-%s.lnk", chain);
+    return GetAutostartDir() / strprintf("auroracoin-%s.desktop", chain);
 }
 
 bool GetStartOnSystemStartup()
@@ -687,7 +687,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
             optionFile << "Name=Auroracoin\n";
         else
             optionFile << strprintf("Name=Auroracoin (%s)\n", chain);
-        optionFile << "Exec=" << pszExePath << strprintf(" -min -testnet=%d -regtest=%d\n", gArgs.GetBoolArg("-testnet", false), gArgs.GetBoolArg("-regtest", false));
+        optionFile << "Exec=" << pszExePath << strprintf(" -min -chain=%s\n", chain);
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
         optionFile.close();
@@ -809,7 +809,7 @@ void restoreWindowGeometry(const QString& strSetting, const QSize& defaultSize, 
     QSize size = settings.value(strSetting + "Size", defaultSize).toSize();
 
     if (!pos.x() && !pos.y()) {
-        QRect screen = QApplication::desktop()->screenGeometry();
+        QRect screen = QGuiApplication::primaryScreen()->geometry();
         pos.setX((screen.width() - size.width()) / 2);
         pos.setY((screen.height() - size.height()) / 2);
     }
@@ -912,9 +912,6 @@ QString formatServicesStr(quint64 mask)
             case NODE_WITNESS:
                 strList.append("WITNESS");
                 break;
-            case NODE_XTHIN:
-                strList.append("XTHIN");
-                break;
             default:
                 strList.append(QString("%1[%2]").arg("UNKNOWN").arg(check));
             }
@@ -990,7 +987,7 @@ qreal calculateIdealFontSize(int width, const QString& text, QFont font, qreal m
     while(font_size >= minPointSize) {
         font.setPointSizeF(font_size);
         QFontMetrics fm(font);
-        if (fm.width(text) < width) {
+        if (TextWidth(fm, text) < width) {
             break;
         }
         font_size -= 0.5;
@@ -1022,11 +1019,20 @@ void PolishProgressDialog(QProgressDialog* dialog)
 {
 #ifdef Q_OS_MAC
     // Workaround for macOS-only Qt bug; see: QTBUG-65750, QTBUG-70357.
-    const int margin = dialog->fontMetrics().width("X");
+    const int margin = TextWidth(dialog->fontMetrics(), ("X"));
     dialog->resize(dialog->width() + 2 * margin, dialog->height());
     dialog->show();
 #else
     Q_UNUSED(dialog);
+#endif
+}
+
+int TextWidth(const QFontMetrics& fm, const QString& text)
+{
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 11, 0))
+    return fm.horizontalAdvance(text);
+#else
+    return fm.width(text);
 #endif
 }
 

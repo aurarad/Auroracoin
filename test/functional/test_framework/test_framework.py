@@ -26,7 +26,7 @@ from .util import (
     PortSeed,
     assert_equal,
     check_json_precision,
-    connect_nodes_bi,
+    connect_nodes,
     disconnect_nodes,
     get_datadir_path,
     initialize_datadir,
@@ -92,6 +92,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
 
     def __init__(self):
         """Sets test framework defaults. Do not override this method. Instead, override the set_test_params() method"""
+        self.chain = 'regtest'
         self.setup_clean_chain = False
         self.nodes = []
         self.network_thread = None
@@ -193,18 +194,18 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
             self.setup_network()
             self.run_test()
             success = TestStatus.PASSED
-        except JSONRPCException as e:
+        except JSONRPCException:
             self.log.exception("JSONRPC error")
         except SkipTest as e:
             self.log.warning("Test Skipped: %s" % e.message)
             success = TestStatus.SKIPPED
-        except AssertionError as e:
+        except AssertionError:
             self.log.exception("Assertion failed")
-        except KeyError as e:
+        except KeyError:
             self.log.exception("Key error")
-        except Exception as e:
+        except Exception:
             self.log.exception("Unexpected exception caught during testing")
-        except KeyboardInterrupt as e:
+        except KeyboardInterrupt:
             self.log.warning("Exiting after keyboard interrupt")
 
         if success == TestStatus.FAILED and self.options.pdbonfailure:
@@ -281,8 +282,18 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
         # Connect the nodes as a "chain".  This allows us
         # to split the network between nodes 1 and 2 to get
         # two halves that can work on competing chains.
+        #
+        # Topology looks like this:
+        # node0 <-- node1 <-- node2 <-- node3
+        #
+        # If all nodes are in IBD (clean chain from genesis), node0 is assumed to be the source of blocks (miner). To
+        # ensure block propagation, all nodes will establish outgoing connections toward node0.
+        # See fPreferredDownload in net_processing.
+        #
+        # If further outbound connections are needed, they can be added at the beginning of the test with e.g.
+        # connect_nodes(self.nodes[1], 2)
         for i in range(self.num_nodes - 1):
-            connect_nodes_bi(self.nodes, i, i + 1)
+            connect_nodes(self.nodes[i + 1], i)
         self.sync_all()
 
     def setup_nodes(self):
@@ -344,6 +355,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
             self.nodes.append(TestNode(
                 i,
                 get_datadir_path(self.options.tmpdir, i),
+                chain=self.chain,
                 rpchost=rpchost,
                 timewait=self.rpc_timeout,
                 auroracoind=binary[i],
@@ -423,7 +435,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
         """
         Join the (previously split) network halves together.
         """
-        connect_nodes_bi(self.nodes, 1, 2)
+        connect_nodes(self.nodes[1], 2)
         self.sync_all()
 
     def sync_blocks(self, nodes=None, **kwargs):
@@ -479,11 +491,12 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
         if not os.path.isdir(cache_node_dir):
             self.log.debug("Creating cache directory {}".format(cache_node_dir))
 
-            initialize_datadir(self.options.cachedir, CACHE_NODE_ID)
+            initialize_datadir(self.options.cachedir, CACHE_NODE_ID, self.chain)
             self.nodes.append(
                 TestNode(
                     CACHE_NODE_ID,
                     cache_node_dir,
+                    chain=self.chain,
                     extra_conf=["bind=127.0.0.1"],
                     extra_args=['-disablewallet'],
                     rpchost=None,
@@ -517,7 +530,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
             self.nodes = []
 
             def cache_path(*paths):
-                return os.path.join(cache_node_dir, "regtest", *paths)
+                return os.path.join(cache_node_dir, self.chain, *paths)
 
             os.rmdir(cache_path('wallets'))  # Remove empty wallets dir
             for entry in os.listdir(cache_path()):
@@ -528,7 +541,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
             self.log.debug("Copy cache directory {} to node {}".format(cache_node_dir, i))
             to_dir = get_datadir_path(self.options.tmpdir, i)
             shutil.copytree(cache_node_dir, to_dir)
-            initialize_datadir(self.options.tmpdir, i)  # Overwrite port/rpcport in digibyte.conf
+            initialize_datadir(self.options.tmpdir, i, self.chain)  # Overwrite port/rpcport in auroracoin.conf
 
     def _initialize_chain_clean(self):
         """Initialize empty blockchain for use by the test.
@@ -536,7 +549,7 @@ class AuroracoinTestFramework(metaclass=AuroracoinTestMetaClass):
         Create an empty blockchain and num_nodes wallets.
         Useful if a test case wants complete control over initialization."""
         for i in range(self.num_nodes):
-            initialize_datadir(self.options.tmpdir, i)
+            initialize_datadir(self.options.tmpdir, i, self.chain)
 
     def skip_if_no_py3_zmq(self):
         """Attempt to import the zmq package and skip the test if the import fails."""

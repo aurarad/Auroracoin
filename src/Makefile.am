@@ -147,7 +147,6 @@ AURORACOIN_CORE_H = \
   interfaces/wallet.h \
   key.h \
   key_io.h \
-  keystore.h \
   dbwrapper.h \
   limitedmap.h \
   logging.h \
@@ -155,11 +154,13 @@ AURORACOIN_CORE_H = \
   merkleblock.h \
   miner.h \
   net.h \
+  net_permissions.h \
   net_processing.h \
   netaddress.h \
   netbase.h \
   netmessagemaker.h \
   node/coin.h \
+  node/coinstats.h \
   node/psbt.h \
   node/transaction.h \
   noui.h \
@@ -179,15 +180,17 @@ AURORACOIN_CORE_H = \
   rpc/blockchain.h \
   rpc/client.h \
   rpc/protocol.h \
-  rpc/server.h \
   rpc/rawtransaction_util.h \
   rpc/register.h \
+  rpc/request.h \
+  rpc/server.h \
   rpc/util.h \
   scheduler.h \
   script/descriptor.h \
-  script/ismine.h \
+  script/keyorigin.h \
   script/sigcache.h \
   script/sign.h \
+  script/signingprovider.h \
   script/standard.h \
   shutdown.h \
   streams.h \
@@ -213,8 +216,10 @@ AURORACOIN_CORE_H = \
   util/memory.h \
   util/moneystr.h \
   util/rbf.h \
+  util/string.h \
   util/threadnames.h \
   util/time.h \
+  util/translation.h \
   util/url.h \
   util/validation.h \
   validation.h \
@@ -227,6 +232,7 @@ AURORACOIN_CORE_H = \
   wallet/db.h \
   wallet/feebumper.h \
   wallet/fees.h \
+  wallet/ismine.h \
   wallet/load.h \
   wallet/psbtwallet.h \
   wallet/rpcwallet.h \
@@ -277,6 +283,7 @@ libauroracoin_server_a_SOURCES = \
   net.cpp \
   net_processing.cpp \
   node/coin.cpp \
+  node/coinstats.cpp \
   node/psbt.cpp \
   node/transaction.cpp \
   noui.cpp \
@@ -311,7 +318,7 @@ libauroracoin_server_a_SOURCES += dummywallet.cpp
 endif
 
 if ENABLE_ZMQ
-libauroracoin_zmq_a_CPPFLAGS = $(AURORACOIN_INCLUDES) $(ZMQ_CFLAGS)
+libauroracoin_zmq_a_CPPFLAGS = $(AM_CPPFLAGS) $(AURORACOIN_INCLUDES) $(ZMQ_CFLAGS)
 libauroracoin_zmq_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libauroracoin_zmq_a_SOURCES = \
   zmq/zmqabstractnotifier.cpp \
@@ -332,6 +339,7 @@ libauroracoin_wallet_a_SOURCES = \
   wallet/db.cpp \
   wallet/feebumper.cpp \
   wallet/fees.cpp \
+  wallet/ismine.cpp \
   wallet/load.cpp \
   wallet/psbtwallet.cpp \
   wallet/rpcdump.cpp \
@@ -356,6 +364,8 @@ crypto_libauroracoin_crypto_base_a_SOURCES = \
   crypto/aes_helper.c \
   crypto/aes.h \
   crypto/brg_endian.h \
+  crypto/chacha_poly_aead.h \
+  crypto/chacha_poly_aead.cpp \
   crypto/chacha20.h \
   crypto/chacha20.cpp \
   crypto/common.h \
@@ -484,10 +494,10 @@ libauroracoin_common_a_SOURCES = \
   ecwrapper.cpp \
   key.cpp \
   key_io.cpp \
-  keystore.cpp \
   merkleblock.cpp \
   netaddress.cpp \
   netbase.cpp \
+  net_permissions.cpp \
   outputtype.cpp \
   policy/feerate.cpp \
   policy/policy.cpp \
@@ -497,8 +507,8 @@ libauroracoin_common_a_SOURCES = \
   rpc/util.cpp \
   scheduler.cpp \
   script/descriptor.cpp \
-  script/ismine.cpp \
   script/sign.cpp \
+  script/signingprovider.cpp \
   script/standard.cpp \
   versionbitsinfo.cpp \
   warnings.cpp \
@@ -521,7 +531,7 @@ libauroracoin_util_a_SOURCES = \
   interfaces/handler.cpp \
   logging.cpp \
   random.cpp \
-  rpc/protocol.cpp \
+  rpc/request.cpp \
   support/cleanse.cpp \
   sync.cpp \
   threadinterrupt.cpp \
@@ -534,6 +544,7 @@ libauroracoin_util_a_SOURCES = \
   util/rbf.cpp \
   util/threadnames.cpp \
   util/strencodings.cpp \
+  util/string.cpp \
   util/time.cpp \
   util/url.cpp \
   util/validation.cpp \
@@ -653,7 +664,7 @@ auroracoin_wallet_LDADD += $(BOOST_LIBS) $(BDB_LIBS) $(CRYPTO_LIBS) $(EVENT_PTHR
 # auroracoinconsensus library #
 if BUILD_AURORACOIN_LIBS
 include_HEADERS = script/auroracoinconsensus.h
-libauroracoinconsensus_la_SOURCES = $(crypto_libauroracoin_crypto_base_a_SOURCES) $(libauroracoin_consensus_a_SOURCES)
+libauroracoinconsensus_la_SOURCES = support/cleanse.cpp $(crypto_libauroracoin_crypto_base_a_SOURCES) $(libauroracoin_consensus_a_SOURCES)
 
 if GLIBC_BACK_COMPAT
   libauroracoinconsensus_la_SOURCES += compat/glibc_compat.cpp

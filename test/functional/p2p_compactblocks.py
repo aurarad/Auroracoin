@@ -96,8 +96,10 @@ class TestP2PConn(P2PInterface):
 class CompactBlocksTest(DigiByteTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
-        # Node0 = pre-segwit, node1 = segwit-aware
         self.num_nodes = 1
+        self.extra_args = [[
+            "-acceptnonstdtxn=1",
+        ]]
         self.utxos = []
 
     def skip_test_if_missing_module(self):

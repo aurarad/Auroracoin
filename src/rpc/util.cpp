@@ -4,11 +4,12 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include <key_io.h>
-#include <keystore.h>
 #include <rpc/util.h>
 #include <script/descriptor.h>
+#include <script/signingprovider.h>
 #include <tinyformat.h>
 #include <util/strencodings.h>
+#include <util/string.h>
 
 #include <tuple>
 
@@ -131,8 +132,8 @@ CPubKey HexToPubKey(const std::string& hex_in)
     return vchPubKey;
 }
 
-// Retrieves a public key for an address from the given CKeyStore
-CPubKey AddrToPubKey(CKeyStore* const keystore, const std::string& addr_in)
+// Retrieves a public key for an address from the given FillableSigningProvider
+CPubKey AddrToPubKey(FillableSigningProvider* const keystore, const std::string& addr_in)
 {
     CTxDestination dest = DecodeDestination(addr_in);
     if (!IsValidDestination(dest)) {
@@ -153,7 +154,7 @@ CPubKey AddrToPubKey(CKeyStore* const keystore, const std::string& addr_in)
 }
 
 // Creates a multisig address from a given list of public keys, number of signatures required, and the address type
-CTxDestination AddAndGetMultisigDestination(const int required, const std::vector<CPubKey>& pubkeys, OutputType type, CKeyStore& keystore, CScript& script_out)
+CTxDestination AddAndGetMultisigDestination(const int required, const std::vector<CPubKey>& pubkeys, OutputType type, FillableSigningProvider& keystore, CScript& script_out)
 {
     // Gather public keys
     if (required < 1) {
@@ -645,11 +646,7 @@ std::string RPCArg::ToString(const bool oneline) const
     }
     case Type::OBJ:
     case Type::OBJ_USER_KEYS: {
-        std::string res;
-        for (size_t i = 0; i < m_inner.size();) {
-            res += m_inner[i].ToStringObj(oneline);
-            if (++i < m_inner.size()) res += ",";
-        }
+        const std::string res = Join(m_inner, ",", [&](const RPCArg& i) { return i.ToStringObj(oneline); });
         if (m_type == Type::OBJ) {
             return "{" + res + "}";
         } else {
@@ -717,9 +714,10 @@ std::vector<CScript> EvalDescriptorStringOrObject(const UniValue& scanobject, Fl
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Scan object needs to be either a string or an object");
     }
 
-    auto desc = Parse(desc_str, provider);
+    std::string error;
+    auto desc = Parse(desc_str, provider, error);
     if (!desc) {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Invalid descriptor '%s'", desc_str));
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, error);
     }
     if (!desc->IsRange()) {
         range.first = 0;
@@ -734,4 +732,22 @@ std::vector<CScript> EvalDescriptorStringOrObject(const UniValue& scanobject, Fl
         std::move(scripts.begin(), scripts.end(), std::back_inserter(ret));
     }
     return ret;
+}
+
+UniValue GetServicesNames(ServiceFlags services)
+{
+    UniValue servicesNames(UniValue::VARR);
+
+    if (services & NODE_NETWORK)
+        servicesNames.push_back("NETWORK");
+    if (services & NODE_GETUTXO)
+        servicesNames.push_back("GETUTXO");
+    if (services & NODE_BLOOM)
+        servicesNames.push_back("BLOOM");
+    if (services & NODE_WITNESS)
+        servicesNames.push_back("WITNESS");
+    if (services & NODE_NETWORK_LIMITED)
+        servicesNames.push_back("NETWORK_LIMITED");
+
+    return servicesNames;
 }

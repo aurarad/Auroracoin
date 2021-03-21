@@ -93,6 +93,7 @@ class PruneTest(DigiByteTestFramework):
             ["-maxreceivebuffer=20000"],
             ["-prune=550"],
         ]
+        self.rpc_timeout = 120
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
@@ -205,6 +206,7 @@ class PruneTest(DigiByteTestFramework):
         self.log.info("Mine 220 more large blocks so we have requisite history")
 
         mine_large_blocks(self.nodes[0], 220)
+        self.sync_blocks(self.nodes[0:3], timeout=120)
 
         usage = calc_usage(self.prunedir)
         self.log.info("Usage should be below target: %d" % usage)

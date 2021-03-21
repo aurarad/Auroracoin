@@ -7,6 +7,7 @@
 
 #include <qt/auroracoinunits.h>
 #include <qt/guiconstants.h>
+#include <qt/guiutil.h>
 #include <qt/qvaluecombobox.h>
 
 #include <QApplication>
@@ -122,7 +123,7 @@ public:
 
             const QFontMetrics fm(fontMetrics());
             int h = lineEdit()->minimumSizeHint().height();
-            int w = fm.width(AuroracoinUnits::format(AuroracoinUnits::AUR, AuroracoinUnits::maxMoney(), false, AuroracoinUnits::separatorAlways));
+            int w = GUIUtil::TextWidth(fm, AuroracoinUnits::format(AuroracoinUnits::AUR, AuroracoinUnits::maxMoney(), false, AuroracoinUnits::separatorAlways));
             w += 2; // cursor blinking space
 
             QStyleOptionSpinBox opt;

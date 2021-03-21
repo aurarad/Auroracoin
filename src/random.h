@@ -13,7 +13,7 @@
 #include <uint256.h>
 
 #include <chrono> // For std::chrono::microseconds
-#include <stdint.h>
+#include <cstdint>
 #include <limits>
 
 /**

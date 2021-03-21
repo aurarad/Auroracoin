@@ -41,7 +41,7 @@ from test_framework.messages import (
     CTxIn,
     CTxOut,
     msg_block,
-    msg_headers
+    msg_headers,
 )
 from test_framework.mininode import P2PInterface
 from test_framework.script import (CScript, OP_TRUE)
@@ -73,7 +73,7 @@ class AssumeValidTest(DigiByteTestFramework):
                 break
             try:
                 p2p_conn.send_message(msg_block(self.blocks[i]))
-            except IOError as e:
+            except IOError:
                 assert not p2p_conn.is_connected
                 break
 
@@ -181,7 +181,7 @@ class AssumeValidTest(DigiByteTestFramework):
         for i in range(2202):
             p2p1.send_message(msg_block(self.blocks[i]))
         # Syncing 2200 blocks can take a while on slow systems. Give it plenty of time to sync.
-        p2p1.sync_with_ping(200)
+        p2p1.sync_with_ping(960)
         assert_equal(self.nodes[1].getblock(self.nodes[1].getbestblockhash())['height'], 2202)
 
         # Send blocks to node2. Block 102 will be rejected.

@@ -61,7 +61,7 @@ AC_DEFUN([AURORACOIN_FIND_BDB53],[
     BDB_CPPFLAGS=${BDB_CFLAGS}
   fi
   AC_SUBST(BDB_CPPFLAGS)
-  
+
   if test "x$BDB_LIBS" = "x"; then
     # TODO: Ideally this could find the library version and make sure it matches the headers being used
     for searchlib in db_cxx-5.3 db_cxx db5_cxx; do

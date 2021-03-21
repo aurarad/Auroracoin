@@ -7,7 +7,6 @@
 #include <key.h>
 
 #include <key_io.h>
-#include <script/script.h>
 #include <uint256.h>
 #include <util/system.h>
 #include <util/strencodings.h>

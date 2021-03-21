@@ -11,7 +11,6 @@
 
 #include <QApplication>
 #include <memory>
-#include <vector>
 
 class AuroracoinGUI;
 class ClientModel;
@@ -57,7 +56,7 @@ class AuroracoinApplication: public QApplication
 {
     Q_OBJECT
 public:
-    explicit AuroracoinApplication(interfaces::Node& node, int &argc, char **argv);
+    explicit AuroracoinApplication(interfaces::Node& node);
     ~AuroracoinApplication();
 
 #ifdef ENABLE_WALLET
@@ -68,6 +67,8 @@ public:
     void parameterSetup();
     /// Create options model
     void createOptionsModel(bool resetSettings);
+    /// Update prune value
+    void SetPrune(bool prune, bool force = false);
     /// Create main window
     void createWindow(const NetworkStyle *networkStyle);
     /// Create splash screen

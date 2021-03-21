@@ -8,4 +8,7 @@ packages/*
 */Release
 */x64
 *.vcxproj.user
-*.vcxproj
+#*.vcxproj
+*/Win32
+libbitcoin_qt/QtGeneratedFiles/*
+test_bitcoin-qt/QtGeneratedFiles/*

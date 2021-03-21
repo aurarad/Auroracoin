@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[auroracoin.qt-translation-018x]
+[auroracoincoin.qt-translation-019x]
 file_filter = src/qt/locale/auroracoin_<lang>.ts
 source_file = src/qt/locale/auroracoin_en.ts
 source_lang = en

@@ -16,7 +16,7 @@ AURORACOINQT=${AURORACOINQT:-$BINDIR/qt/auroracoin-qt}
 [ ! -x $AURORACOIND ] && echo "$AURORACOIND not found or not executable." && exit 1
 
 # The autodetected version git tag can screw up manpage output a little bit
-AURVER=($($AURORACOINCLI --version | head -n1 | awk -F'[ -]' '{ print $6, $7 }'))
+read -r -a AURVER <<< "$($AURORACOINCLI --version | head -n1 | awk -F'[ -]' '{ print $6, $7 }')"
 
 # Create a footer file with copyright content.
 # This gets autodetected fine for auroracoind if --version-string is not set,

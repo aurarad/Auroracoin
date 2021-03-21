@@ -1,6 +1,7 @@
 *.tar.gz
 
 *.exe
+*.pdb
 src/auroracoin
 src/auroracoind
 src/auroracoin-cli
@@ -34,6 +35,7 @@ libtool
 src/config/auroracoin-config.h
 src/config/auroracoin-config.h.in
 src/config/stamp-h1
+src/obj
 share/setup.nsi
 share/qt/Info.plist
 
@@ -90,6 +92,9 @@ auroracoin-qt
 Auroracoin-Qt.app
 background.tiff*
 
+# Qt Creator
+Makefile.am.user
+
 # Unit-tests
 Makefile.test
 auroracoin-qt_test
@@ -128,3 +133,7 @@ db4/
 
 # clang-check
 *.plist
+
+osx_volname
+dist/
+*.background.tiff

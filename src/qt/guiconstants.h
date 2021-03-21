@@ -7,6 +7,8 @@
 #ifndef AURORACOIN_QT_GUICONSTANTS_H
 #define AURORACOIN_QT_GUICONSTANTS_H
 
+#include <cstdint>
+
 /* Milliseconds between model updates */
 static const int MODEL_UPDATE_DELAY = 250;
 

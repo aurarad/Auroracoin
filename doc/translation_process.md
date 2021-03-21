@@ -71,17 +71,11 @@ To assist in updating translations, we have created a script to help.
 2. `git add` new translations from `src/qt/locale/`
 3. Update `src/qt/auroracoin_locale.qrc` manually or via
 ```bash
-git ls-files src/qt/locale/*ts|xargs -n1 basename|sed 's/\(auroracoin_\(.*\)\).ts/<file alias="\2">locale\/\1.qm<\/file>/'
+git ls-files src/qt/locale/*ts|xargs -n1 basename|sed 's/\(auroracoin_\(.*\)\).ts/        <file alias="\2">locale\/\1.qm<\/file>/'
 ```
 4. Update `src/Makefile.qt.include` manually or via
 ```bash
 git ls-files src/qt/locale/*ts|xargs -n1 basename|sed 's/\(auroracoin_\(.*\)\).ts/  qt\/locale\/\1.ts \\/'
-```
-5. Update `build_msvc/libauroracoin_qt/libauroracoin_qt.vcxproj` or via
-```bash
-git ls-files src/qt/locale/*ts|xargs -n1 basename |
-  sed 's/@/%40/' |
-  sed 's/\(auroracoin_\(.*\)\).ts/    <None Include="..\\..\\src\\qt\\locale\\\1.ts">\n      <DeploymentContent>true<\/DeploymentContent>\n    <\/None>/'
 ```
 
 Auroracoin doesn't use Transifex. To update existing language files to include new strings do the following:
@@ -95,7 +89,7 @@ with each language file to update (replace <lang> with the language code):
 
 ```
 cd src/qt/locale/
-lconvert -locations relative -no-obsolete -i auroracoin_<lang>.ts auroracoin_en.ts -o auroracoin_<lang>.ts
+lconvert -locations relative -no-obsolete -i auroracoin_en.ts auroracoin_<lang>.ts -o auroracoin_<lang>.ts
 ```
 
 **Do not directly download translations** one by one from the Transifex website, as we do a few post-processing steps before committing the translations.

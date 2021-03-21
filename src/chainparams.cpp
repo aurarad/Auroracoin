@@ -115,6 +115,8 @@ public:
         consensus.multiAlgoDiffChangeTarget = 225000; // Block 225,000 MultiAlgo Hard Fork
         consensus.workComputationChangeTarget = 1430000; // Block 1,430,000 DigiSpeed Hard Fork
 
+        consensus.blockSequentialAlgoMaxCount = 5; // Maximum sequential blocks of same algo
+
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
         consensus.nRuleChangeActivationThreshold = 28224; // 28224 - 70% of 40320
@@ -187,7 +189,7 @@ public:
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
-        fMineBlocksOnDemand = false;
+        m_is_test_chain = false;
 
         checkpointData = (CCheckpointData) {
          {
@@ -220,6 +222,7 @@ public:
          {1000269, uint256S("0x0000000000000093ee81b8a1feddc87d6184ea5de5947723df3fc75ab4dbd9db")},
          {1100741, uint256S("0x3918891cb2285b91ff0477cdaf5a3f49b705fc219c7ce8f036993d48af43d0df")},
          {1200178, uint256S("0xb78a08c3c3b04b0f5a612cd856aeaa5e88b7c753d8dc059bbe407f8eead75deb")},
+         {2890867, uint256S("0x0000000000000a2bd03e286905e3b879d2fa2e56cabff964e1ab8129609834fe")},
          }
         };
 
@@ -231,9 +234,6 @@ public:
                         //   (the tx=... number in the SetBestChain debug.log lines)
             0.1         // * estimated number of transactions per second after that timestamp
         };
-
-        /* disable fallback fee on mainnet */
-        m_fallback_fee_enabled = false;
     }
 };
 
@@ -363,8 +363,7 @@ public:
 
         fDefaultConsistencyChecks = false;
         fRequireStandard = false;
-        fMineBlocksOnDemand = false;
-
+        m_is_test_chain = true;
 
         checkpointData = {
             {
@@ -378,9 +377,6 @@ public:
             /* nTxCount */ 19438708,
             /* dTxRate  */ 0.626
         };
-
-        /* enable fallback fee on testnet */
-        m_fallback_fee_enabled = true;
     }
 };
 
@@ -466,8 +462,8 @@ public:
         vSeeds.clear();      //!< Regtest mode doesn't have any DNS seeds.
 
         fDefaultConsistencyChecks = true;
-        fRequireStandard = false;
-        fMineBlocksOnDemand = true;
+        fRequireStandard = true;
+        m_is_test_chain = true;
 
         checkpointData = {
             {

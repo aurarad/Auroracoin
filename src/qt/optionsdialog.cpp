@@ -97,12 +97,12 @@ OptionsDialog::OptionsDialog(QWidget *parent, bool enableWallet) :
 
     QDir translations(":translations");
 
-    ui->auroracoinAtStartup->setToolTip(ui->auroracoinAtStartup->toolTip().arg(tr(PACKAGE_NAME)));
-    ui->auroracoinAtStartup->setText(ui->auroracoinAtStartup->text().arg(tr(PACKAGE_NAME)));
+    ui->auroracoinAtStartup->setToolTip(ui->auroracoinAtStartup->toolTip().arg(PACKAGE_NAME));
+    ui->auroracoinAtStartup->setText(ui->auroracoinAtStartup->text().arg(PACKAGE_NAME));
 
-    ui->openAuroracoinConfButton->setToolTip(ui->openAuroracoinConfButton->toolTip().arg(tr(PACKAGE_NAME)));
+    ui->openAuroracoinConfButton->setToolTip(ui->openAuroracoinConfButton->toolTip().arg(PACKAGE_NAME));
 
-    ui->lang->setToolTip(ui->lang->toolTip().arg(tr(PACKAGE_NAME)));
+    ui->lang->setToolTip(ui->lang->toolTip().arg(PACKAGE_NAME));
     ui->lang->addItem(QString("(") + tr("default") + QString(")"), QVariant(""));
     for (const QString &langStr : translations.entryList())
     {

@@ -1,0 +1,33 @@
+# /etc/conf.d/auroracoind: config file for /etc/init.d/auroracoind
+
+# Config file location
+#AURORACOIND_CONFIGFILE="/etc/auroracoin/auroracoin.conf"
+
+# What directory to write pidfile to? (created and owned by $AURORACOIND_USER)
+#AURORACOIND_PIDDIR="/var/run/auroracoind"
+
+# What filename to give the pidfile
+#AURORACOIND_PIDFILE="${AURORACOIND_PIDDIR}/auroracoind.pid"
+
+# Where to write auroracoind data (be mindful that the blockchain is large)
+#AURORACOIND_DATADIR="/var/lib/auroracoind"
+
+# User and group to own auroracoind process
+#AURORACOIND_USER="auroracoin"
+#AURORACOIND_GROUP="auroracoin"
+
+# Path to auroracoind executable
+#AURORACOIND_BIN="/usr/bin/auroracoind"
+
+# Nice value to run auroracoind under
+#AURORACOIND_NICE=0
+
+# Additional options (avoid -conf and -datadir, use flags above)
+#AURORACOIND_OPTS=""
+
+# The timeout in seconds OpenRC will wait for auroracoind to terminate
+# after a SIGTERM has been raised.
+# Note that this will be mapped as argument to start-stop-daemon's
+# '--retry' option, which means you can specify a retry schedule
+# here. For more information see man 8 start-stop-daemon.
+AURORACOIND_SIGTERM_TIMEOUT=60

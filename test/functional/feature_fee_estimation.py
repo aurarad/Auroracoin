@@ -29,6 +29,7 @@ P2SH_2 = CScript([OP_HASH160, hash160(REDEEM_SCRIPT_2), OP_EQUAL])
 # Associated ScriptSig's to spend satisfy P2SH_1 and P2SH_2
 SCRIPT_SIG = [CScript([OP_TRUE, REDEEM_SCRIPT_1]), CScript([OP_TRUE, REDEEM_SCRIPT_2])]
 
+
 def small_txpuzzle_randfee(from_node, conflist, unconflist, amount, min_fee, fee_increment):
     """Create and send a transaction with a random fee.
 
@@ -69,6 +70,7 @@ def small_txpuzzle_randfee(from_node, conflist, unconflist, amount, min_fee, fee
     unconflist.append({"txid": txid, "vout": 1, "amount": amount})
 
     return (ToHex(tx), fee)
+
 
 def split_inputs(from_node, txins, txouts, initial_split=False):
     """Generate a lot of inputs so we can generate a ton of transactions.
@@ -121,9 +123,17 @@ def check_estimates(node, fees_seen):
         else:
             assert_greater_than_or_equal(i + 1, e["blocks"])
 
+
 class EstimateFeeTest(DigiByteTestFramework):
     def set_test_params(self):
         self.num_nodes = 3
+        # mine non-standard txs (e.g. txs with "dust" outputs)
+        # Force fSendTrickle to true (via whitelist)
+        self.extra_args = [
+            ["-acceptnonstdtxn", "-whitelist=127.0.0.1"],
+            ["-acceptnonstdtxn", "-whitelist=127.0.0.1", "-blockmaxweight=68000"],
+            ["-acceptnonstdtxn", "-whitelist=127.0.0.1", "-blockmaxweight=32000"],
+        ]
 
     def skip_test_if_missing_module(self):
         self.skip_if_no_wallet()
@@ -134,9 +144,7 @@ class EstimateFeeTest(DigiByteTestFramework):
         But first we need to use one node to create a lot of outputs
         which we will use to generate our transactions.
         """
-        self.add_nodes(3, extra_args=[["-maxorphantx=1000", "-whitelist=127.0.0.1"],
-                                      ["-blockmaxweight=68000", "-maxorphantx=1000"],
-                                      ["-blockmaxweight=32000", "-maxorphantx=1000"]])
+        self.add_nodes(3, extra_args=self.extra_args)
         # Use node0 to mine blocks for input splitting
         # Node1 mines small blocks but that are bigger than the expected transaction rate.
         # NOTE: the CreateNewBlock code starts counting block weight at 4,000 weight,
@@ -161,9 +169,9 @@ class EstimateFeeTest(DigiByteTestFramework):
                                                       self.memutxo, Decimal("0.005"), min_fee, min_fee)
                 tx_kbytes = (len(txhex) // 2) / 1000.0
                 self.fees_per_kb.append(float(fee) / tx_kbytes)
-            self.sync_mempools(self.nodes[0:3], wait=.1)
+            self.sync_mempools(wait=.1)
             mined = mining_node.getblock(mining_node.generate(1)[0], True)["tx"]
-            self.sync_blocks(self.nodes[0:3], wait=.1)
+            self.sync_blocks(wait=.1)
             # update which txouts are confirmed
             newmem = []
             for utx in self.memutxo:
@@ -185,22 +193,22 @@ class EstimateFeeTest(DigiByteTestFramework):
         split_inputs(self.nodes[0], self.nodes[0].listunspent(0), self.txouts, True)
 
         # Mine
-        while (len(self.nodes[0].getrawmempool()) > 0):
+        while len(self.nodes[0].getrawmempool()) > 0:
             self.nodes[0].generate(1)
 
         # Repeatedly split those 2 outputs, doubling twice for each rep
         # Use txouts to monitor the available utxo, since these won't be tracked in wallet
         reps = 0
-        while (reps < 5):
+        while reps < 5:
             # Double txouts to txouts2
-            while (len(self.txouts) > 0):
+            while len(self.txouts) > 0:
                 split_inputs(self.nodes[0], self.txouts, self.txouts2)
-            while (len(self.nodes[0].getrawmempool()) > 0):
+            while len(self.nodes[0].getrawmempool()) > 0:
                 self.nodes[0].generate(1)
             # Double txouts2 to txouts
-            while (len(self.txouts2) > 0):
+            while len(self.txouts2) > 0:
                 split_inputs(self.nodes[0], self.txouts2, self.txouts)
-            while (len(self.nodes[0].getrawmempool()) > 0):
+            while len(self.nodes[0].getrawmempool()) > 0:
                 self.nodes[0].generate(1)
             reps += 1
         self.log.info("Finished splitting")
@@ -239,6 +247,7 @@ class EstimateFeeTest(DigiByteTestFramework):
         self.sync_blocks(self.nodes[0:3], wait=.1)
         self.log.info("Final estimates after emptying mempools")
         check_estimates(self.nodes[1], self.fees_per_kb)
+
 
 if __name__ == '__main__':
     EstimateFeeTest().main()

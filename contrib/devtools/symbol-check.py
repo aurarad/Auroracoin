@@ -68,8 +68,6 @@ ALLOWED_LIBRARIES = {
 'ld-linux-armhf.so.3', # 32-bit ARM dynamic linker
 'ld-linux-riscv64-lp64d.so.1', # 64-bit RISC-V dynamic linker
 # digibyte-qt only
-'libX11-xcb.so.1', # part of X11
-'libX11.so.6', # part of X11
 'libxcb.so.1', # part of X11
 'libfontconfig.so.1', # font support
 'libfreetype.so.6', # font parsing
@@ -144,7 +142,7 @@ def read_libraries(filename):
     for line in stdout.splitlines():
         tokens = line.split()
         if len(tokens)>2 and tokens[1] == '(NEEDED)':
-            match = re.match('^Shared library: \[(.*)\]$', ' '.join(tokens[2:]))
+            match = re.match(r'^Shared library: \[(.*)\]$', ' '.join(tokens[2:]))
             if match:
                 libraries.append(match.group(1))
             else:
@@ -174,5 +172,3 @@ if __name__ == '__main__':
                 retval = 1
 
     sys.exit(retval)
-
-

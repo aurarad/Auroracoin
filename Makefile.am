@@ -199,7 +199,7 @@ test_auroracoin_filtered.info: test_auroracoin.info
 	$(LCOV) -a $@ $(LCOV_OPTS) -o $@
 
 functional_test.info: test_auroracoin_filtered.info
-	-@TIMEOUT=15 test/functional/test_runner.py $(EXTENDED_FUNCTIONAL_TESTS)
+	@TIMEOUT=15 test/functional/test_runner.py $(EXTENDED_FUNCTIONAL_TESTS)
 	$(LCOV) -c $(LCOV_OPTS) -d $(abs_builddir)/src --t functional-tests -o $@
 	$(LCOV) -z $(LCOV_OPTS) -d $(abs_builddir)/src
 
@@ -311,4 +311,5 @@ clean-docs:
 clean-local: clean-docs
 	rm -rf coverage_percent.txt test_auroracoin.coverage/ total.coverage/ test/tmp/ cache/ $(OSX_APP)
 	rm -rf test/functional/__pycache__ test/functional/test_framework/__pycache__ test/cache share/rpcauth/__pycache__
+	rm -rf osx_volname dist/ dpi36.background.tiff dpi72.background.tiff
 

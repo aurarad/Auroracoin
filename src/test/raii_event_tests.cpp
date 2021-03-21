@@ -15,8 +15,6 @@
 
 #include <test/setup_common.h>
 
-#include <vector>
-
 #include <boost/test/unit_test.hpp>
 
 static std::map<void*, short> tags;

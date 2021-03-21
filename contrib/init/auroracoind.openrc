@@ -1,0 +1,92 @@
+#!/sbin/openrc-run
+
+# backward compatibility for existing gentoo layout
+#
+if [ -d "/var/lib/auroracoin/.auroracoin" ]; then
+	AURORACOIND_DEFAULT_DATADIR="/var/lib/auroracoin/.auroracoin"
+else
+	AURORACOIND_DEFAULT_DATADIR="/var/lib/auroracoind"
+fi
+
+AURORACOIND_CONFIGFILE=${AURORACOIND_CONFIGFILE:-/etc/auroracoin/auroracoin.conf}
+AURORACOIND_PIDDIR=${AURORACOIND_PIDDIR:-/var/run/auroracoind}
+AURORACOIND_PIDFILE=${AURORACOIND_PIDFILE:-${AURORACOIND_PIDDIR}/auroracoind.pid}
+AURORACOIND_DATADIR=${AURORACOIND_DATADIR:-${AURORACOIND_DEFAULT_DATADIR}}
+AURORACOIND_USER=${AURORACOIND_USER:-${AURORACOIN_USER:-auroracoin}}
+AURORACOIND_GROUP=${AURORACOIND_GROUP:-auroracoin}
+AURORACOIND_BIN=${AURORACOIND_BIN:-/usr/bin/auroracoind}
+AURORACOIND_NICE=${AURORACOIND_NICE:-${NICELEVEL:-0}}
+AURORACOIND_OPTS="${AURORACOIND_OPTS:-${AURORACOIN_OPTS}}"
+
+name="Auroracoin Daemon"
+description="Auroracoin cryptocurrency P2P network daemon"
+
+command="/usr/bin/auroracoind"
+command_args="-pid=\"${AURORACOIND_PIDFILE}\" \
+		-conf=\"${AURORACOIND_CONFIGFILE}\" \
+		-datadir=\"${AURORACOIND_DATADIR}\" \
+		-daemon \
+		${AURORACOIND_OPTS}"
+
+required_files="${AURORACOIND_CONFIGFILE}"
+start_stop_daemon_args="-u ${AURORACOIND_USER} \
+			-N ${AURORACOIND_NICE} -w 2000"
+pidfile="${AURORACOIND_PIDFILE}"
+
+# The retry schedule to use when stopping the daemon. Could be either
+# a timeout in seconds or multiple signal/timeout pairs (like
+# "SIGKILL/180 SIGTERM/300")
+retry="${AURORACOIND_SIGTERM_TIMEOUT}"
+
+depend() {
+	need localmount net
+}
+
+# verify
+# 1) that the datadir exists and is writable (or create it)
+# 2) that a directory for the pid exists and is writable
+# 3) ownership and permissions on the config file
+start_pre() {
+	checkpath \
+	-d \
+	--mode 0750 \
+	--owner "${AURORACOIND_USER}:${AURORACOIND_GROUP}" \
+	"${AURORACOIND_DATADIR}"
+
+	checkpath \
+	-d \
+	--mode 0755 \
+	--owner "${AURORACOIND_USER}:${AURORACOIND_GROUP}" \
+	"${AURORACOIND_PIDDIR}"
+
+	checkpath -f \
+	-o ${AURORACOIND_USER}:${AURORACOIND_GROUP} \
+	-m 0660 \
+	${AURORACOIND_CONFIGFILE}
+
+	checkconfig || return 1
+}
+
+checkconfig()
+{
+	if ! grep -qs '^rpcpassword=' "${AURORACOIND_CONFIGFILE}" ; then
+		eerror ""
+		eerror "ERROR: You must set a secure rpcpassword to run auroracoind."
+		eerror "The setting must appear in ${AURORACOIND_CONFIGFILE}"
+		eerror ""
+		eerror "This password is security critical to securing wallets "
+		eerror "and must not be the same as the rpcuser setting."
+		eerror "You can generate a suitable random password using the following "
+		eerror "command from the shell:"
+		eerror ""
+		eerror "bash -c 'tr -dc a-zA-Z0-9 < /dev/urandom | head -c32 && echo'"
+		eerror ""
+		eerror "It is recommended that you also set alertnotify so you are "
+		eerror "notified of problems:"
+		eerror ""
+		eerror "ie: alertnotify=echo %%s | mail -s \"Auroracoin Alert\"" \
+			"admin@foo.com"
+		eerror ""
+		return 1
+	fi
+}

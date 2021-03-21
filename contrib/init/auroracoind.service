@@ -1,0 +1,76 @@
+# It is not recommended to modify this file in-place, because it will
+# be overwritten during package upgrades. If you want to add further
+# options or overwrite existing ones then use
+# $ systemctl edit auroracoind.service
+# See "man systemd.service" for details.
+
+# Note that almost all daemon options could be specified in
+# /etc/auroracoin/auroracoin.conf, but keep in mind those explicitly
+# specified as arguments in ExecStart= will override those in the
+# config file.
+
+[Unit]
+Description=Auroracoin daemon
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/auroracoind -daemon \
+                            -pid=/run/auroracoind/auroracoind.pid \
+                            -conf=/etc/auroracoin/auroracoin.conf \
+                            -datadir=/var/lib/auroracoind
+
+# Make sure the config directory is readable by the service user
+PermissionsStartOnly=true
+ExecStartPre=/bin/chgrp auroracoin /etc/auroracoin
+
+# Process management
+####################
+
+Type=forking
+PIDFile=/run/auroracoind/auroracoind.pid
+Restart=on-failure
+
+# Directory creation and permissions
+####################################
+
+# Run as auroracoin:auroracoin
+User=auroracoin
+Group=auroracoin
+
+# /run/auroracoind
+RuntimeDirectory=auroracoind
+RuntimeDirectoryMode=0710
+
+# /etc/auroracoin
+ConfigurationDirectory=auroracoin
+ConfigurationDirectoryMode=0710
+
+# /var/lib/auroracoind
+StateDirectory=auroracoind
+StateDirectoryMode=0710
+
+# Hardening measures
+####################
+
+# Provide a private /tmp and /var/tmp.
+PrivateTmp=true
+
+# Mount /usr, /boot/ and /etc read-only for the process.
+ProtectSystem=full
+
+# Deny access to /home, /root and /run/user
+ProtectHome=true
+
+# Disallow the process and all of its children to gain
+# new privileges through execve().
+NoNewPrivileges=true
+
+# Use a new /dev namespace only populated with API pseudo devices
+# such as /dev/null, /dev/zero and /dev/random.
+PrivateDevices=true
+
+# Deny the creation of writable and executable memory mappings.
+MemoryDenyWriteExecute=true
+
+[Install]
+WantedBy=multi-user.target

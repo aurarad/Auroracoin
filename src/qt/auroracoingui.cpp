@@ -7,6 +7,7 @@
 
 #include <qt/auroracoinunits.h>
 #include <qt/clientmodel.h>
+#include <qt/createwalletdialog.h>
 #include <qt/guiconstants.h>
 #include <qt/guiutil.h>
 #include <qt/modaloverlay.h>
@@ -37,14 +38,10 @@
 #include <ui_interface.h>
 #include <util/system.h>
 
-#include <iostream>
-#include <memory>
-
 #include <QAction>
 #include <QApplication>
 #include <QComboBox>
 #include <QDateTime>
-#include <QDesktopWidget>
 #include <QDragEnterEvent>
 #include <QListWidget>
 #include <QMenu>
@@ -52,6 +49,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressDialog>
+#include <QScreen>
 #include <QSettings>
 #include <QShortcut>
 #include <QStackedWidget>
@@ -87,7 +85,7 @@ AuroracoinGUI::AuroracoinGUI(interfaces::Node& node, const PlatformStyle *_platf
    QSettings settings;
     if (!restoreGeometry(settings.value("MainWindowGeometry").toByteArray())) {
         // Restore failed (perhaps missing setting), center the window
-        move(QApplication::desktop()->availableGeometry().center() - frameGeometry().center());
+        move(QGuiApplication::primaryScreen()->availableGeometry().center() - frameGeometry().center());
     }
 
 #ifdef ENABLE_WALLET
@@ -299,15 +297,15 @@ void AuroracoinGUI::createActions()
     quitAction->setStatusTip(tr("Quit application"));
     quitAction->setShortcut(QKeySequence(Qt::CTRL + Qt::Key_Q));
     quitAction->setMenuRole(QAction::QuitRole);
-    aboutAction = new QAction(platformStyle->TextColorIcon(":/icons/auroracoin"), tr("&About %1").arg(tr(PACKAGE_NAME)), this);
-    aboutAction->setStatusTip(tr("Show information about %1").arg(tr(PACKAGE_NAME)));
+    aboutAction = new QAction(platformStyle->TextColorIcon(":/icons/auroracoin"), tr("&About %1").arg(PACKAGE_NAME), this);
+    aboutAction->setStatusTip(tr("Show information about %1").arg(PACKAGE_NAME));
     aboutAction->setMenuRole(QAction::AboutRole);
     aboutAction->setEnabled(false);
     aboutQtAction = new QAction(platformStyle->TextColorIcon(":/qt-project.org/qmessagebox/images/qtlogo-64.png"), tr("About &Qt"), this);
     aboutQtAction->setStatusTip(tr("Show information about Qt"));
     aboutQtAction->setMenuRole(QAction::AboutQtRole);
     optionsAction = new QAction(platformStyle->TextColorIcon(":/icons//options"), tr("&Options..."), this);
-    optionsAction->setStatusTip(tr("Modify configuration options for %1").arg(tr(PACKAGE_NAME)));
+    optionsAction->setStatusTip(tr("Modify configuration options for %1").arg(PACKAGE_NAME));
     optionsAction->setMenuRole(QAction::PreferencesRole);
     optionsAction->setEnabled(false);
     toggleHideAction = new QAction(platformStyle->TextColorIcon(":/icons/" + theme + "/about"), tr("&Show / Hide"), this);
@@ -347,9 +345,12 @@ void AuroracoinGUI::createActions()
     m_close_wallet_action = new QAction(tr("Close Wallet..."), this);
     m_close_wallet_action->setStatusTip(tr("Close wallet"));
 
+    m_create_wallet_action = new QAction(tr("Create Wallet..."), this);
+    m_create_wallet_action->setStatusTip(tr("Create a new wallet"));
+
     showHelpMessageAction = new QAction(platformStyle->TextColorIcon(":/icons/" + theme + "/info"), tr("&Command-line options"), this);
     showHelpMessageAction->setMenuRole(QAction::NoRole);
-    showHelpMessageAction->setStatusTip(tr("Show the %1 help message to get a list with possible auroracoin command-line options").arg(tr(PACKAGE_NAME)));
+    showHelpMessageAction->setStatusTip(tr("Show the %1 help message to get a list with possible auroracoin command-line options").arg(PACKAGE_NAME));
 
     connect(quitAction, &QAction::triggered, qApp, QApplication::quit);
     connect(aboutAction, &QAction::triggered, this, &AuroracoinGUI::aboutClicked);
@@ -376,52 +377,41 @@ void AuroracoinGUI::createActions()
         connect(openAction, &QAction::triggered, this, &AuroracoinGUI::openClicked);
         connect(m_open_wallet_menu, &QMenu::aboutToShow, [this] {
             m_open_wallet_menu->clear();
-            std::vector<std::string> available_wallets = m_wallet_controller->getWalletsAvailableToOpen();
-            std::vector<std::string> wallets = m_node.listWalletDir();
-            for (const auto& path : wallets) {
+            for (const std::pair<const std::string, bool>& i : m_wallet_controller->listWalletDir()) {
+                const std::string& path = i.first;
                 QString name = path.empty() ? QString("["+tr("default wallet")+"]") : QString::fromStdString(path);
+                // Menu items remove single &. Single & are shown when && is in
+                // the string, but only the first occurrence. So replace only
+                // the first & with &&.
+                name.replace(name.indexOf(QChar('&')), 1, QString("&&"));
                 QAction* action = m_open_wallet_menu->addAction(name);
 
-                if (std::find(available_wallets.begin(), available_wallets.end(), path) == available_wallets.end()) {
+                if (i.second) {
                     // This wallet is already loaded
                     action->setEnabled(false);
                     continue;
                 }
 
-                connect(action, &QAction::triggered, [this, name, path] {
-                    OpenWalletActivity* activity = m_wallet_controller->openWallet(path);
-
-                    QProgressDialog* dialog = new QProgressDialog(this);
-                    dialog->setLabelText(tr("Opening Wallet <b>%1</b>...").arg(name.toHtmlEscaped()));
-                    dialog->setRange(0, 0);
-                    dialog->setCancelButton(nullptr);
-                    dialog->setWindowModality(Qt::ApplicationModal);
-                    dialog->show();
-
-                    connect(activity, &OpenWalletActivity::message, this, [this] (QMessageBox::Icon icon, QString text) {
-                        QMessageBox box;
-                        box.setIcon(icon);
-                        box.setText(tr("Open Wallet Failed"));
-                        box.setInformativeText(text);
-                        box.setStandardButtons(QMessageBox::Ok);
-                        box.setDefaultButton(QMessageBox::Ok);
-                        connect(this, &QObject::destroyed, &box, &QDialog::accept);
-                        box.exec();
-                    });
+                connect(action, &QAction::triggered, [this, path] {
+                    auto activity = new OpenWalletActivity(m_wallet_controller, this);
                     connect(activity, &OpenWalletActivity::opened, this, &AuroracoinGUI::setCurrentWallet);
                     connect(activity, &OpenWalletActivity::finished, activity, &QObject::deleteLater);
-                    connect(activity, &OpenWalletActivity::finished, dialog, &QObject::deleteLater);
-                    bool invoked = QMetaObject::invokeMethod(activity, "open");
-                    assert(invoked);
+                    activity->open(path);
                 });
             }
-            if (wallets.empty()) {
+            if (m_open_wallet_menu->isEmpty()) {
                 QAction* action = m_open_wallet_menu->addAction(tr("No wallets available"));
                 action->setEnabled(false);
             }
         });
         connect(m_close_wallet_action, &QAction::triggered, [this] {
             m_wallet_controller->closeWallet(walletFrame->currentWalletModel(), this);
+        });
+        connect(m_create_wallet_action, &QAction::triggered, [this] {
+            auto activity = new CreateWalletActivity(m_wallet_controller, this);
+            connect(activity, &CreateWalletActivity::created, this, &AuroracoinGUI::setCurrentWallet);
+            connect(activity, &CreateWalletActivity::finished, activity, &QObject::deleteLater);
+            activity->create();
         });
     }
 #endif // ENABLE_WALLET
@@ -444,6 +434,7 @@ void AuroracoinGUI::createMenuBar()
     QMenu *file = appMenuBar->addMenu(tr("&File"));
     if(walletFrame)
     {
+        file->addAction(m_create_wallet_action);
         file->addAction(m_open_wallet_action);
         file->addAction(m_close_wallet_action);
         file->addSeparator();
@@ -489,24 +480,16 @@ void AuroracoinGUI::createMenuBar()
     connect(qApp, &QApplication::focusWindowChanged, [zoom_action] (QWindow* window) {
         zoom_action->setEnabled(window != nullptr);
     });
-#else
-    QAction* restore_action = window_menu->addAction(tr("Restore"));
-    connect(restore_action, &QAction::triggered, [] {
-        qApp->focusWindow()->showNormal();
-    });
-
-    connect(qApp, &QApplication::focusWindowChanged, [restore_action] (QWindow* window) {
-        restore_action->setEnabled(window != nullptr);
-    });
 #endif
 
     if (walletFrame) {
+#ifdef Q_OS_MAC
         window_menu->addSeparator();
         QAction* main_window_action = window_menu->addAction(tr("Main Window"));
         connect(main_window_action, &QAction::triggered, [this] {
             GUIUtil::bringToFront(this);
         });
-
+#endif
         window_menu->addSeparator();
         window_menu->addAction(usedSendingAddressesAction);
         window_menu->addAction(usedReceivingAddressesAction);
@@ -645,7 +628,7 @@ void AuroracoinGUI::setWalletController(WalletController* wallet_controller)
     connect(wallet_controller, &WalletController::walletAdded, this, &AuroracoinGUI::addWallet);
     connect(wallet_controller, &WalletController::walletRemoved, this, &AuroracoinGUI::removeWallet);
 
-    for (WalletModel* wallet_model : m_wallet_controller->getWallets()) {
+    for (WalletModel* wallet_model : m_wallet_controller->getOpenWallets()) {
         addWallet(wallet_model);
     }
 }
@@ -734,7 +717,7 @@ void AuroracoinGUI::createTrayIcon()
 #ifndef Q_OS_MAC
     if (QSystemTrayIcon::isSystemTrayAvailable()) {
         trayIcon = new QSystemTrayIcon(m_network_style->getTrayAndWindowIcon(), this);
-        QString toolTip = tr("%1 client").arg(tr(PACKAGE_NAME)) + " " + m_network_style->getTitleAddText();
+        QString toolTip = tr("%1 client").arg(PACKAGE_NAME) + " " + m_network_style->getTitleAddText();
         trayIcon->setToolTip(toolTip);
     }
 #endif
@@ -1055,49 +1038,51 @@ void AuroracoinGUI::setNumBlocks(int count, const QDateTime& blockDate, double n
     progressBar->setToolTip(tooltip);
 }
 
-void AuroracoinGUI::message(const QString &title, const QString &message, unsigned int style, bool *ret)
+void AuroracoinGUI::message(const QString& title, QString message, unsigned int style, bool* ret)
 {
-    QString strTitle = tr("Auroracoin"); // default title
+    // Default title. On macOS, the window title is ignored (as required by the macOS Guidelines).
+    QString strTitle{PACKAGE_NAME};
     // Default to information icon
     int nMBoxIcon = QMessageBox::Information;
     int nNotifyIcon = Notificator::Information;
 
-    QString msgType;
+    bool prefix = !(style & CClientUIInterface::MSG_NOPREFIX);
+    style &= ~CClientUIInterface::MSG_NOPREFIX;
 
-    // Prefer supplied title over style based title
+    QString msgType;
     if (!title.isEmpty()) {
         msgType = title;
-    }
-    else {
+    } else {
         switch (style) {
         case CClientUIInterface::MSG_ERROR:
             msgType = tr("Error");
+            if (prefix) message = tr("Error: %1").arg(message);
             break;
         case CClientUIInterface::MSG_WARNING:
             msgType = tr("Warning");
+            if (prefix) message = tr("Warning: %1").arg(message);
             break;
         case CClientUIInterface::MSG_INFORMATION:
             msgType = tr("Information");
+            // No need to prepend the prefix here.
             break;
         default:
             break;
         }
     }
-    // Append title to "Auroracoin - "
-    if (!msgType.isEmpty())
-        strTitle += " - " + msgType;
 
-    // Check for error/warning icon
+    if (!msgType.isEmpty()) {
+        strTitle += " - " + msgType;
+    }
+
     if (style & CClientUIInterface::ICON_ERROR) {
         nMBoxIcon = QMessageBox::Critical;
         nNotifyIcon = Notificator::Critical;
-    }
-    else if (style & CClientUIInterface::ICON_WARNING) {
+    } else if (style & CClientUIInterface::ICON_WARNING) {
         nMBoxIcon = QMessageBox::Warning;
         nNotifyIcon = Notificator::Warning;
     }
 
-    // Display message
     if (style & CClientUIInterface::MODAL) {
         // Check for buttons, use OK as default, if none was supplied
         QMessageBox::StandardButton buttons;
@@ -1110,9 +1095,9 @@ void AuroracoinGUI::message(const QString &title, const QString &message, unsign
         int r = mBox.exec();
         if (ret != nullptr)
             *ret = r == QMessageBox::Ok;
-    }
-    else
+    } else {
         notificator->notify(static_cast<Notificator::Class>(nNotifyIcon), strTitle, message);
+    }
 }
 
 void AuroracoinGUI::changeEvent(QEvent *e)
@@ -1307,7 +1292,7 @@ void AuroracoinGUI::updateProxyIcon()
 
 void AuroracoinGUI::updateWindowTitle()
 {
-    QString window_title = tr(PACKAGE_NAME);
+    QString window_title = PACKAGE_NAME;
 #ifdef ENABLE_WALLET
     if (walletFrame) {
         WalletModel* const wallet_model = walletFrame->currentWalletModel();
@@ -1426,7 +1411,7 @@ UnitDisplayStatusBarControl::UnitDisplayStatusBarControl(const PlatformStyle *pl
     const QFontMetrics fm(font());
     for (const AuroracoinUnits::Unit unit : units)
     {
-        max_width = qMax(max_width, fm.width(AuroracoinUnits::longName(unit)));
+        max_width = qMax(max_width, GUIUtil::TextWidth(fm, AuroracoinUnits::longName(unit)));
     }
     setMinimumSize(max_width, 0);
     setAlignment(Qt::AlignRight | Qt::AlignVCenter);

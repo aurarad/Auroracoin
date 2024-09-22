@@ -1,8 +1,19 @@
-# Notice! This is the stable branch
+# stable branch
 
-Use this branch for running auroracoin in production environments. If you want the development branch,
+As of Summer 2024 This branch is no longer maintained. 
+
+The active branch, master, is the primary development and release branch.   
+
 switch to [master](https://github.com/aurarad/Auroracoin/tree/master).
 
+Background: 
+This was previously "stable branch", representing development branch for integrating new features and bug fixes before merging into master for a major release. 
+
+However, the master and stable branch have diverged and we decided to deprecate the stable branch. 
+
+Currently master branch is the branch for development pull-requests and build ready. 
+
+( We will probably create "development" or similar branch (from master) for new features and bug fixes. ) 
 
 # Auroracoin AUR
 

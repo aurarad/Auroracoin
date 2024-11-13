@@ -200,8 +200,8 @@ static uint64_t GetRdSeed() noexcept
  * Slower sources should probably be invoked separately, and/or only from
  * RandAddSeedSleep (which is called during idle background operation).
  */
-+static void InitHardwareRand() {}
-+static void ReportHardwareRand() {}
+static void InitHardwareRand() {}
+static void ReportHardwareRand() {}
 #endif
 
 /** Add 64 bits of entropy gathered from hardware to hasher. Do nothing if not supported. */
